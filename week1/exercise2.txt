@@ -1,0 +1,47 @@
+2. Cree un algoritmo que describa su rutina diaria. Use condiciones, condiciones multiples y ciclos.
+    
+    Respuesta:
+    
+    1. Inicio
+    2. despertarme
+    3. apagar la alarma
+    4. levantarse de la cama
+    5. ir al baño
+    6. tomar el cepillo de dientes
+    7. ponerle pasta de dientes al cepillo
+    8. Si hay bastante pasta de dientes
+        1. ignorar
+    9. Sino, apuntar en la lista de compras
+    10. lavarse los dientes
+    11. ir a la cocina
+    12. Si hay pan y mantequilla de maní y miel de abeja
+        1. meter el pan al horno
+        2. tostar el pan
+        3. sacarlo del horno
+        4. ponerle mantequilla de maní y miel de abeja
+        5. desayunar
+    13. lavo los platos
+    14. voy al baño
+    15. me lavo los dientes
+    16. me baño
+    17. me alisto
+    18. alisto la maleta del gimnasio
+    19. voy al gimnasio
+    20. buscar maquina
+    21. mientras la maquina este ocupada
+        1. usar otra maquina
+    22. Si estoy cansado
+        1. tomar agua
+    23. vuelvo a la casa
+    24. voy al baño
+    25. me baño
+    26. almuerzo
+    27. enciendo la computadora
+    28. Empiezo curso de Lyfter
+    29. Termino curso de Lyfter
+    30. Ceno
+    31. Leo un libro
+    32. voy al baño
+    33. me lavo los dientes
+    34. me voy a dormir
+    35. Fin

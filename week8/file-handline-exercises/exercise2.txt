@@ -1,0 +1,28 @@
+Lea sobre el resto de métodos de la clase File de Python aquí y cree una tabla donde explique qué hace cada uno. No necesita usar código para esto, es solo crear una tabla en Notion o Word.
+
+close() = Cierra el archivo, se usa cuando no se usa el with para abrir un archivo
+
+detach() = Retorna el raw stream del buffer, funcional cuando quiero cambiar el encoding del stream
+
+fileno() = Retorna el numero descriptor de archivo visto desde la perspectiva del sistema operativo, 0 si es un input estándar, 1 si es un output estándar, 2 si es un error estándar y 3 o mas si es un archivo abierto por mi programa
+
+flush() = Hace que todo lo que este en buffer esperando para ser escrito se escriba inmediatamente en el archivo o en la terminal
+
+isatty() = Retorna True si el archivo esta asociado a una terminal y False si no
+
+readable() = Retorna True si el archivo se puede leer y False si no se puede leer
+
+readline() = Retorna una sola linea del archivo
+
+seek() = Cambia de lugar donde se esta leyendo o escribiendo en el archivo
+
+seekable() = Retorna True si el archivo permite cambiar de lugar donde se esta leyendo o escribiendo y retorna False si no
+
+tell() = Retorna donde esta el cursor dentro del archivo medida por bytes
+
+truncate() = Se usa para reducir el tamaño del archivo a uno especifico
+
+writable() = Retorna True si se puede escribir dentro del archivo y False si no
+
+writelines() = Escribe todas las lineas de una lista una después de otra dentro del archivo
+
