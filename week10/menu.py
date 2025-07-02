@@ -7,6 +7,7 @@ from actions import see_students_info
 from actions import see_top_3_best_average
 from actions import see_students_average
 from actions import check_if_students_list_empty
+from actions import check_students_info_empty
 #data functions
 from data import create_csv_file
 from data import import_csv_file
@@ -22,7 +23,8 @@ def show_menu():
         print('4 to see the average of each student')
         print('5 to export the information of all students to a csv file')
         print('6 to import the information of all students from a previous csv file')
-        print('7 to exit the program')
+        print('7 to clear the current non-exported student list')
+        print('8 to exit the program')
         while True:
             user_choice = input('enter the number of your choice: ')
             try:
@@ -78,11 +80,23 @@ def select_menu_option(user_choice, students_info):
             print('------------------------')
     elif user_choice == 6:
         if check_file_exists('students.csv'):
-            import_csv_file('students.csv')
+            result = check_students_info_empty(students_info)
+            if result == True:
+                students_info.clear()
+                imported_list = import_csv_file('students.csv')
+                students_info.extend(imported_list)
+            elif result == 'import':
+                imported_list = import_csv_file('students.csv')
+                students_info.extend(imported_list)
         else:
             print('------------------------')
             print('there is no file to import')
             print('------------------------')
     elif user_choice == 7:
+        students_info.clear()
+        print('------------------------')
+        print('the list was cleared correctly!')
+        print('------------------------')
+    elif user_choice == 8:
         print('goodbye')
         exit()

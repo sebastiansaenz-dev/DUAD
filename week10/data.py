@@ -20,7 +20,15 @@ def modify_csv_file(file_path, data, headers):
 
 
 def import_csv_file(path):
+    new_list = []
     with open(path, 'r') as file:
         reader = csv.DictReader(file)
         for row in reader:
-            print(row)
+            new_list.append(row)
+        print('------------------------')
+        print('imported all students from csv file')
+        print('------------------------')
+        return new_list
+            
+
+

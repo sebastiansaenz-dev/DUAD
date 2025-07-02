@@ -77,11 +77,20 @@ def see_top_3_best_average(students):
 
 #see averages of all students
 def see_students_average(students):
+    total_students = len(students)
     students_average = calculate_average(students)
-
-    print('------------------------')
+    averages = []
     for student in students_average:
-        print(f'{student['student_name']} had an average of {student["average"]}')
+        averages.append(student['average'])
+
+    total_sum = 0
+
+    for average in averages:
+        total_sum += average
+    
+    total_average = total_sum / total_students
+    print('------------------------')
+    print(f'the average all students is: {total_average}')
     print('------------------------')
 
 
@@ -93,11 +102,11 @@ def calculate_average(students):
     for student in students:
         temporal_dic = {}
         student_name = student['student_name']
-        spanish = student['spanish_grade']
-        english = student['english_grade']
-        social_studies = student['social_studies_grade']
-        science = student['science_grade']
-        average = int((spanish + english + social_studies + science) / 4)
+        spanish = float(student['spanish_grade'])
+        english = float(student['english_grade'])
+        social_studies = float(student['social_studies_grade'])
+        science = float(student['science_grade'])
+        average = (spanish + english + social_studies + science) / 4
 
         temporal_dic['student_name'] = student_name
         temporal_dic['average'] = average
@@ -109,6 +118,28 @@ def check_if_students_list_empty(students):
     if students != []:
         return True
 
+
+def check_students_info_empty(students):
+    if students != []:
+        print('------------------------')
+        print('there are students in the list waiting for being export to the csv file')
+        user_choice = input('do you want to clear the new students from the list to import the students from de csv file? (yes/no): ')
+        print('------------------------')
+        while True:
+            if user_choice.strip().lower() == 'yes':
+                return True
+            elif user_choice.strip().lower() == 'no':
+                print('------------------------')
+                print('non-exported students still here')
+                print('------------------------')
+                return False
+            else:
+                print('------------------------')
+                print('you must enter yes or no')
+                user_choice = input('do you want to clear the new students from the list to import the students from de csv file? (yes/no): ')
+                print('------------------------')
+    else:
+        return 'import'
 
 def check_yes_no_option(option):
     while True:
@@ -199,11 +230,11 @@ def get_valid_menu_option(user_choice):
     while True:
         try:
             user_choice = int(user_choice)
-            if user_choice >= 1 and user_choice <= 7:
+            if user_choice >= 1 and user_choice <= 8:
                 return user_choice
             else:
-                print('you must enter a number between 1 and 7')
+                print('you must enter a number between 1 and 8')
                 user_choice = input('enter the number of your choice: ')
         except Exception as error:
             print('you must enter a integer')
-            user_choice = input('enter the number between 1 and 7: ')
+            user_choice = input('enter the number between 1 and 8: ')
