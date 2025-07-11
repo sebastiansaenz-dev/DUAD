@@ -1,8 +1,9 @@
 
 
 class Bus:
-    max_passengers = 3
-    passengers = []
+    def __init__(self):
+        self.max_passengers = 3
+        self.passengers = []
 
     def add_passenger(self, person):
         self.passengers.append(person)
@@ -27,6 +28,7 @@ class Person:
 
 
 def menu():
+    bus = Bus()
     while True:
         print('1: add passenger')
         print('2: remove passenger')
@@ -34,11 +36,10 @@ def menu():
 
         user_choice = input('enter your choice: ')
         checked_user_choice = get_valid_menu_option(user_choice)
-        select_menu_option(checked_user_choice)
+        select_menu_option(checked_user_choice, bus)
 
 
-def select_menu_option(user_choice):
-    bus = Bus()
+def select_menu_option(user_choice, bus):
     if user_choice == 1:
         board_passengers(bus)
     elif user_choice == 2:
@@ -131,8 +132,7 @@ def check_yes_no_option(option):
 
 def main():
     try:
-        user_choice = menu()
-        select_menu_option(user_choice)
+        menu()
     except Exception as error:
         print(error)
         print('there was an error')
