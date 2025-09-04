@@ -65,5 +65,3 @@ def delete_category(category_to_remove):
     update_category_list = remove_category(categories, category_to_remove)
     update_category_list_dicts = [c.convert_to_dic() for c in update_category_list]
     save_json(update_category_list_dicts, './categories.json')
-
-

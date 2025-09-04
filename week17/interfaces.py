@@ -35,6 +35,7 @@ def category_window():
             if is_valid_string(values['-CATEGORY-']) and is_valid_string(values['-CATEGORY_DESCRIPTION-']) and values['-CATEGORY-'] != '':
                 services.create_category(values['-CATEGORY-'], values['-CATEGORY_DESCRIPTION-'])
                 sg.popup(f"Category '{values['-CATEGORY-']}' created!")
+                
 
             else:
                 sg.popup("the category must be a string and can't be empty")
@@ -182,6 +183,7 @@ def show_principal_menu():
             categories_names = [category.name for category in categories]
             categories_names.append(' ')
             window['-CATEGORY-'].update(values=categories_names, value=' ')
+            window['-SELECTED_CATEGORY_TABLE-'].update(values=services.categories_to_table_rows(categories))
 
         elif event == 'Add expense':
             add_expense_window()
@@ -227,7 +229,7 @@ def show_principal_menu():
                     categories.pop(selected_index)
                     window['-SELECTED_CATEGORY_TABLE-'].update(
                         values=services.categories_to_table_rows(categories))
-                    window['-CATEGORY-'].update(values=[c.name for c in categories])
+                    window['-CATEGORY-'].update(values=[c.name for c in categories] + [' '])
 
                     transactions = services.get_transactions()
                     transactions_table = services.transactions_to_table_rows(transactions)
