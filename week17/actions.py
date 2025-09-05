@@ -2,8 +2,14 @@
 
 
 def is_valid_string(value):
+    value = str(value)
+
+    if value.strip() == '':
+        return False
+
+
     try:
-        int(value) or value.strip() == None
+        int(value)
         return False
     except ValueError:
         return True

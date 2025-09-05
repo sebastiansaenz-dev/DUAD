@@ -32,7 +32,7 @@ def category_window():
         if event == sg.WINDOW_CLOSED:
             break
         elif event == 'Create category':
-            if is_valid_string(values['-CATEGORY-']) and is_valid_string(values['-CATEGORY_DESCRIPTION-']) and values['-CATEGORY-'] != '':
+            if is_valid_string(values['-CATEGORY-']) and values['-CATEGORY-'] != '':
                 services.create_category(values['-CATEGORY-'], values['-CATEGORY_DESCRIPTION-'])
                 sg.popup(f"Category '{values['-CATEGORY-']}' created!")
                 
@@ -69,15 +69,19 @@ def add_expense_window():
         if event == sg.WINDOW_CLOSED:
             break
         elif event == 'add expense':
-            if is_valid_string(values['-EXPENSE_NAME-']) and is_valid_int(values['-EXPENSE_AMOUNT-']) and values['-CATEGORY-'] != ' ' and values['-EXPENSE_AMOUNT-'] != '':
+            if is_valid_string(values['-EXPENSE_NAME-']) and values['-CATEGORY-'] != ' ' and values['-EXPENSE_AMOUNT-'] != '':
 
-                services.create_transaction(
-                    'expense',
-                    values['-EXPENSE_NAME-'],
-                    values['-CATEGORY-'],
-                    values['-EXPENSE_AMOUNT-']
-                )
-                sg.popup('Expense added')
+                if is_valid_int(values['-EXPENSE_AMOUNT-']):
+
+                    services.create_transaction(
+                        'expense',
+                        values['-EXPENSE_NAME-'],
+                        values['-CATEGORY-'],
+                        values['-EXPENSE_AMOUNT-']
+                    )
+                    sg.popup('Expense added')
+                else:
+                    sg.popup("the expense amount can't be negative numbers")
 
             else:
                 sg.popup('the name, amount and category of the income cant be empty')
@@ -112,15 +116,20 @@ def add_income_window():
             break
         elif event == 'add income':
 
-            if is_valid_string(values['-INCOME_NAME-']) and is_valid_int(values['-INCOME_AMOUNT-']) and values['-INCOME_AMOUNT-'] != '' and values['-CATEGORY-'] != ' ':
+            if is_valid_string(values['-INCOME_NAME-']) and values['-INCOME_AMOUNT-'] != '' and values['-CATEGORY-'] != ' ':
 
-                services.create_transaction(
-                    'income',
-                    values['-INCOME_NAME-'],
-                    values['-CATEGORY-'],
-                    values['-INCOME_AMOUNT-']
-                )
-                sg.popup('income added!')
+                if is_valid_int(values['-INCOME_AMOUNT-']):
+
+                    services.create_transaction(
+                        'income',
+                        values['-INCOME_NAME-'],
+                        values['-CATEGORY-'],
+                        values['-INCOME_AMOUNT-']
+                    )
+                    sg.popup('income added!')
+                
+                else:
+                    sg.popup("the income amount can't be negative numbers")
                 
             else:
                 sg.popup('the name, amount and category of the income cant be empty')

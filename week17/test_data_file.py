@@ -136,6 +136,14 @@ def test_is_valid_string_with_int():
     assert result == False
 
 
+def test_is_valid_string_with_spaces():
+    value = ' '
+
+    result = is_valid_string(value)
+
+    assert result == False
+
+
 def test_is_valid_int_with_int():
     value = 54
 
