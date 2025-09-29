@@ -10,20 +10,23 @@ def setup_routes(app, manager):
         hw_list = import_homeworks()
         title_filter = request.args.get('title')
         id_filter = request.args.get('id')
+        status_filter = request.args.get('status')
 
-        if title_filter:
-            hw_list = [hw for hw in hw_list if hw['title'] == title_filter]
-        
         if id_filter:
             try:
                 id_filter = int(id_filter)
             except ValueError:
                 return jsonify(message='id must be an integer')
 
-            hw_list = [hw for hw in hw_list if hw['id'] == id_filter]
 
-        if title_filter and id_filter:
-            return jsonify(message='only 1 filter can be accepted')
+        if title_filter or id_filter or status_filter:
+            hw_list = [
+                hw for hw in hw_list 
+                if (title_filter and hw['title'] == title_filter) 
+                or (id_filter and hw['id'] == id_filter) 
+                or (status_filter and hw['status'] == status_filter)
+            ]
+            
     
         return hw_list
 
@@ -55,9 +58,10 @@ def setup_routes(app, manager):
 
             return jsonify(message="Homework created")
         except ValueError as ex:
-            return jsonify(message=str(ex)), 400
+            print(ex)
+            return jsonify(message='there was an error'), 400
         except Exception as ex:
-            return jsonify(message=str(ex)), 500
+            return jsonify(message='there was an error'), 500
             
     @app.route('/homeworks/<int:id>', methods=["PATCH"])
     def update_homework(id):
@@ -73,20 +77,22 @@ def setup_routes(app, manager):
             if invalid_fields:
                 return jsonify(message='only title, description and status fields are allowed')
 
-            if check_valid_status(request_body['status']):
-                homeworks = import_homeworks()
-                for hw in homeworks:
-                    if hw['id'] == id:
-                        hw.update(request_body)
-                        export_data(homeworks)
-                        return jsonify(message='Homework updated')
-            else:
-                return jsonify(message="status must be 'not started', 'on progress' or 'done'"), 400
+
+            if "status" in request_body:
+                if not check_valid_status(request_body['status']):
+                    return jsonify(message="status must be 'not started', 'on progress' or 'done'"), 400
+
+            homeworks = import_homeworks()
+            for hw in homeworks:
+                if hw['id'] == id:
+                    hw.update(request_body)
+                    export_data(homeworks)
+                    return jsonify(message='Homework updated')
                 
             return jsonify(message='homeworks not founded'), 400
 
         except Exception as ex:
-            return jsonify(message=str(ex)), 500
+            return jsonify(message='there was an error'), 500
         
     @app.route('/homeworks/<int:id>', methods=["DELETE"])
     def delete_homework(id):
@@ -103,7 +109,7 @@ def setup_routes(app, manager):
             return jsonify(message='homeworks not founded'), 400
         
         except Exception as ex:
-            return jsonify(message=str(ex))
+            return jsonify(message='there was an error')
 
 
 
