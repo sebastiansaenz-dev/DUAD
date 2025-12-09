@@ -1,7 +1,8 @@
 
 
-from datetime import date
+from datetime import date as SystemDate
 
+date = 0
 
 class Model():
 
@@ -15,10 +16,10 @@ class Model():
         cls._id_counter += 1
         return cls._id_counter
     
+    
     @classmethod
     def exists_in_list(cls, object_to_check, existing_objects, key):
         return any(getattr(obj, key) == getattr(object_to_check, key) for obj in existing_objects)
-
 
 
     def to_json(self):
@@ -51,30 +52,29 @@ class Model():
         return cls(**obj_data)
 
 
-
 class User(Model):
     def __init__(self, id, username, password, role='user', created_at=None):
         self.id = id
         self.username = username
         self.password = password
         self.role = role
-        self.created_at = created_at or str(date.today())
+        self.created_at = created_at or str(SystemDate.today())
 
 
 class Receipt(Model):
-    def __init__(self, id, code, sale_id, products, total, payment_method, receipt_date=None):
+    def __init__(self, id, code, sale_id, products, total, payment_method, date=None):
         self.id = id
         self.code = code
         self.sale_id = sale_id
         self.products = products
         self.total = total
         self.payment_method = payment_method
-        self.receipt_date = receipt_date or str(date.today())
+        self.date = date or str(SystemDate.today())
 
     def to_public_json(self, products_list):
         return {
             'code': self.code,
-            'date': self.receipt_date,
+            'date': self.date,
             'items': [
                 {
                     'product_id': item.product_id,
@@ -96,7 +96,7 @@ class Product(Model):
         self.price = float(price)
         self.brand = brand
         self.stock = int(stock)
-        self.entry_date = entry_date or str(date.today())
+        self.entry_date = entry_date or str(SystemDate.today())
 
 
     def restock(self, amount):
@@ -110,12 +110,12 @@ class Product(Model):
 
 
 class Sale(Model):
-    def __init__(self, id , user_id, products, total, sale_date, payment_method, refund_status=False):
+    def __init__(self, id , user_id, products, total, date, payment_method, refund_status=False):
         self.id = id
         self.user_id = user_id
         self.products = products
         self.total = total
-        self.sale_date = sale_date or str(date.today())
+        self.date = date or str(SystemDate.today())
         self.payment_method = payment_method
         self.refund_status = refund_status
 
@@ -155,7 +155,6 @@ class Cart(Model):
         self.products = []
 
 
-
 class CartItem(Model):
     def __init__(self, id, product_id, quantity):
         self.id = id
@@ -163,13 +162,12 @@ class CartItem(Model):
         self.quantity = quantity
 
 
-
 class Refund(Model):
-    def __init__(self, id, sale_id, products, total=0, refund_date=None):
+    def __init__(self, id, sale_id, products, total=0, date=None):
         self.id = id
         self.sale_id = sale_id
         self.products = products
-        self.refund_date = refund_date or str(date.today())
+        self.date = date or str(SystemDate.today())
         self.total = total
 
     @staticmethod
@@ -186,8 +184,3 @@ class Refund(Model):
             total -= product.price * ri.quantity
 
         return total
-
-
-
-
-

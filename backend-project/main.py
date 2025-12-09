@@ -8,9 +8,6 @@ from sales import register_api as register_sales
 from receipts import register_api as register_receipts
 from refunds import register_api as register_refunds
 
-
-
-
 app = Flask(__name__)
 
 register_users(app)

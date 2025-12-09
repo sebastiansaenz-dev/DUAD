@@ -3,57 +3,40 @@
 
 from flask.views import MethodView
 from flask import request, jsonify
-from data import import_data
-from datetime import datetime
-from models import Receipt
+from data import import_data, receipts_path
+from models import Receipt, CartItem
 from users_authentication import require_auth_admin
-
-
-
+from utils import validate_int, validate_date, handle_errors
 
 
 class ReceiptAPI(MethodView):
     @require_auth_admin
+    @handle_errors
     def get(self):
 
-        receipts_list = [Receipt.from_json(r) for r in import_data('./receipts.json')]
+        receipts_list = [Receipt.from_json(r, types_map={'products': CartItem}) for r in import_data(receipts_path)]
         id_filter = request.args.get('id')
         code_filter = request.args.get('code')
-        user_id_filter = request.args.get('user_id')
         sale_id_filter = request.args.get('sale_id')
         product_id_filter = request.args.get('product_id')
         total_filter = request.args.get('total')
         date_filter = request.args.get('date')
 
         if date_filter:
-            try:
-                datetime.strptime(date_filter, '%Y-%m-%d')
-            except ValueError as ex:
-                return jsonify(message='date must be in format YYYY-MM-DD')
-            
+            date_filter = validate_date(date_filter)
+
         if id_filter:
-            try:
-                id_filter = int(id_filter)
-            except ValueError as ex:
-                return jsonify(message='the id must be an integer'), 400
+            id_filter = validate_int(id_filter, 'id')
 
         if user_id_filter:
-            try:
-                user_id_filter = int(user_id_filter)
-            except ValueError as ex:
-                return jsonify(message='the user_id must be an integer'), 400
-            
+            user_id_filter = validate_int(user_id_filter, 'user_id')
+
         if product_id_filter:
-            try:
-                product_id_filter = int(product_id_filter)
-            except ValueError as ex:
-                return jsonify(message='the product_id must be an integer'), 400
-            
+            product_id_filter = validate_int(product_id_filter, 'product_id')
+
         if total_filter:
-            try:
-                total_filter = int(total_filter)
-            except ValueError as ex:
-                return jsonify(message='the total must be an integer'), 400
+            total_filter = validate_int(total_filter, 'total')
+            
             
         filtered = receipts_list
 
@@ -62,15 +45,12 @@ class ReceiptAPI(MethodView):
 
         if code_filter:
             filtered = [r for r in receipts_list if r.code == code_filter]
-        
-        if user_id_filter:
-            filtered = [r for r in receipts_list if r.user_id == user_id_filter]
 
         if sale_id_filter:
             filtered = [r for r in receipts_list if r.sale_id == sale_id_filter]
 
         if product_id_filter:
-            filtered = [r for r in receipts_list if r.product_id == product_id_filter]
+            filtered = [r for r in receipts_list if any(p.product_id == product_id_filter for p in r.products)]
 
         if total_filter:
             filtered = [r for r in receipts_list if r.total == total_filter]

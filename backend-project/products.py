@@ -1,20 +1,18 @@
 
 
-
-
 from flask.views import MethodView
 from flask import request, jsonify
 from models import Product
-from data import export_data, import_data, add_item_to_list, check_if_exists
-from datetime import datetime
+from data import export_data, import_data, products_path
 import uuid
-from users_authentication import require_auth, tokens, require_auth_admin
-
+from users_authentication import require_auth_admin
+from utils import error_response, validate_int, validate_date, handle_errors
 
 
 class ProductAPI(MethodView):
+    @handle_errors
     def get(self):
-        products_list = [Product.from_json(p) for p in import_data('./products.json')]
+        products_list = [Product.from_json(p) for p in import_data(products_path)]
         id_filter = request.args.get('id')
         name_filter = request.args.get('name')
         code_filter = request.args.get('code')
@@ -22,35 +20,24 @@ class ProductAPI(MethodView):
         brand_filter = request.args.get('brand')
         stock_filter = request.args.get('stock')
 
-
         if id_filter:
-            try:
-                id_filter = int(id_filter)
-            except ValueError as ex:
-                return jsonify(message='id must be an integer'), 400
-            
+            id_filter = validate_int(id_filter, 'id')
+        
         if stock_filter:
-            try:
-                stock_filter = int(stock_filter)
-            except ValueError as ex:
-                return jsonify(message='stock must be a integer'), 400
-            
+            stock_filter = validate_int(stock_filter, 'stock')
+
         if code_filter:
-                if not code_filter.isalnum():
-                    return jsonify(message='code must be alphanumeric'), 400
-                
-                if any(char.isalpha() and not char.isupper() for char in code_filter):
-                    return jsonify(message='letters must be in uppercase'), 400
+            if len(code_filter) != 10:
+                raise ValueError('invalid code format')
+            
+            if not all(c in '0123456789ABCDEF' for c in code_filter):
+                raise ValueError('invalid code format')
         
         if entry_date_filter:
-            try:
-                datetime.strptime(entry_date_filter, "%Y-%m-%d")
-            except (ValueError, TypeError):
-                return jsonify(message='the date must be in this format YYYY-MM-DD'), 400
+            entry_date_filter = validate_date(entry_date_filter)
+
             
-
         filtered = products_list
-
 
         if id_filter:
             filtered = [p for p in filtered if p.id == id_filter]
@@ -74,117 +61,84 @@ class ProductAPI(MethodView):
         return jsonify([p.to_json() for p in filtered]), 200
 
     @require_auth_admin
+    @handle_errors
     def post(self):
-        try:
-            products_list = [Product.from_json(p) for p in import_data('./products.json')]
-            code = uuid.uuid4().hex.upper()[:10]
-            request_body = request.json
+        products_list = [Product.from_json(p) for p in import_data(products_path)]
+        code = uuid.uuid4().hex.upper()[:10]
+        request_body = request.json
 
-            require_fields = ['name', 'price', 'brand', 'stock']
-            for key in request_body.keys():
-                if key not in require_fields:
-                    return jsonify(message=f'unexpected key: {key}')
-                
-            require_fields = ['name', 'price', 'brand', 'stock']
-            for key in require_fields:
-                if key not in request_body.keys():
-                    return jsonify(message=f'{key} missing in the body')
-                
-            try:          
-                price = float(request_body['price'])
-                stock = int(request_body['stock'])
-            except ValueError as ex:
-                print(ex)
-                return jsonify(message='price must be a float and stock an integer'), 400
-                
-
-            product_check = any(p.name == request_body['name'] for p in products_list)
-
-            if not product_check:
-                new_product = Product(Product.next_id(products_list), code, request_body['name'], price, request_body['brand'], stock)
+        require_fields = ['name', 'price', 'brand', 'stock']
+        for key in request_body.keys():
+            if key not in require_fields:
+                return error_response(f'unexpected field: {key}', 422)
             
-            else:
-                return jsonify(message='product already exists'), 400
-            
-            products_list.append(new_product)
-            export_data([p.to_json() for p in products_list], './products.json')
+        for key in require_fields:
+            if key not in request_body.keys():
+                return error_response(f'missing field: {key}', 400)
 
-            return jsonify(message='product created'), 200
+        price = validate_int(request_body['price'], 'price')
+        stock = validate_int(request_body['stock'], 'stock')
+
+        product_check = any(p.name == request_body['name'] for p in products_list)
+        code_check = any(p.code == code for p in products_list)
+
+        if not product_check and not code_check:
+            new_product = Product(Product.next_id(products_list), code, request_body['name'], price, request_body['brand'], stock)
         
-        except Exception as ex:
-            print(ex)
-            return jsonify(message='there was an error'), 500
+        else:
+            return error_response('product already exists', 409)
+        
+        products_list.append(new_product)
+        export_data([p.to_json() for p in products_list], products_path)
 
+        return jsonify(message='product created'), 201
 
 
     @require_auth_admin
+    @handle_errors
     def patch(self, id):
-        try:
+        products_list = [Product.from_json(p) for p in import_data(products_path)]
+        product_to_update = next((p for p in products_list if p.id == id), None)
+        request_body = request.json
 
-            products_list = [Product.from_json(p) for p in import_data('./products.json')]
-            product_to_update = next((p for p in products_list if p.id == id), None)
-            request_body = request.json
+        if not product_to_update:
+            return error_response('product not found', 404)
 
-            allowed_fields = ['name', 'price', 'entry_date', 'brand', 'stock']
-            for key in request_body.keys():
-                if key not in allowed_fields:
-                    return jsonify(message=f'{key} cannot be modified'), 400
-                
-            if 'entry_date' in request_body:
-                try:
-                    datetime.strptime(request_body['entry_date'], "%Y-%m-%d")
-                except ValueError:
-                    return jsonify(message='the entry_date must be in YYYY-MM-DD format'), 400
-                
-            if 'price' in request_body:
-                try:
-                    price = float(request_body['price'])
-                    if price < 0:
-                        return jsonify(message='price must be a positive number')
-                except (ValueError, TypeError):
-                    return jsonify(message='price must be a number')
-                
-            if 'stock' in request_body:
-                try:
-                    stock = float(request_body['stock'])
-                    if stock < 0:
-                        return jsonify(message='stock must be a positive number')
-                    
-                except (ValueError, TypeError):
-                    return jsonify(message='stock must be a number')
-                
-            for key, value in request_body.items():
-                if hasattr(product_to_update, key):
-                    setattr(product_to_update, key, value)
-
-            export_data([p.to_json() for p in products_list], './products.json')
-            return jsonify(product_to_update.to_json()), 200
-
-
-        except Exception as ex:
-            print(ex)
-            return jsonify(message='there was an error'), 500
+        allowed_fields = ['name', 'price', 'brand', 'stock']
+        for key in request_body.keys():
+            if key not in allowed_fields:
+                return error_response(f'unexpected field: {key}', 422)
             
+        if 'price' in request_body:
+            price = validate_int(request_body['price'], 'price')
+            if price < 0:
+                raise ValueError('price must be a positive number')
+            
+        if 'stock' in request_body:
+            stock = validate_int(request_body['stock'], 'stock')
+            if stock < 0:
+                raise ValueError('stock must be a positive number')
+            
+        for key, value in request_body.items():
+            if hasattr(product_to_update, key):
+                setattr(product_to_update, key, value)
+
+        export_data([p.to_json() for p in products_list], products_path)
+        return jsonify(product_to_update.to_json()), 200
+        
     
     @require_auth_admin
+    @handle_errors
     def delete(self, id):
-        try:
+        products_list = [Product.from_json(p) for p in import_data(products_path)]
+        product_to_delete = next((p for p in products_list if p.id == id), None)
 
-            products_list = [Product.from_json(p) for p in import_data('./products.json')]
+        if not product_to_delete:
+            return error_response('product not found', 404)
 
-            product_to_delete = next((p for p in products_list if p.id == id), None)
-
-            if not product_to_delete:
-                return jsonify(message='product not found'), 404
-
-            products_list =[p for p in products_list if p.id != id]
-            export_data([p.to_json() for p in products_list], './products.json')
-            return jsonify(message='product deleted'), 200
-
-        except Exception as ex:
-            print(ex)
-            return jsonify(message='there was an error'), 500
-
+        products_list =[p for p in products_list if p.id != id]
+        export_data([p.to_json() for p in products_list], products_path)
+        return jsonify(message='product deleted'), 200
 
 
 def register_api(app):

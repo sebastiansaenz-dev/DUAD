@@ -2,6 +2,14 @@
 import json
 import os
 
+users_path = './users.json'
+products_path = './products.json'
+carts_path = './carts.json'
+sales_path = './sales.json'
+receipts_path = './receipts.json'
+refunds_path = './refunds.json'
+
+
 def check_if_exists(key, value, item_list):
     return any(item[key] == value for item in item_list)
 
