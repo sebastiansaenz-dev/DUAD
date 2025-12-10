@@ -6,7 +6,6 @@ import traceback
 
 def error_response(message, status):
     return jsonify({
-        'success': False,
         'error': {
             'message': message
         }
