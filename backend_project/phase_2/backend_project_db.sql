@@ -2,14 +2,14 @@
 
 CREATE TABLE users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    username VARCHAR(50) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
     password TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT datetime('now')
 );
 
 CREATE TABLE products (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    code CHAR(10) NOT NULL UNIQUE,
+    sku VARCHAR(30) NOT NULL UNIQUE,
     name VARCHAR(100) NOT NULL,
     price INTEGER NOT NULL,
     brand VARCHAR(50) NOT NULL,
@@ -27,7 +27,8 @@ CREATE TABLE products_carts (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     cart_id INTEGER NOT NULL REFERENCES carts(id),
     product_id INTEGER NOT NULL REFERENCES products(id),
-    quantity INTEGER NOT NULL
+    quantity INTEGER NOT NULL DEFAULT 1,
+    UNIQUE (cart_id, product_id)
 );
 
 CREATE TABLE payment_methods (
@@ -40,44 +41,17 @@ CREATE TABLE sales (
     user_id INTEGER NOT NULL REFERENCES users(id),
     payment_method_id INTEGER NOT NULL REFERENCES payment_methods(id),
     total INTEGER NOT NULL,
-    date TIMESTAMP DEFAULT datetime('now')
-);
-
-CREATE TABLE refunds (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    sale_id INTEGER NOT NULL REFERENCES sales(id),
-    total INTEGER NOT NULL,
-    date TIMESTAMP DEFAULT datetime('now')
-);
-
-CREATE TABLE receipts (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    code CHAR(10) NOT NULL UNIQUE,
-    sale_id INTEGER NOT NULL REFERENCES sales(id),
-    payment_method_id INTEGER NOT NULL REFERENCES payment_methods(id),
-    total INTEGER NOT NULL,
-    date TIMESTAMP DEFAULT datetime('now')
+    date TIMESTAMP DEFAULT datetime('now'),
+    type VARCHAR(20) NOT NULL CHECK (type IN ('sale', 'refund')) DEFAULT 'sale',
+    parent_sale_id INTEGER REFERENCES sales(id) --Null when type is 'sale'
 );
 
 CREATE TABLE products_sales (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     sale_id INTEGER NOT NULL REFERENCES sales(id),
     product_id INTEGER NOT NULL REFERENCES products(id),
-    quantity INTEGER NOT NULL
-);
-
-CREATE TABLE products_receipt (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    receipt_id INTEGER NOT NULL REFERENCES receipts(id),
-    product_id INTEGER NOT NULL REFERENCES products(id),
-    quantity INTEGER NOT NULL
-);
-
-CREATE TABLE products_refunds (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    refund_id INTEGER NOT NULL REFERENCES refunds(id),
-    product_id INTEGER NOT NULL REFERENCES products(id),
-    quantity INTEGER NOT NULL
+    quantity INTEGER NOT NULL,
+    UNIQUE (sale_id, product_id)
 );
 
 CREATE TABLE roles (
@@ -86,7 +60,7 @@ CREATE TABLE roles (
 );
 
 CREATE TABLE users_roles (
-    id INTEGER PRIAMRY KEY AUTOINCREMENT,
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id INTEGER NOT NULL REFERENCES users(id),
     role_id INTEGER NOT NULL REFERENCES roles(id)
 );
