@@ -11,7 +11,7 @@ CREATE TABLE products (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     sku VARCHAR(30) NOT NULL UNIQUE,
     name VARCHAR(100) NOT NULL,
-    price INTEGER NOT NULL,
+    price REAL NOT NULL,
     brand VARCHAR(50) NOT NULL,
     stock INTEGER NOT NULL,
     entry_date TIMESTAMP DEFAULT datetime('now')
@@ -39,8 +39,9 @@ CREATE TABLE payment_methods (
 CREATE TABLE sales (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id INTEGER NOT NULL REFERENCES users(id),
+    cart_id INTEGER NOT NULL REFERENCES carts(id),
     payment_method_id INTEGER NOT NULL REFERENCES payment_methods(id),
-    total INTEGER NOT NULL,
+    total REAL NOT NULL,
     date TIMESTAMP DEFAULT datetime('now'),
     type VARCHAR(20) NOT NULL CHECK (type IN ('sale', 'refund')) DEFAULT 'sale',
     parent_sale_id INTEGER REFERENCES sales(id) --Null when type is 'sale'
