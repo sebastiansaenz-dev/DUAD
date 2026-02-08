@@ -2,6 +2,7 @@
 
 CREATE TABLE users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
+    username VARCHAR(50) NOT NULL UNIQUE,
     email VARCHAR(255) NOT NULL UNIQUE,
     password TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT datetime('now')
@@ -20,7 +21,6 @@ CREATE TABLE products (
 CREATE TABLE carts (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id INTEGER NOT NULL UNIQUE REFERENCES users(id),
-    status VARCHAR(20) NOT NULL DEFAULT 'active'
 );
 
 CREATE TABLE products_carts (
@@ -38,16 +38,15 @@ CREATE TABLE payment_methods (
 
 CREATE TABLE sales (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    user_id INTEGER NOT NULL REFERENCES users(id),
     cart_id INTEGER NOT NULL REFERENCES carts(id),
     payment_method_id INTEGER NOT NULL REFERENCES payment_methods(id),
     total REAL NOT NULL,
     date TIMESTAMP DEFAULT datetime('now'),
-    type VARCHAR(20) NOT NULL CHECK (type IN ('sale', 'refund')) DEFAULT 'sale',
+    type_id INTEGER REFERENCES  sales_type(id),
     parent_sale_id INTEGER REFERENCES sales(id) --Null when type is 'sale'
 );
 
-CREATE TABLE products_sales (
+CREATE TABLE products_sales ( 
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     sale_id INTEGER NOT NULL REFERENCES sales(id),
     product_id INTEGER NOT NULL REFERENCES products(id),
@@ -57,7 +56,7 @@ CREATE TABLE products_sales (
 
 CREATE TABLE roles (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    role VARCHAR(20) NOT NULL
+    name VARCHAR(20) NOT NULL UNIQUE
 );
 
 CREATE TABLE users_roles (
@@ -65,3 +64,9 @@ CREATE TABLE users_roles (
     user_id INTEGER NOT NULL REFERENCES users(id),
     role_id INTEGER NOT NULL REFERENCES roles(id)
 );
+
+CREATE TABLE sales_type (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name VARCHAR(10) NOT NULL UNIQUE  -- sale and refund
+);
+

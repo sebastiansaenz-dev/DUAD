@@ -1,0 +1,54 @@
+insert into lyfter_ecommerce."Products_carts" (cart_id, product_id, quantity) values (17, 12, 3);
+insert into lyfter_ecommerce."Products_carts" (cart_id, product_id, quantity) values (13, 36, 2);
+insert into lyfter_ecommerce."Products_carts" (cart_id, product_id, quantity) values (39, 46, 4);
+insert into lyfter_ecommerce."Products_carts" (cart_id, product_id, quantity) values (38, 35, 2);
+insert into lyfter_ecommerce."Products_carts" (cart_id, product_id, quantity) values (24, 45, 5);
+insert into lyfter_ecommerce."Products_carts" (cart_id, product_id, quantity) values (38, 9, 6);
+insert into lyfter_ecommerce."Products_carts" (cart_id, product_id, quantity) values (1, 40, 1);
+insert into lyfter_ecommerce."Products_carts" (cart_id, product_id, quantity) values (4, 48, 2);
+insert into lyfter_ecommerce."Products_carts" (cart_id, product_id, quantity) values (2, 33, 5);
+insert into lyfter_ecommerce."Products_carts" (cart_id, product_id, quantity) values (2, 9, 8);
+insert into lyfter_ecommerce."Products_carts" (cart_id, product_id, quantity) values (18, 40, 4);
+insert into lyfter_ecommerce."Products_carts" (cart_id, product_id, quantity) values (11, 38, 3);
+insert into lyfter_ecommerce."Products_carts" (cart_id, product_id, quantity) values (25, 38, 10);
+insert into lyfter_ecommerce."Products_carts" (cart_id, product_id, quantity) values (15, 45, 9);
+insert into lyfter_ecommerce."Products_carts" (cart_id, product_id, quantity) values (36, 11, 3);
+insert into lyfter_ecommerce."Products_carts" (cart_id, product_id, quantity) values (42, 12, 7);
+insert into lyfter_ecommerce."Products_carts" (cart_id, product_id, quantity) values (13, 10, 3);
+insert into lyfter_ecommerce."Products_carts" (cart_id, product_id, quantity) values (35, 12, 7);
+insert into lyfter_ecommerce."Products_carts" (cart_id, product_id, quantity) values (30, 22, 2);
+insert into lyfter_ecommerce."Products_carts" (cart_id, product_id, quantity) values (19, 29, 6);
+insert into lyfter_ecommerce."Products_carts" (cart_id, product_id, quantity) values (3, 16, 7);
+insert into lyfter_ecommerce."Products_carts" (cart_id, product_id, quantity) values (38, 43, 7);
+insert into lyfter_ecommerce."Products_carts" (cart_id, product_id, quantity) values (31, 38, 9);
+insert into lyfter_ecommerce."Products_carts" (cart_id, product_id, quantity) values (45, 7, 2);
+insert into lyfter_ecommerce."Products_carts" (cart_id, product_id, quantity) values (42, 2, 1);
+insert into lyfter_ecommerce."Products_carts" (cart_id, product_id, quantity) values (11, 8, 10);
+insert into lyfter_ecommerce."Products_carts" (cart_id, product_id, quantity) values (44, 21, 4);
+insert into lyfter_ecommerce."Products_carts" (cart_id, product_id, quantity) values (43, 46, 10);
+insert into lyfter_ecommerce."Products_carts" (cart_id, product_id, quantity) values (5, 45, 9);
+insert into lyfter_ecommerce."Products_carts" (cart_id, product_id, quantity) values (43, 5, 9);
+insert into lyfter_ecommerce."Products_carts" (cart_id, product_id, quantity) values (3, 17, 7);
+insert into lyfter_ecommerce."Products_carts" (cart_id, product_id, quantity) values (35, 9, 5);
+insert into lyfter_ecommerce."Products_carts" (cart_id, product_id, quantity) values (6, 12, 1);
+insert into lyfter_ecommerce."Products_carts" (cart_id, product_id, quantity) values (7, 23, 5);
+insert into lyfter_ecommerce."Products_carts" (cart_id, product_id, quantity) values (37, 49, 1);
+insert into lyfter_ecommerce."Products_carts" (cart_id, product_id, quantity) values (42, 10, 3);
+insert into lyfter_ecommerce."Products_carts" (cart_id, product_id, quantity) values (43, 21, 9);
+insert into lyfter_ecommerce."Products_carts" (cart_id, product_id, quantity) values (15, 15, 1);
+insert into lyfter_ecommerce."Products_carts" (cart_id, product_id, quantity) values (25, 40, 8);
+insert into lyfter_ecommerce."Products_carts" (cart_id, product_id, quantity) values (19, 24, 10);
+insert into lyfter_ecommerce."Products_carts" (cart_id, product_id, quantity) values (20, 28, 5);
+insert into lyfter_ecommerce."Products_carts" (cart_id, product_id, quantity) values (42, 31, 7);
+insert into lyfter_ecommerce."Products_carts" (cart_id, product_id, quantity) values (4, 13, 2);
+insert into lyfter_ecommerce."Products_carts" (cart_id, product_id, quantity) values (1, 6, 10);
+insert into lyfter_ecommerce."Products_carts" (cart_id, product_id, quantity) values (50, 22, 4);
+insert into lyfter_ecommerce."Products_carts" (cart_id, product_id, quantity) values (18, 19, 9);
+insert into lyfter_ecommerce."Products_carts" (cart_id, product_id, quantity) values (27, 26, 7);
+insert into lyfter_ecommerce."Products_carts" (cart_id, product_id, quantity) values (3, 5, 3);
+insert into lyfter_ecommerce."Products_carts" (cart_id, product_id, quantity) values (14, 29, 7);
+insert into lyfter_ecommerce."Products_carts" (cart_id, product_id, quantity) values (19, 11, 9);
+
+
+
+ 
