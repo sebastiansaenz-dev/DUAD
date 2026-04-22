@@ -89,7 +89,7 @@ class AdminCartsRepo(BaseRepository):
                 product.stock -= difference
                 item.quantity = new_quantity
 
-                db.session.commit()
+            db.session.commit()
 
 
         except Exception as ex:

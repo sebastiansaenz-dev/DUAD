@@ -1,14 +1,14 @@
 
 
 
-from flask import request, jsonify
+from flask import request, jsonify, Blueprint
 from flask.views import MethodView
 from models import Refunds
 from schemas.refunds_schema import RefundsSchema
 from repos.refunds_repo import RefundsRepo
 from utils import require_auth, handle_errors
 
-
+refunds_bp = Blueprint('refunds', __name__, url_prefix='/refunds')
 
 class RefundsAPI(MethodView):
 
@@ -31,17 +31,8 @@ class RefundsAPI(MethodView):
         new_refund = self.repo.create_refund(current_user_id, data)
         return jsonify(new_refund)
 
-
-
-
-
-def register_api(app):
-    refund_view = RefundsAPI.as_view('refund_api')
-    app.add_url_rule('/refunds', view_func=refund_view, methods=['GET', 'POST'])
-
-
-
-
+refund_view = RefundsAPI.as_view('refund_api')
+refunds_bp.add_url_rule('/refunds', view_func=refund_view, methods=['GET', 'POST'])
 
 
 

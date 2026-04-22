@@ -1,6 +1,6 @@
 
 
-from flask import request, jsonify
+from flask import request, jsonify, Blueprint
 from flask.views import MethodView
 from models import Orders
 from schemas.orders_schema import OrdersSchema
@@ -8,6 +8,7 @@ from repos.orders_repo import OrdersRepo
 from utils import require_admin, require_auth, handle_errors
 
 
+orders_bp = Blueprint('orders', __name__, url_prefix='/orders')
 
 class OrdersAPI(MethodView):
 
@@ -30,9 +31,6 @@ class OrdersAPI(MethodView):
 
         return jsonify(new_order)
 
+order_view = OrdersAPI.as_view('order_api')
+orders_bp.add_url_rule('/', view_func=order_view, methods=['GET', 'POST'])
 
-
-
-def register_api(app):
-    order_view = OrdersAPI.as_view('order_api')
-    app.add_url_rule('/orders', view_func=order_view, methods=['GET', 'POST'])

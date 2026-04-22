@@ -45,8 +45,24 @@ class AdminUsersRepo(BaseRepository):
             db.session.add(new_user)
             db.session.flush()
 
-            role_assignation = UsersRoles(user_id=new_user.id)
-            db.session.add(role_assignation)
+            if 'roles' in data:
+
+                new_roles = data.pop('roles')
+
+                roles_stmt = select(Roles)
+                all_roles = db.session.execute(roles_stmt).scalars().all()
+
+                roles_names = {role.name: role.id for role in all_roles}
+                    
+
+                for role in new_roles:
+                    if role not in roles_names.keys():
+                        raise BadRequest(f"role: {role} doesn't exists")
+                    
+                for role in new_roles:
+                    role_id = roles_names[role]
+                    new_role = UsersRoles(user_id=id, role_id=role_id)
+                    db.session.add(new_role)
 
             db.session.refresh(new_user)
 

@@ -1,13 +1,15 @@
 
 
 from flask.views import MethodView
-from flask import request, jsonify
+from flask import request, jsonify, Blueprint
 from repos.products_repo import ProductsRepo
 from models import Products
 from schemas.products_schema import ProductsSchema
 from utils import handle_errors, require_admin
 import uuid
 
+
+admin_products_bp = Blueprint('admin_products', __name__, url_prefix='/staff-portal/products')
 
 
 class AdminProductsAPI(MethodView):
@@ -47,7 +49,6 @@ class AdminProductsAPI(MethodView):
             return jsonify(message='item deleted'), 200
 
 
-def register_api(app):
-    admin_products_view = AdminProductsAPI.as_view('admin_products_api')
-    app.add_url_rule('/staff-portal/products', view_func=admin_products_view, methods=['POST'])
-    app.add_url_rule('/staff-portal/products/<int:id>', view_func=admin_products_view, methods=['PATCH', 'DELETE'])
+admin_products_view = AdminProductsAPI.as_view('admin_products_api')
+admin_products_bp.add_url_rule('/', view_func=admin_products_view, methods=['POST'])
+admin_products_bp.add_url_rule('/<int:id>', view_func=admin_products_view, methods=['PATCH', 'DELETE'])

@@ -1,11 +1,13 @@
 
 
 from flask.views import MethodView
-from flask import request, jsonify
+from flask import request, jsonify, Blueprint
 from repos.products_repo import ProductsRepo
 from models import Products
 from schemas.products_schema import ProductsSchema
 from utils import handle_errors
+
+products_bp = Blueprint('products', __name__, url_prefix='/products')
 
 
 
@@ -22,6 +24,7 @@ class ProductsAPI(MethodView):
         return jsonify(products)
 
 
-def register_api(app):
-    products_view = ProductsAPI.as_view('products_api')
-    app.add_url_rule('/products', view_func=products_view, methods=['GET'])
+products_view = ProductsAPI.as_view('products_api')
+
+products_bp.add_url_rule('/', view_func=products_view, methods=['GET'])
+

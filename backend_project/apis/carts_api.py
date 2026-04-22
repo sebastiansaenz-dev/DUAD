@@ -1,7 +1,7 @@
 
 
 
-from flask import request, jsonify
+from flask import request, jsonify, Blueprint
 from flask.views import MethodView
 from models import Carts
 from schemas.carts_schema import CartsSchema
@@ -10,6 +10,7 @@ from utils import require_auth, handle_errors
 from constants import CartsStatusEnum
 
 
+carts_bp = Blueprint('carts', __name__, url_prefix='/cart')
 
 class CartsAPI(MethodView):
     def __init__(self):
@@ -75,10 +76,8 @@ class CartsAPI(MethodView):
         return jsonify(message='product/s deleted')
 
 
-def register_api(app):
-    carts_view = CartsAPI.as_view('carts_api')
-    app.add_url_rule('/cart', view_func=carts_view, methods=['GET', 'POST', 'PATCH', 'DELETE'])
-
+carts_view = CartsAPI.as_view('carts_api')
+carts_bp.add_url_rule('/', view_func=carts_view, methods=['GET', 'POST', 'PATCH', 'DELETE'])
 
 
 

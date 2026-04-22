@@ -1,12 +1,14 @@
 
 
 from flask.views import MethodView
-from flask import jsonify, request
+from flask import jsonify, request, Blueprint
 from schemas.users_schema import UsersSchema
 from repos.admin_repos.admin_users_repo import AdminUsersRepo
 from models import Users
 from utils import require_admin, handle_errors
 
+
+admin_users_bp = Blueprint('admin_users', __name__, url_prefix='/staff-portal/users')
 
 class AdminUserAPI(MethodView):
 
@@ -57,11 +59,7 @@ class AdminUserAPI(MethodView):
             return jsonify(message='user deleted'), 200
         
 
+admin_user_view = AdminUserAPI.as_view('admin_user_api')
+admin_users_bp.add_url_rule('/', view_func=admin_user_view, methods=['GET', 'POST'])
+admin_users_bp.add_url_rule('/<int:id>', view_func=admin_user_view, methods=['PATCH', 'DELETE'])
 
-
-
-def register_api(app):
-    admin_user_view = AdminUserAPI.as_view('admin_user_api')
-    
-    app.add_url_rule('/staff-portal/users', view_func=admin_user_view, methods=['GET', 'POST'])
-    app.add_url_rule('/staff-portal/users/<int:id>', view_func=admin_user_view, methods=['PATCH', 'DELETE'])
