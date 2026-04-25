@@ -17,9 +17,11 @@ class ProductsAPI(MethodView):
 
     @handle_errors
     def get(self):
-        filters = request.args
+        page = request.args.get('page', 1, type=int)
+        per_page = request.args.get('per_page', 20, type=int)
+        filters = request.args.to_dict()
 
-        products = self.repo.get_all(filters)
+        products = self.repo.get_products(filters, page, per_page)
 
         return jsonify(products)
 
