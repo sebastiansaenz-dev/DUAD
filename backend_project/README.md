@@ -4,18 +4,35 @@
 ![Flask](https://img.shields.io/badge/flask-%23000.svg?style=for-the-badge&logo=flask&logoColor=white)
 ![PostgreSQL](https://img.shields.io/badge/postgresql-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white)
 
-This is a high-performance RESTful API design for an e-commerce platform. Developed using Flask, the architecture implements a modular system based on Blueprints that separates the domains of administration and client. The projects stand out for the use of the repository pattern, which ensures total decoupling between business logic and data persistence with SQLAlchemy. Additionally, a strict serialization by Marshmallow is implemented to guarantee the integrity of JSON responses.
+This is a high-performance RESTful API design for an e-commerce platform. Developed using Flask, the architecture implements a modular system based on Blueprints that separates the domains of administration and client. The projects stands out for the use of the repository pattern, which ensures total decoupling between business logic and data persistence with SQLAlchemy. Additionally, a strict serialization by Marshmallow is implemented to guarantee the integrity of JSON responses.
 
-## Technologies
+## 💡Technologies
 
 - **Flask**: For a lightweight and modular RESTful architecture
 - **SQLAlchemy & PostgreSQL**: Robust data persistence and relational mapping
 - **Marshmallow**: Strict data validation and serialization
 - **JWT**: Secure stateless authentication
 
+## 🏗️ Architecture: Repository Pattern
+
+The project is structured to separate concerns:
+
+1. **Models**: Define the database structure.
+2. **Repositories**: Handle all database queries (CRUD).
+3. **Schemas**: Manage validation and JSON serialization.
+4. **Blueprints**: Define the API routes and handle logic flow.
+
 ## 🛠️ Installation and Configuration
 
-Follow these steps to raise the development environment locally
+### 📋 Prerequisites
+
+| Tool           | Version    | Description            |
+| :------------- | :--------- | :--------------------- |
+| **Python**     | $\ge$ 3.10 | Backend runtime        |
+| **PostgreSQL** | $\ge$ 14   | Relational database    |
+| **Pip**        | Latest     | Python package manager |
+
+### Follow these steps to raise the development environment locally
 
 ### 1. Clone this repository
 
@@ -60,6 +77,8 @@ SECRET_KEY=your_secret_key
 ```
 
 ### 5. Database initialization
+
+- **Note**: Make sure you have created a database in PostgreSQL that matches the name in your .env file before running the migrations.
 
 ```Bash
 # Apply the migrations to create your database tables
