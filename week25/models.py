@@ -17,7 +17,7 @@ class ReceiptsFruits(Base):
     quantity = Column(Integer, nullable=False)
 
     receipt = relationship("Receipts", back_populates='receipts_fruits')
-    fruit = relationship("Fruits", lazy='joined')
+    fruits = relationship("Fruits", back_populates='receipts', lazy='joined')
 
 
 class Users(Base):
@@ -41,7 +41,7 @@ class Fruits(Base):
     entry_date = Column(DateTime, server_default=func.now())
     quantity = Column(Integer, nullable=False)
 
-    receipts = relationship("Receipts", secondary=ReceiptsFruits.__table__, back_populates="fruits")
+    receipts = relationship("ReceiptsFruits", back_populates="fruits")
 
     __hidden__ = ['entry_date']
 
@@ -54,7 +54,6 @@ class Receipts(Base):
     total = Column(Integer, nullable=False)
 
     user = relationship("Users", back_populates="receipts")
-    fruits = relationship("Fruits", secondary=ReceiptsFruits.__table__, back_populates="receipts")
     receipts_fruits = relationship("ReceiptsFruits", back_populates='receipt', lazy='joined')
 
 

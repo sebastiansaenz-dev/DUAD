@@ -3,11 +3,22 @@ from JWT_Manager import JWT_Manager
 from flask import Flask, request, Response, jsonify
 from models import Base
 from functools import wraps
+from cache import CacheManager
+from dotenv import load_dotenv
+import os
+import redis
+import json
 
+load_dotenv()
 
 app = Flask("user-service")
 db_manager = DB_Manager()
 jwt_manager = JWT_Manager(private_path='./private_key.pem', public_path='./public_key.pem', algorithm='RS256')
+cache_manager = CacheManager(
+    host=os.getenv("REDIS_HOST"),
+    port=int(os.getenv("REDIS_PORT")),
+    password=os.getenv("REDIS_PASSWORD")
+)
 Base.metadata.create_all(db_manager.engine)
 
 
@@ -217,6 +228,64 @@ def delete_user(current_user_id):
 ########################################
 # CRUD FRUITS
 
+@app.route('/fruits')
+def get_fruits():
+    try:
+        filters = request.args.to_dict()
+
+        cache_key = f"fruits:all:{filters}" if filters else "fruits:all"
+
+
+        cached_fruits = cache_manager.get_data(cache_key)
+        if cached_fruits:
+            return jsonify(json.loads(cached_fruits))
+
+        fruits = db_manager.fruits.get_all(filters)
+
+        fruits_string = json.dumps([db_manager.fruits.to_dict(f) for f in fruits])
+
+        fruits_dict = [db_manager.fruits.to_dict(f) for f in fruits]
+
+        if cache_key == "fruits:all":
+            cache_manager.store_data(cache_key, fruits_string, time_to_live=600)
+
+        cache_manager.store_data(cache_key, fruits_string, time_to_live=300)
+
+        return jsonify(fruits_dict)
+    
+    except Exception as ex:
+        print(ex)
+        return jsonify('there was as error')
+
+
+@app.route('/fruits/<id>', methods=['GET'])
+def get_fruits_by_id(id):
+    try:
+
+        cache_fruit = cache_manager.get_data(f'fruits:{id}')
+
+        if cache_fruit:
+            return jsonify(json.loads(cache_fruit))
+
+        fruit = db_manager.fruits.get_by_id(id)
+
+        if not fruit:
+            return jsonify(message='fruit not found'), 404
+
+        fruit_dict = db_manager.fruits.to_dict(fruit)
+
+        fruit_string = json.dumps(fruit_dict)
+
+        cache_manager.store_data(f'fruits:{id}', fruit_string, time_to_live=3600)
+
+        return jsonify(fruit_dict)
+
+    
+    except Exception as ex:
+        print(ex)
+        return jsonify('there was as error')
+
+
 @app.route('/fruits', methods=['POST'])
 @require_admin
 def create_fruit():
@@ -224,34 +293,25 @@ def create_fruit():
         data = request.get_json()
         if data.get('name') == None or data.get('price') == None or data.get('quantity') == None:
             return Response(status=400)
-        else:
-            fruit_data = {
-                "name": data.get('name'),
-                "price": data.get('price'),
-                "quantity": data.get('quantity')
-            }
 
-            new_fruit = db_manager.fruits.create(fruit_data)
+        fruit_data = {
+            "name": data.get('name'),
+            "price": data.get('price'),
+            "quantity": data.get('quantity')
+        }
 
-            return jsonify(db_manager.fruits.to_dict(new_fruit))
+        new_fruit = db_manager.fruits.create(fruit_data)
+        new_fruit_dict = db_manager.fruits.to_dict(new_fruit)
+
+        cache_manager.store_data(f'fruits:{new_fruit.id}', json.dumps(new_fruit_dict), time_to_live=3600)
+        cache_manager.delete_data('fruits:all')
+
+        return jsonify(new_fruit_dict)
 
     except Exception as ex:
         print(ex)
         return jsonify("there was an error"), 500
     
-
-@app.route('/fruits')
-def get_fruits():
-    try:
-        filters = request.args.to_dict()
-
-        fruits = db_manager.fruits.get_all(filters)
-
-        return jsonify([db_manager.fruits.to_dict(f) for f in fruits])
-    except Exception as ex:
-        print(ex)
-        return jsonify('there was as error')
-
 
 @app.route('/fruits/<id>', methods=['PATCH'])
 @require_admin
@@ -261,7 +321,14 @@ def update_fruit(id):
 
         update_fruit = db_manager.fruits.update(new_data, {"id": id})
 
-        print(update_fruit)
+        if not update_fruit:
+            return jsonify(message='fruit not found'), 404
+
+        if update_fruit:
+            for fruit in update_fruit:
+                cache_manager.delete_data(f'fruits:{fruit.id}')
+
+        cache_manager.delete_data('fruits:all')
 
         return jsonify([db_manager.fruits.to_dict(f) for f in update_fruit])
     except Exception as ex:
@@ -275,6 +342,8 @@ def delete_fruit(id):
     try:
 
         db_manager.fruits.delete({"id": id})
+        cache_manager.delete_data(f'fruits:{id}')
+        cache_manager.delete_data('fruits:all')
 
         return jsonify('item deleted')
 
@@ -327,8 +396,11 @@ def buy(current_user_id):
             }
             db_manager.receipts_fruits.create(receipt_fruits_data)
 
+
             db_manager.fruits.update({'quantity': item['fruit'].quantity - item['quantity']}, {'id': item['fruit'].id})
 
+            cache_manager.delete_data(f'fruits:{item['fruit'].id}')
+        cache_manager.delete_data('fruits:all')
         return jsonify({
             'message': 'purchase successful',
             'receipt_id': new_receipt.id
