@@ -6,13 +6,13 @@ from functools import wraps
 from cache import CacheManager
 from dotenv import load_dotenv
 import os
-import redis
 import json
+from utils import generate_filters_hash
 
 load_dotenv()
 
 app = Flask("user-service")
-db_manager = DB_Manager()
+db_manager = DB_Manager(os.getenv("DATABASE_URL"))
 jwt_manager = JWT_Manager(private_path='./private_key.pem', public_path='./public_key.pem', algorithm='RS256')
 cache_manager = CacheManager(
     host=os.getenv("REDIS_HOST"),
@@ -22,24 +22,27 @@ cache_manager = CacheManager(
 Base.metadata.create_all(db_manager.engine)
 
 
+def error_response(message, status_code):
+    return jsonify({"error": message}), status_code
+
 def require_admin(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
         token = request.headers.get('Authorization')
         if not token or not token.startswith("Bearer "):
-            return jsonify('invalid token'), 400
+            return error_response("Invalid or missing token", 401)
 
         token = token.replace("Bearer ", "")
 
         decoded = jwt_manager.decode(token)
 
         if decoded is None:
-            return jsonify('Invalid token'), 400
+            return error_response("Invalid token", 401)
         
         user_role = decoded.get('role')
 
         if user_role != 'admin':
-            return jsonify('invalid permissions'), 403
+            return error_response("Invalid permissions", 403)
 
         return func(*args, **kwargs)
     return wrapper
@@ -49,14 +52,14 @@ def require_auth(func):
     def wrapper(*args, **kwargs):
         token = request.headers.get('Authorization')
         if not token or not token.startswith("Bearer "):
-            return jsonify('invalid token'), 400
+            return error_response("Invalid or missing token", 401)
         
         token = token.replace("Bearer ", "")
 
         decoded = jwt_manager.decode(token)
 
         if decoded is None:
-            return jsonify('invalid token'), 403
+            return error_response("Invalid token", 401)
         
         user_id = decoded.get('id')
 
@@ -78,7 +81,7 @@ def liveness():
 def register():
     data = request.get_json()  # data is empty
     if(data.get('username') == None or data.get('password') == None):
-        return Response(status=400)
+        return error_response("Username and password are required", 400)
     else:
         user_data = {
             "username": data.get('username'),
@@ -99,7 +102,7 @@ def register():
 def login():
     data = request.get_json()  # data is empty
     if(data.get('username') == None or data.get('password') == None):
-        return Response(status=400)
+        return error_response("Username and password are required", 400)
     else:
         user_data = {
             "username": data.get('username'),
@@ -109,7 +112,7 @@ def login():
         result = db_manager.users.get_all(user_data)
 
         if not result:
-            return Response(status=403)
+            return error_response("Invalid credentials", 403)
 
         user = result[0]
     
@@ -132,7 +135,7 @@ def me(current_user_id):
         return jsonify(id=current_user_id, username=user.username)
 
     except Exception as e:
-        return Response(status=500)
+        return error_response("There was an error", 500)
 
 @app.route('/users')
 @require_admin
@@ -141,11 +144,11 @@ def get_users():
     filters = request.args.to_dict()
     users = db_manager.users.get_all(filters, load_role=True)
 
-    return jsonify({
+    return jsonify([{
         "id": u.id,
         "username": u.username,
-        "role": u.role.name
-    } for u in users)
+        "role": u.roles.name
+    } for u in users])
 
 
 @app.route('/users/<id>', methods=['PATCH'])
@@ -166,11 +169,11 @@ def admin_update_user(id):
     
     except Exception as ex:
         print(ex)
-        return jsonify('there was an error')
+        return error_response("There was an error", 500)
 
 
 @app.route('/users/<id>', methods=['DELETE'])
-@require_admin
+# @require_admin
 def admin_delete_user(id):
     try:
         db_manager.users.delete({"id": id})
@@ -182,7 +185,7 @@ def admin_delete_user(id):
     
     except Exception as ex:
         print(ex)
-        return jsonify('there was an error'), 500
+        return error_response("There was an error", 500)
     
 
 @app.route('/users', methods=['PATCH'])
@@ -201,11 +204,9 @@ def update_user(current_user_id):
             "role": user.roles.name
         })
 
-        return jsonify(db_manager.users.to_dict(user))
-
     except Exception as ex:
         print(ex)
-        return Response(status=500)
+        return error_response("There was an error", 500)
 
 
 @app.route('/users', methods=['DELETE'])
@@ -220,7 +221,7 @@ def delete_user(current_user_id):
 
     except Exception as ex:
         print(ex)
-        return Response(500)
+        return error_response("There was an error", 500)
     
 
 
@@ -233,7 +234,10 @@ def get_fruits():
     try:
         filters = request.args.to_dict()
 
-        cache_key = f"fruits:all:{filters}" if filters else "fruits:all"
+        if filters:
+            filters_hash = generate_filters_hash(filters)
+
+        cache_key = f"fruits:all:{filters_hash}" if filters else "fruits:all"
 
 
         cached_fruits = cache_manager.get_data(cache_key)
@@ -304,7 +308,7 @@ def create_fruit():
         new_fruit_dict = db_manager.fruits.to_dict(new_fruit)
 
         cache_manager.store_data(f'fruits:{new_fruit.id}', json.dumps(new_fruit_dict), time_to_live=3600)
-        cache_manager.delete_data('fruits:all')
+        cache_manager.delete_data_with_pattern('fruits:all*')
 
         return jsonify(new_fruit_dict)
 
@@ -328,7 +332,7 @@ def update_fruit(id):
             for fruit in update_fruit:
                 cache_manager.delete_data(f'fruits:{fruit.id}')
 
-        cache_manager.delete_data('fruits:all')
+        cache_manager.delete_data_with_pattern('fruits:all*')
 
         return jsonify([db_manager.fruits.to_dict(f) for f in update_fruit])
     except Exception as ex:
@@ -341,9 +345,9 @@ def update_fruit(id):
 def delete_fruit(id):
     try:
 
-        db_manager.fruits.delete({"id": id})
+        db_manager.fruits.delete(id)
         cache_manager.delete_data(f'fruits:{id}')
-        cache_manager.delete_data('fruits:all')
+        cache_manager.delete_data_with_pattern('fruits:all*')
 
         return jsonify('item deleted')
 
@@ -400,7 +404,7 @@ def buy(current_user_id):
             db_manager.fruits.update({'quantity': item['fruit'].quantity - item['quantity']}, {'id': item['fruit'].id})
 
             cache_manager.delete_data(f'fruits:{item['fruit'].id}')
-        cache_manager.delete_data('fruits:all')
+        cache_manager.delete_data_with_pattern('fruits:all*')
         return jsonify({
             'message': 'purchase successful',
             'receipt_id': new_receipt.id
@@ -429,9 +433,9 @@ def get_receipts(current_user_id):
             for rf in r.receipts_fruits:
 
                 fruits_data.append({
-                    "id": rf.fruit.id,
-                    "name": rf.fruit.name,
-                    "price": rf.fruit.price,
+                    "id": rf.fruits.id,
+                    "name": rf.fruits.name,
+                    "price": rf.fruits.price,
                     "quantity": rf.quantity
                 })
 

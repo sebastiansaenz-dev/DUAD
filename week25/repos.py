@@ -129,7 +129,29 @@ class BaseRepository():
 
 
 class FruitsRepository(BaseRepository):
-    pass
+    def get_all(self, filters=None):
+        stmt = select(self.model).where(self.model.is_active == True)
+
+        if filters:
+            stmt = self._apply_filters(stmt, filters)
+
+        if stmt is None:
+            return []
+
+        with Session(self.engine) as session:
+            return session.execute(stmt).scalars().all()
+        
+    def delete(self, id):
+        stmt = select(self.model).where(self.model.id == id)
+
+        with Session(self.engine) as session:
+            fruit = session.execute(stmt).scalars().first()
+            if fruit is None:
+                return False
+            fruit.is_active = False
+            session.commit()
+            return True
+
 
 class UsersRepository(BaseRepository):
     def get_all(self, filters, load_role=False):
@@ -168,7 +190,7 @@ class ReceiptsRepository(BaseRepository):
             stmt = stmt.options(joinedload(self.model.user))
         
         if load_fruits:
-            stmt = stmt.options(joinedload(self.model.fruits))
+            stmt = stmt.options(joinedload(self.model.receipts_fruits))
 
         with Session(self.engine) as session:
             return session.execute(stmt).scalars().unique().all()

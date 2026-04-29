@@ -1,5 +1,5 @@
 
-from sqlalchemy import MetaData, Column, Integer, String, DateTime, func, ForeignKey
+from sqlalchemy import MetaData, Column, Integer, String, DateTime, func, ForeignKey, Boolean
 from sqlalchemy.orm import DeclarativeBase, relationship
 
 
@@ -40,6 +40,7 @@ class Fruits(Base):
     price = Column(Integer, nullable=False)
     entry_date = Column(DateTime, server_default=func.now())
     quantity = Column(Integer, nullable=False)
+    is_active = Column(Boolean, default=True)
 
     receipts = relationship("ReceiptsFruits", back_populates="fruits")
 

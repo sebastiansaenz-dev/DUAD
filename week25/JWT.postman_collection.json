@@ -1,0 +1,1307 @@
+{
+  "info": {
+    "_postman_id": "a0265f20-1642-4af7-90d3-9a6de966be07",
+    "name": "JWT",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "42477481"
+  },
+  "item": [
+    {
+      "name": "CRUD users",
+      "item": [
+        {
+          "name": "ADMIN users",
+          "item": [
+            {
+              "name": "get users",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "PONER_TOKEN_AQUI",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://127.0.0.1:5000/users",
+                  "protocol": "http",
+                  "host": ["127", "0", "0", "1"],
+                  "port": "5000",
+                  "path": ["users"]
+                }
+              },
+              "response": [
+                {
+                  "name": "get users",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "http://127.0.0.1:5000/users",
+                      "protocol": "http",
+                      "host": ["127", "0", "0", "1"],
+                      "port": "5000",
+                      "path": ["users"]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": null,
+                  "header": [
+                    {
+                      "key": "Server",
+                      "value": "Werkzeug/3.1.3 Python/3.12.0"
+                    },
+                    {
+                      "key": "Date",
+                      "value": "Wed, 29 Apr 2026 19:56:57 GMT"
+                    },
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    },
+                    {
+                      "key": "Content-Length",
+                      "value": "349"
+                    },
+                    {
+                      "key": "Connection",
+                      "value": "close"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "[\n    {\n        \"id\": 14,\n        \"role\": \"admin\",\n        \"username\": \"Sebas\"\n    },\n    {\n        \"id\": 17,\n        \"role\": \"client\",\n        \"username\": \"Fulano\"\n    },\n    {\n        \"id\": 18,\n        \"role\": \"client\",\n        \"username\": \"Fulano\"\n    },\n    {\n        \"id\": 19,\n        \"role\": \"client\",\n        \"username\": \"Fulano\"\n    },\n    {\n        \"id\": 15,\n        \"role\": \"client\",\n        \"username\": \"Fabi\"\n    }\n]"
+                }
+              ]
+            },
+            {
+              "name": "admin update user",
+              "request": {
+                "method": "PATCH",
+                "header": [],
+                "url": {
+                  "raw": "http://127.0.0.1:5000/users/2",
+                  "protocol": "http",
+                  "host": ["127", "0", "0", "1"],
+                  "port": "5000",
+                  "path": ["users", "2"]
+                }
+              },
+              "response": [
+                {
+                  "name": "admin update user",
+                  "originalRequest": {
+                    "method": "PATCH",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n    \"username\": \"Fulanosss\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "http://127.0.0.1:5000/users/17",
+                      "protocol": "http",
+                      "host": ["127", "0", "0", "1"],
+                      "port": "5000",
+                      "path": ["users", "17"]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": null,
+                  "header": [
+                    {
+                      "key": "Server",
+                      "value": "Werkzeug/3.1.3 Python/3.12.0"
+                    },
+                    {
+                      "key": "Date",
+                      "value": "Wed, 29 Apr 2026 20:04:15 GMT"
+                    },
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    },
+                    {
+                      "key": "Content-Length",
+                      "value": "62"
+                    },
+                    {
+                      "key": "Connection",
+                      "value": "close"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n    \"id\": 17,\n    \"role\": \"client\",\n    \"username\": \"Fulanosss\"\n}"
+                }
+              ]
+            },
+            {
+              "name": "admin delete user",
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "http://127.0.0.1:5000/users/2",
+                  "protocol": "http",
+                  "host": ["127", "0", "0", "1"],
+                  "port": "5000",
+                  "path": ["users", "2"]
+                }
+              },
+              "response": [
+                {
+                  "name": "admin delete user",
+                  "originalRequest": {
+                    "method": "DELETE",
+                    "header": [],
+                    "url": {
+                      "raw": "http://127.0.0.1:5000/users/17",
+                      "protocol": "http",
+                      "host": ["127", "0", "0", "1"],
+                      "port": "5000",
+                      "path": ["users", "17"]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": null,
+                  "header": [
+                    {
+                      "key": "Server",
+                      "value": "Werkzeug/3.1.3 Python/3.12.0"
+                    },
+                    {
+                      "key": "Date",
+                      "value": "Wed, 29 Apr 2026 20:04:37 GMT"
+                    },
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    },
+                    {
+                      "key": "Content-Length",
+                      "value": "15"
+                    },
+                    {
+                      "key": "Connection",
+                      "value": "close"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "\"user deleted\""
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "register",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"username\": \"Fulano\",\n    \"password\": \"123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://127.0.0.1:5000/register",
+              "protocol": "http",
+              "host": ["127", "0", "0", "1"],
+              "port": "5000",
+              "path": ["register"]
+            }
+          },
+          "response": [
+            {
+              "name": "register",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"username\": \"Fulano\",\n    \"password\": \"123\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://127.0.0.1:5000/register",
+                  "protocol": "http",
+                  "host": ["127", "0", "0", "1"],
+                  "port": "5000",
+                  "path": ["register"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Server",
+                  "value": "Werkzeug/3.1.3 Python/3.12.0"
+                },
+                {
+                  "key": "Date",
+                  "value": "Wed, 29 Apr 2026 18:05:40 GMT"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "432"
+                },
+                {
+                  "key": "Connection",
+                  "value": "close"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"token\": \"eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTgsInJvbGUiOiJjbGllbnQifQ.BrlSbUuf2dZQNa3y5Rz9m6DNV3IGmNnFGUd6RQmTuNnKTp_rRKnSrMR6d0u-cz5q6jt2XSkRzSw-5EDnyuo2qBfBL6BO7NEw-RoqePIgx_E35C2cHUqOtfgYB3n6qgB-eh8UnA-pt8ggRTwhn5HKVNvDJIPbc8g25dVVlQtMDdQuGhJGm1KTy6TxRI0ngI4H-kVagJwyeHlOLkuPjFkJfgx9vSRAXzdgcoP6vqSvHTVNHXorKbPoIs8tfkt-yLaBHpm6JydFXtdgPDzcw2b86YlUSg1RnS9hbaqiubEFSCs21PVcTnJbKiy0kJbLB7s_PyF4apYc9YQiMPseh8sd9Q\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "login",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"username\": \"Sebas\",\n    \"password\": \"123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://127.0.0.1:5000/login",
+              "protocol": "http",
+              "host": ["127", "0", "0", "1"],
+              "port": "5000",
+              "path": ["login"]
+            }
+          },
+          "response": [
+            {
+              "name": "login",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"username\": \"Sebas\",\n    \"password\": \"123\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://127.0.0.1:5000/login",
+                  "protocol": "http",
+                  "host": ["127", "0", "0", "1"],
+                  "port": "5000",
+                  "path": ["login"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Server",
+                  "value": "Werkzeug/3.1.3 Python/3.12.0"
+                },
+                {
+                  "key": "Date",
+                  "value": "Wed, 29 Apr 2026 18:06:31 GMT"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "430"
+                },
+                {
+                  "key": "Connection",
+                  "value": "close"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"token\": \"eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTQsInJvbGUiOiJhZG1pbiJ9.gwH5nN1VTw17ICCmKRkGEsRl3pE71UWt95ZhK4sWsKVnACnvLELfw6wYT_1yKGrEXb_WxG20-v63cbwcteVf-1M-EQJvFE63R3xUJHOFaRfcsyocsB3oHhvf6OKBHalU5q0HFsX-W-KmK-eh7EQTaQHIg2-L2joa4MR_JeoVcu1e_kt9hsd7SdF0aYvnqy2Cq6wimWXETU7xXdr0AhR87G_gJ7VyoZhgJ9_sCc0gpyVNPH3yV-o-mbfugFjksYKLOoc1DDWSOq8Rgc_JrOIRO4pKH1mYl8N5f7MQxzORLHCwJnXS1TT_TyFFKjdX-lZhluKlz1BPJ8Qtyn2zC5XTQg\"\n}"
+            },
+            {
+              "name": "login invalid",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"username\": \"Sebas\",\n    \"password\": \"1233\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://127.0.0.1:5000/login",
+                  "protocol": "http",
+                  "host": ["127", "0", "0", "1"],
+                  "port": "5000",
+                  "path": ["login"]
+                }
+              },
+              "status": "FORBIDDEN",
+              "code": 403,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Server",
+                  "value": "Werkzeug/3.1.3 Python/3.12.0"
+                },
+                {
+                  "key": "Date",
+                  "value": "Wed, 29 Apr 2026 19:48:36 GMT"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "37"
+                },
+                {
+                  "key": "Connection",
+                  "value": "close"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"error\": \"Invalid credentials\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "me",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "PONER_TOKEN_AQUI",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://127.0.0.1:5000/me",
+              "protocol": "http",
+              "host": ["127", "0", "0", "1"],
+              "port": "5000",
+              "path": ["me"]
+            }
+          },
+          "response": [
+            {
+              "name": "me",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://127.0.0.1:5000/me",
+                  "protocol": "http",
+                  "host": ["127", "0", "0", "1"],
+                  "port": "5000",
+                  "path": ["me"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Server",
+                  "value": "Werkzeug/3.1.3 Python/3.12.0"
+                },
+                {
+                  "key": "Date",
+                  "value": "Wed, 29 Apr 2026 18:07:14 GMT"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "38"
+                },
+                {
+                  "key": "Connection",
+                  "value": "close"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"id\": 14,\n    \"username\": \"Sebas\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Delete user",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "PONER_TOKEN_AQUI",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://127.0.0.1:5000/users",
+              "protocol": "http",
+              "host": ["127", "0", "0", "1"],
+              "port": "5000",
+              "path": ["users"]
+            }
+          },
+          "response": [
+            {
+              "name": "Delete user",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "http://127.0.0.1:5000/users",
+                  "protocol": "http",
+                  "host": ["127", "0", "0", "1"],
+                  "port": "5000",
+                  "path": ["users"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Server",
+                  "value": "Werkzeug/3.1.3 Python/3.12.0"
+                },
+                {
+                  "key": "Date",
+                  "value": "Wed, 29 Apr 2026 18:08:01 GMT"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "15"
+                },
+                {
+                  "key": "Connection",
+                  "value": "close"
+                }
+              ],
+              "cookie": [],
+              "body": "\"user deleted\""
+            }
+          ]
+        },
+        {
+          "name": "Update user",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "PONER_TOKEN_AQUI",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"username\": \"Fabi\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://127.0.0.1:5000/users",
+              "protocol": "http",
+              "host": ["127", "0", "0", "1"],
+              "port": "5000",
+              "path": ["users"]
+            }
+          },
+          "response": [
+            {
+              "name": "Update user",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"username\": \"Fabi\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://127.0.0.1:5000/users",
+                  "protocol": "http",
+                  "host": ["127", "0", "0", "1"],
+                  "port": "5000",
+                  "path": ["users"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Server",
+                  "value": "Werkzeug/3.1.3 Python/3.12.0"
+                },
+                {
+                  "key": "Date",
+                  "value": "Wed, 29 Apr 2026 18:08:54 GMT"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "57"
+                },
+                {
+                  "key": "Connection",
+                  "value": "close"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"id\": 15,\n    \"role\": \"client\",\n    \"username\": \"Fabi\"\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "CRUD fruits",
+      "item": [
+        {
+          "name": "get fruits",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "PONER_TOKEN_AQUI",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://127.0.0.1:5000/fruits",
+              "protocol": "http",
+              "host": ["127", "0", "0", "1"],
+              "port": "5000",
+              "path": ["fruits"],
+              "query": [
+                {
+                  "key": "name",
+                  "value": "Grapes",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "get fruits",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://127.0.0.1:5000/fruits",
+                  "protocol": "http",
+                  "host": ["127", "0", "0", "1"],
+                  "port": "5000",
+                  "path": ["fruits"],
+                  "query": [
+                    {
+                      "key": "name",
+                      "value": "Grapes",
+                      "disabled": true
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Server",
+                  "value": "Werkzeug/3.1.3 Python/3.12.0"
+                },
+                {
+                  "key": "Date",
+                  "value": "Wed, 29 Apr 2026 18:09:16 GMT"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "581"
+                },
+                {
+                  "key": "Connection",
+                  "value": "close"
+                }
+              ],
+              "cookie": [],
+              "body": "[\n    {\n        \"id\": 2,\n        \"name\": \"Apple\",\n        \"price\": 200,\n        \"quantity\": 15\n    },\n    {\n        \"id\": 3,\n        \"name\": \"Watermelon\",\n        \"price\": 250,\n        \"quantity\": 30\n    },\n    {\n        \"id\": 4,\n        \"name\": \"Grapes\",\n        \"price\": 150,\n        \"quantity\": 40\n    },\n    {\n        \"id\": 5,\n        \"name\": \"Grapes\",\n        \"price\": 150,\n        \"quantity\": 40\n    },\n    {\n        \"id\": 1,\n        \"name\": \"Banana\",\n        \"price\": 350,\n        \"quantity\": 16\n    },\n    {\n        \"id\": 12,\n        \"name\": \"Strawberry\",\n        \"price\": 1500,\n        \"quantity\": 40\n    },\n    {\n        \"id\": 11,\n        \"name\": \"Grapes\",\n        \"price\": 3500,\n        \"quantity\": 38\n    }\n]"
+            },
+            {
+              "name": "get fruits by filter",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://127.0.0.1:5000/fruits?name=Grapes",
+                  "protocol": "http",
+                  "host": ["127", "0", "0", "1"],
+                  "port": "5000",
+                  "path": ["fruits"],
+                  "query": [
+                    {
+                      "key": "name",
+                      "value": "Grapes"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Server",
+                  "value": "Werkzeug/3.1.3 Python/3.12.0"
+                },
+                {
+                  "key": "Date",
+                  "value": "Wed, 29 Apr 2026 18:09:35 GMT"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "248"
+                },
+                {
+                  "key": "Connection",
+                  "value": "close"
+                }
+              ],
+              "cookie": [],
+              "body": "[\n    {\n        \"id\": 4,\n        \"name\": \"Grapes\",\n        \"price\": 150,\n        \"quantity\": 40\n    },\n    {\n        \"id\": 5,\n        \"name\": \"Grapes\",\n        \"price\": 150,\n        \"quantity\": 40\n    },\n    {\n        \"id\": 11,\n        \"name\": \"Grapes\",\n        \"price\": 3500,\n        \"quantity\": 38\n    }\n]"
+            }
+          ]
+        },
+        {
+          "name": "create fruit",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "PONER_TOKEN_AQUI",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Strawberry\",\n    \"price\": 1500,\n    \"quantity\": 40\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://127.0.0.1:5000/fruits",
+              "protocol": "http",
+              "host": ["127", "0", "0", "1"],
+              "port": "5000",
+              "path": ["fruits"]
+            }
+          },
+          "response": [
+            {
+              "name": "create fruit",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"name\": \"Strawberry\",\n    \"price\": 1500,\n    \"quantity\": 40\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://127.0.0.1:5000/fruits",
+                  "protocol": "http",
+                  "host": ["127", "0", "0", "1"],
+                  "port": "5000",
+                  "path": ["fruits"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Server",
+                  "value": "Werkzeug/3.1.3 Python/3.12.0"
+                },
+                {
+                  "key": "Date",
+                  "value": "Wed, 29 Apr 2026 18:10:44 GMT"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "74"
+                },
+                {
+                  "key": "Connection",
+                  "value": "close"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"id\": 13,\n    \"name\": \"Strawberry\",\n    \"price\": 1500,\n    \"quantity\": 40\n}"
+            }
+          ]
+        },
+        {
+          "name": "Update fruit",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "PONER_TOKEN_AQUI",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"price\": 3500\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://127.0.0.1:5000/fruits/11",
+              "protocol": "http",
+              "host": ["127", "0", "0", "1"],
+              "port": "5000",
+              "path": ["fruits", "11"]
+            }
+          },
+          "response": [
+            {
+              "name": "Update fruit",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"price\": 3500\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://127.0.0.1:5000/fruits/11",
+                  "protocol": "http",
+                  "host": ["127", "0", "0", "1"],
+                  "port": "5000",
+                  "path": ["fruits", "11"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Server",
+                  "value": "Werkzeug/3.1.3 Python/3.12.0"
+                },
+                {
+                  "key": "Date",
+                  "value": "Wed, 29 Apr 2026 18:10:59 GMT"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "86"
+                },
+                {
+                  "key": "Connection",
+                  "value": "close"
+                }
+              ],
+              "cookie": [],
+              "body": "[\n    {\n        \"id\": 11,\n        \"name\": \"Grapes\",\n        \"price\": 3500,\n        \"quantity\": 38\n    }\n]"
+            }
+          ]
+        },
+        {
+          "name": "delete fruit",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "PONER_TOKEN_AQUI",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://127.0.0.1:5000/fruits/13",
+              "protocol": "http",
+              "host": ["127", "0", "0", "1"],
+              "port": "5000",
+              "path": ["fruits", "13"]
+            }
+          },
+          "response": [
+            {
+              "name": "delete fruit",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "http://127.0.0.1:5000/fruits/13",
+                  "protocol": "http",
+                  "host": ["127", "0", "0", "1"],
+                  "port": "5000",
+                  "path": ["fruits", "13"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Server",
+                  "value": "Werkzeug/3.1.3 Python/3.12.0"
+                },
+                {
+                  "key": "Date",
+                  "value": "Wed, 29 Apr 2026 19:20:39 GMT"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "15"
+                },
+                {
+                  "key": "Connection",
+                  "value": "close"
+                }
+              ],
+              "cookie": [],
+              "body": "\"item deleted\""
+            }
+          ]
+        },
+        {
+          "name": "get fruit by id",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://127.0.0.1:5000/fruits/11",
+              "protocol": "http",
+              "host": ["127", "0", "0", "1"],
+              "port": "5000",
+              "path": ["fruits", "11"],
+              "query": [
+                {
+                  "key": "name",
+                  "value": "Banana",
+                  "disabled": true
+                },
+                {
+                  "key": "id",
+                  "value": "8",
+                  "type": "text",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "get fruit by id",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://127.0.0.1:5000/fruits/11",
+                  "protocol": "http",
+                  "host": ["127", "0", "0", "1"],
+                  "port": "5000",
+                  "path": ["fruits", "11"],
+                  "query": [
+                    {
+                      "key": "name",
+                      "value": "Banana",
+                      "disabled": true
+                    },
+                    {
+                      "key": "id",
+                      "value": "8",
+                      "type": "text",
+                      "disabled": true
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Server",
+                  "value": "Werkzeug/3.1.3 Python/3.12.0"
+                },
+                {
+                  "key": "Date",
+                  "value": "Wed, 29 Apr 2026 18:12:41 GMT"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "70"
+                },
+                {
+                  "key": "Connection",
+                  "value": "close"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"id\": 11,\n    \"name\": \"Grapes\",\n    \"price\": 3500,\n    \"quantity\": 38\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "PURCHASE",
+      "item": [
+        {
+          "name": "buy",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "PONER_TOKEN_AQUI",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "[\n    {\n        \"id\": 11,\n        \"quantity\": 2\n    }\n]",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://127.0.0.1:5000/buy",
+              "protocol": "http",
+              "host": ["127", "0", "0", "1"],
+              "port": "5000",
+              "path": ["buy"]
+            }
+          },
+          "response": [
+            {
+              "name": "buy",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n    {\n        \"id\": 11,\n        \"quantity\": 2\n    }\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://127.0.0.1:5000/buy",
+                  "protocol": "http",
+                  "host": ["127", "0", "0", "1"],
+                  "port": "5000",
+                  "path": ["buy"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Server",
+                  "value": "Werkzeug/3.1.3 Python/3.12.0"
+                },
+                {
+                  "key": "Date",
+                  "value": "Wed, 29 Apr 2026 18:13:08 GMT"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "58"
+                },
+                {
+                  "key": "Connection",
+                  "value": "close"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"message\": \"purchase successful\",\n    \"receipt_id\": 6\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "receipts",
+      "item": [
+        {
+          "name": "receipts",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "PONER_TOKEN_AQUI",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://127.0.0.1:5000/receipts",
+              "protocol": "http",
+              "host": ["127", "0", "0", "1"],
+              "port": "5000",
+              "path": ["receipts"]
+            }
+          },
+          "response": [
+            {
+              "name": "receipts",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://127.0.0.1:5000/receipts",
+                  "protocol": "http",
+                  "host": ["127", "0", "0", "1"],
+                  "port": "5000",
+                  "path": ["receipts"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Server",
+                  "value": "Werkzeug/3.1.3 Python/3.12.0"
+                },
+                {
+                  "key": "Date",
+                  "value": "Wed, 29 Apr 2026 18:17:39 GMT"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "1526"
+                },
+                {
+                  "key": "Connection",
+                  "value": "close"
+                }
+              ],
+              "cookie": [],
+              "body": "[\n    {\n        \"date\": \"Tue, 10 Mar 2026 17:10:49 GMT\",\n        \"id\": 2,\n        \"items\": [\n            {\n                \"id\": 1,\n                \"name\": \"Banana\",\n                \"price\": 350,\n                \"quantity\": 2\n            }\n        ],\n        \"total\": 700,\n        \"user\": {\n            \"id\": 15,\n            \"username\": \"Fabi\"\n        }\n    },\n    {\n        \"date\": \"Tue, 10 Mar 2026 17:12:29 GMT\",\n        \"id\": 3,\n        \"items\": [\n            {\n                \"id\": 1,\n                \"name\": \"Banana\",\n                \"price\": 350,\n                \"quantity\": 2\n            }\n        ],\n        \"total\": 700,\n        \"user\": {\n            \"id\": 15,\n            \"username\": \"Fabi\"\n        }\n    },\n    {\n        \"date\": \"Tue, 10 Mar 2026 17:29:53 GMT\",\n        \"id\": 4,\n        \"items\": [\n            {\n                \"id\": 1,\n                \"name\": \"Banana\",\n                \"price\": 350,\n                \"quantity\": 2\n            }\n        ],\n        \"total\": 700,\n        \"user\": {\n            \"id\": 15,\n            \"username\": \"Fabi\"\n        }\n    },\n    {\n        \"date\": \"Mon, 27 Apr 2026 18:28:54 GMT\",\n        \"id\": 5,\n        \"items\": [\n            {\n                \"id\": 11,\n                \"name\": \"Grapes\",\n                \"price\": 3500,\n                \"quantity\": 2\n            }\n        ],\n        \"total\": 700,\n        \"user\": {\n            \"id\": 15,\n            \"username\": \"Fabi\"\n        }\n    },\n    {\n        \"date\": \"Wed, 29 Apr 2026 12:13:08 GMT\",\n        \"id\": 6,\n        \"items\": [\n            {\n                \"id\": 11,\n                \"name\": \"Grapes\",\n                \"price\": 3500,\n                \"quantity\": 2\n            }\n        ],\n        \"total\": 7000,\n        \"user\": {\n            \"id\": 15,\n            \"username\": \"Fabi\"\n        }\n    },\n    {\n        \"date\": \"Tue, 10 Mar 2026 17:07:51 GMT\",\n        \"id\": 1,\n        \"items\": [],\n        \"total\": 700,\n        \"user\": {\n            \"id\": 15,\n            \"username\": \"Fabi\"\n        }\n    }\n]"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "liveness",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://127.0.0.1:5000/liveness",
+          "protocol": "http",
+          "host": ["127", "0", "0", "1"],
+          "port": "5000",
+          "path": ["liveness"]
+        }
+      },
+      "response": [
+        {
+          "name": "liveness",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://127.0.0.1:5000/liveness",
+              "protocol": "http",
+              "host": ["127", "0", "0", "1"],
+              "port": "5000",
+              "path": ["liveness"]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Server",
+              "value": "Werkzeug/3.1.3 Python/3.12.0"
+            },
+            {
+              "key": "Date",
+              "value": "Wed, 29 Apr 2026 18:18:15 GMT"
+            },
+            {
+              "key": "Content-Type",
+              "value": "text/html; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "20"
+            },
+            {
+              "key": "Connection",
+              "value": "close"
+            }
+          ],
+          "cookie": [],
+          "body": "<p>Hello, World!</p>"
+        }
+      ]
+    }
+  ]
+}
