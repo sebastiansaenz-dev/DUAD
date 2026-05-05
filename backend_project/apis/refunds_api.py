@@ -29,7 +29,7 @@ class RefundsAPI(MethodView):
         data = request.get_json()
 
         new_refund = self.repo.create_refund(current_user_id, data)
-        return jsonify(new_refund)
+        return jsonify(self.repo.schema.dump(new_refund))
 
 refund_view = RefundsAPI.as_view('refund_api')
 refunds_bp.add_url_rule('/refunds', view_func=refund_view, methods=['GET', 'POST'])
