@@ -1,8 +1,7 @@
 
-from extensions import db
 from sqlalchemy import select
 from models import Carts, ProductsOrders, OrdersStatus, Orders
-from constants import CartsStatusEnum, PaymentMethodsEnum, OrdersStatusEnum
+from constants import CartsStatusEnum, PaymentMethodsEnum
 import uuid
 from werkzeug.exceptions import BadRequest, NotFound
 
@@ -12,11 +11,15 @@ from repos.base_repo import BaseRepository
 
 
 class AdminOrdersRepo(BaseRepository):
+    def __init__(self, model, schema, session=None):
+        super().__init__(model, schema, session)
+
+
     def create_order(self, user_id):
         try:
             cart_stmt = select(Carts).where(Carts.user_id == user_id).where(Carts.status_id == CartsStatusEnum.ACTIVE)
 
-            cart = db.session.execute(cart_stmt).scalars().first()
+            cart = self.session.execute(cart_stmt).scalars().first()
 
             products = [{
                 'id': p.product.id,
@@ -40,8 +43,8 @@ class AdminOrdersRepo(BaseRepository):
                 total=total
             )
 
-            db.session.add(new_order)
-            db.session.flush()
+            self.session.add(new_order)
+            self.session.flush()
 
             for p in products:
                 new_item = ProductsOrders(
@@ -51,15 +54,15 @@ class AdminOrdersRepo(BaseRepository):
                     price_at_purchase=p['price']
                 )
 
-                db.session.add(new_item)
+                self.session.add(new_item)
             cart.status_id = CartsStatusEnum.COMPLETED
-            db.session.commit()
+            self.session.commit()
 
             return self.schema.dump(new_order)
 
 
         except Exception as ex:
-            db.session.rollback()
+            self.session.rollback()
             raise ex
         
     def update_status(self, user_id, data):
@@ -69,21 +72,21 @@ class AdminOrdersRepo(BaseRepository):
 
         order_stmt = select(Orders).where(Orders.user_id == user_id)
 
-        order = db.session.execute(order_stmt).scalars().unique().first()
+        order = self.session.execute(order_stmt).scalars().unique().first()
 
         if not order:
             raise NotFound('order not found')
 
         new_status_stmt = select(OrdersStatus).where(OrdersStatus.name == data['status'])
-        new_status = db.session.execute(new_status_stmt).scalars().first()
+        new_status = self.session.execute(new_status_stmt).scalars().first()
 
         if not new_status:
             raise BadRequest(f'invalid status: {data['status']}')
                 
         order.status_id = new_status.id
 
-        db.session.commit()
-        db.session.refresh(order)
+        self.session.commit()
+        self.session.refresh(order)
 
         return self.schema.dump(order)
 

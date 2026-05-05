@@ -6,24 +6,32 @@ from dotenv import load_dotenv
 from apis import register_blueprints
 from apis.admin_apis import register_admin_blueprints
 
-from extensions import ma, db, migrate, bcrypt
+from extensions import init_extensions
 
 load_dotenv()
 
-app = Flask(__name__)
+def create_app(config_override=None):
+    
+    app = Flask(__name__)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DATABASE_URL")
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SECRET_KEY'] = os.getenv("SECRET_KEY")
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DATABASE_URL")
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    app.config['SECRET_KEY'] = os.getenv("SECRET_KEY")
 
-db.init_app(app)
-migrate.init_app(app, db)
-ma.init_app(app)
-bcrypt.init_app(app)
+    app.config['REDIS_HOST'] = os.getenv("REDIS_HOST")
+    app.config['REDIS_PORT'] = os.getenv("REDIS_PORT")
+    app.config['REDIS_PASSWORD'] = os.getenv("REDIS_PASSWORD")
 
-register_blueprints(app)
-register_admin_blueprints(app)
+    if config_override:
+        app.config.update(config_override)
 
+    init_extensions(app)
+    register_blueprints(app)
+    register_admin_blueprints(app)
+
+    return app
+
+app = create_app()
 
 if __name__ == "__main__":
     app.run(host="localhost", port=5002, debug=True)

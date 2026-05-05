@@ -2,12 +2,16 @@
 
 from .base_repo import BaseRepository
 from models import UsersRoles, Users
-from extensions import db, jwt_manager, bcrypt
+from extensions import jwt_manager, bcrypt
 from werkzeug.exceptions import Unauthorized, Conflict
 from sqlalchemy import select
 
 
 class UsersRepo(BaseRepository):
+    def __init__(self, model, schema, session=None):
+        super().__init__(model, schema, session)
+
+
     def register_user(self, data):
         try:
 
@@ -18,10 +22,10 @@ class UsersRepo(BaseRepository):
             password = validate_data.password
 
             username_stmt = select(Users).where(Users.username == username)
-            username_exists = db.session.execute(username_stmt).scalars().first()
+            username_exists = self.session.execute(username_stmt).scalars().first()
 
             email_stmt = select(Users).where(Users.email == email)
-            email_exists = db.session.execute(email_stmt).scalars().first()
+            email_exists = self.session.execute(email_stmt).scalars().first()
 
 
             if username_exists:
@@ -39,15 +43,15 @@ class UsersRepo(BaseRepository):
                 password=hashed_password
             )
 
-            db.session.add(new_user)
-            db.session.flush()
+            self.session.add(new_user)
+            self.session.flush()
 
             role_assignation = UsersRoles(user_id=new_user.id)
-            db.session.add(role_assignation)
+            self.session.add(role_assignation)
 
-            db.session.refresh(new_user)
+            self.session.refresh(new_user)
 
-            db.session.commit()
+            self.session.commit()
 
             roles = [r.name for r in new_user.roles]
 
@@ -65,7 +69,7 @@ class UsersRepo(BaseRepository):
         
         
         except Exception as ex:
-            db.session.rollback()
+            self.session.rollback()
             raise ex
         
     def login_user(self, data):
@@ -96,7 +100,7 @@ class UsersRepo(BaseRepository):
 
 
         except Exception as ex:
-            db.session.rollback()
+            self.session.rollback()
             raise ex
 
 

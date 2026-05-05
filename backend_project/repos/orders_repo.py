@@ -1,9 +1,9 @@
 
-from extensions import db
 from sqlalchemy import select
-from models import Carts, ProductsOrders
+from models import Carts, ProductsOrders, Products
 from constants import CartsStatusEnum, PaymentMethodsEnum
 import uuid
+from werkzeug.exceptions import BadRequest
 
 
 
@@ -11,18 +11,39 @@ from .base_repo import BaseRepository
 
 
 class OrdersRepo(BaseRepository):
-    def create_order(self, user_id):
+    def __init__(self, model, schema, session=None):
+        super().__init__(model, schema, session)
+
+
+    def proceed_order(self, user_id):
         try:
+
             cart_stmt = select(Carts).where(Carts.user_id == user_id).where(Carts.status_id == CartsStatusEnum.ACTIVE)
 
-            cart = db.session.execute(cart_stmt).scalars().first()
+            cart = self.session.execute(cart_stmt).scalars().first()
 
-            products = [{
-                'id': p.product.id,
-                'quantity': p.quantity,
-                'price': p.product.price,
-                'total': p.product.price * p.quantity
-            } for p in cart.items]
+            products = []
+
+            for item in cart.items:
+                p_id = item.product.id
+                p_quantity = item.quantity
+
+                product = self.session.get(Products, p_id)
+
+                if p_quantity > product.stock:
+                    raise BadRequest(f'not enough stock available for {item.product.name}')
+                
+                product.stock -= p_quantity
+
+                each_product = {
+                    'id': item.product.id,
+                    'quantity': item.quantity,
+                    'price': item.product.price,
+                    'total': item.product.price * item.quantity
+                }
+
+                products.append(each_product)
+
 
             if not products:
                 raise ValueError('your cart is empty, add products to finish your purchase')
@@ -33,14 +54,14 @@ class OrdersRepo(BaseRepository):
 
             new_order = self.model(
                 order_number=uuid.uuid4().hex[:8].upper(),
-                user_id=user_id,
+                user_id=cart.user_id,
                 cart_id=cart.id,
                 payment_method_id=PaymentMethodsEnum.SINPE,
                 total=total
             )
 
-            db.session.add(new_order)
-            db.session.flush()
+            self.session.add(new_order)
+            self.session.flush()
 
             for p in products:
                 new_item = ProductsOrders(
@@ -49,16 +70,16 @@ class OrdersRepo(BaseRepository):
                     quantity=p['quantity'],
                     price_at_purchase=p['price']
                 )
-
-                db.session.add(new_item)
+                self.session.add(new_item)
             cart.status_id = CartsStatusEnum.COMPLETED
-            db.session.commit()
+            self.session.refresh(new_order)
+            self.session.commit()
 
-            return self.schema.dump(new_order)
+            return new_order
 
 
         except Exception as ex:
-            db.session.rollback()
+            self.session.rollback()
             raise ex
 
 

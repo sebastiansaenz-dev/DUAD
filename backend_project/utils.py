@@ -7,6 +7,9 @@ from extensions import jwt_manager
 from sqlalchemy.exc import SQLAlchemyError
 from werkzeug.exceptions import HTTPException
 from marshmallow import ValidationError
+from redis import RedisError
+import json
+import hashlib
 
 
 def error_response(message, status):
@@ -65,6 +68,15 @@ def require_admin(func):
     return wrapper
 
 
+def generate_filters_hash(filters):
+    if not filters:
+        return None
+    
+    filters_sorted = json.dumps(filters, sort_keys=True, separators=(',', ':'))
+
+    return hashlib.md5(filters_sorted.encode('utf-8')).hexdigest()
+
+
 def handle_errors(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
@@ -81,6 +93,9 @@ def handle_errors(func):
         
         except HTTPException as ex:
             return error_response(ex.description, ex.code)
+        
+        except RedisError as ex:
+            return error_response(str(ex), 400)
         
         except SQLAlchemyError as ex:
             return error_response('internal server error', 500)
