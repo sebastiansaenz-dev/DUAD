@@ -7,7 +7,7 @@ from flask_bcrypt import Bcrypt
 from sqlalchemy import MetaData
 from cache import CacheManager
 
-jwt_manager = JWT_Manager(private_path='./keys/private.pem', public_path='./keys/public.pem', algorithm='RS256')
+jwt_manager = JWT_Manager(private_path='./keys/private_key.pem', public_path='./keys/public_key.pem', algorithm='RS256')
 migrate = Migrate()
 metadata = MetaData(schema='lyfter_ecommerce')
 db = SQLAlchemy(metadata=metadata)

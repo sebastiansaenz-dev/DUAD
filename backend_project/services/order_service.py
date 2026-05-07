@@ -1,12 +1,10 @@
 
 
-from models import Orders, Carts
-from sqlalchemy import select
+from models import Orders
 from schemas.orders_schema import OrdersSchema
 from repos.orders_repo import OrdersRepo
 from extensions import cache_manager
-from constants import CartsStatusEnum
-from werkzeug.exceptions import Conflict
+
 
 
 class OrderService:

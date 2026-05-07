@@ -22,6 +22,9 @@ class OrdersRepo(BaseRepository):
 
             cart = self.session.execute(cart_stmt).scalars().first()
 
+            if not cart:
+                raise BadRequest('your cart is empty, add products to finish your purchase')
+
             products = []
 
             for item in cart.items:

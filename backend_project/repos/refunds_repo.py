@@ -27,16 +27,14 @@ class RefundsRepo(BaseRepository):
             return 'PARTIAL'
 
 
-    def create_refund(self, current_user_id, data):
+    def proceed_refund(self, current_user_id, data):
         try:
             self.schema.load(data, partial=True)
-            print(data['order_number'])
             order_stmt = select(Orders).where(Orders.user_id == current_user_id).where(Orders.order_number == data['order_number']).where(Orders.status_id == OrdersStatusEnum.COMPLETED)
 
             order = self.session.execute(order_stmt).scalars().unique().first()
 
             items_to_refund = data['items']
-            print(data['items'])
 
             if not order:
                 raise NotFound('order not found')
@@ -119,7 +117,6 @@ class RefundsRepo(BaseRepository):
             self.session.commit()
 
             return new_refund
-
 
         except Exception as ex:
             self.session.rollback()
