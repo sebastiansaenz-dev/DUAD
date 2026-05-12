@@ -2,11 +2,11 @@
 
 
 
-class CartsStatusEnum():
+class CartsStatusEnum:
     ACTIVE = 1
     COMPLETED = 2
 
-class OrdersStatusEnum():
+class OrdersStatusEnum:
     PENDING = 1
     PAID = 2
     SHIPPED = 3
@@ -14,12 +14,15 @@ class OrdersStatusEnum():
     REFUNDED = 5
     PARTIALLY_REFUNDED = 6
 
-class RefundsTypesEnum():
+class RefundsTypesEnum:
     FULL = 1
     PARTIAL = 2
 
-class PaymentMethodsEnum():
+class PaymentMethodsEnum:
     SINPE = 1
 
+class TokenTypesEnum:
+    ACCESS = 1
+    REFRESH = 2
 
 

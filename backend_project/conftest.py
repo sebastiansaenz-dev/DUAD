@@ -3,6 +3,7 @@ import pytest
 from extensions import db as _db
 from app import create_app
 from sqlalchemy.orm import sessionmaker
+from unittest.mock import patch
 
 from models import Products, ProductsOrders, ProductsCarts, Carts, Orders
 from constants import OrdersStatusEnum, PaymentMethodsEnum
@@ -47,6 +48,16 @@ def session(db, app):
         if transaction.is_active:
             transaction.rollback()
         connection.close()
+
+@pytest.fixture()
+def client(app):
+    return app.test_client()
+
+@pytest.fixture(autouse=True)
+def mock_redis():
+    with patch('extensions.cache_manager.redis_client') as mocked_redis:
+        mocked_redis.get.return_value = None
+        yield mock_redis
 
 
 @pytest.fixture()

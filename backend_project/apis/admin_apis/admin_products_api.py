@@ -5,7 +5,7 @@ from flask import request, jsonify, Blueprint
 from repos.products_repo import ProductsRepo
 from models import Products
 from schemas.products_schema import ProductsSchema
-from utils import handle_errors, require_admin
+from utils import handle_errors, require_auth
 import uuid
 
 
@@ -16,7 +16,7 @@ class AdminProductsAPI(MethodView):
     def __init__(self):
         self.repo = ProductsRepo(Products, ProductsSchema())
 
-    @require_admin
+    @require_auth(role='admin')
     @handle_errors
     def post(self):
         data = request.get_json()
@@ -30,7 +30,7 @@ class AdminProductsAPI(MethodView):
         return jsonify(new_item)
     
 
-    @require_admin
+    @require_auth(role='admin')
     @handle_errors
     def patch(self, id):
         data = request.get_json()
@@ -40,7 +40,7 @@ class AdminProductsAPI(MethodView):
         return jsonify(updated_item)
 
 
-    @require_admin
+    @require_auth(role='admin')
     @handle_errors
     def delete(self, id):
         deleted_item = self.repo.delete(id)

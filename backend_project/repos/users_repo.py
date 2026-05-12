@@ -1,16 +1,18 @@
 
 
 from .base_repo import BaseRepository
-from models import UsersRoles, Users
+from models import UsersRoles, Users, TokenBlocklist
+from constants import TokenTypesEnum
 from extensions import jwt_manager, bcrypt
 from werkzeug.exceptions import Unauthorized, Conflict
 from sqlalchemy import select
+from datetime import timezone, datetime
+from flask_jwt_extended import create_access_token, create_refresh_token, get_jwt_identity
 
 
 class UsersRepo(BaseRepository):
     def __init__(self, model, schema, session=None):
         super().__init__(model, schema, session)
-
 
     def register_user(self, data):
         try:
@@ -81,46 +83,50 @@ class UsersRepo(BaseRepository):
 
             if not user or not bcrypt.check_password_hash(user.password, password):
                 raise Unauthorized('invalid username or password')
-
-            roles = [r.name for r in user.roles]
-
-            payload = {
-                'id': user.id,
-                'roles': roles
+            
+            claims = {
+                "roles": [r.name for r in user.roles]
             }
 
-            token = jwt_manager.encode(payload)
+            access_token = create_access_token(identity=str(user.id), additional_claims=claims, fresh=True)
+            refresh_token = create_refresh_token(identity=str(user.id))
 
             return {
                 'user': self.schema.dump(user),
-                'token': token
+                'access_token': access_token,
+                'refresh_token': refresh_token
             }
-
-
 
 
         except Exception as ex:
             self.session.rollback()
             raise ex
+        
+    def logout_user(self, token_data):
 
+        try:
 
+            jti = token_data['jti']
+            exp_time = token_data['exp']
+            user_id = get_jwt_identity()
 
+            expires_date = datetime.fromtimestamp(exp_time, timezone.utc)
 
+            new_blocked_token = TokenBlocklist(
+                jti=jti,
+                type_id=TokenTypesEnum.REFRESH,
+                user_id=user_id,
+                expires=expires_date
+            )
 
+            self.session.add(new_blocked_token)
+            self.session.commit()
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+            return True
+        
+        except Exception as ex:
+            self.session.rollback()
+            raise ex
 
 
 

@@ -15,14 +15,14 @@ class CartsAPI(MethodView):
     def __init__(self):
         self.repo = CartsRepo(Carts, CartsSchema())
 
-    @require_auth
+    @require_auth()
     @handle_errors
     def get(self, current_user_id):
 
         return jsonify(self.repo.get_cart(current_user_id))
     
 
-    @require_auth
+    @require_auth()
     @handle_errors
     def post(self, current_user_id):
         data = request.get_json()
@@ -32,7 +32,7 @@ class CartsAPI(MethodView):
         return jsonify('products added'), 201
 
 
-    @require_auth
+    @require_auth()
     @handle_errors
     def patch(self, current_user_id):
         data = request.get_json()
@@ -42,7 +42,7 @@ class CartsAPI(MethodView):
         return jsonify(message='product updated')
 
 
-    @require_auth
+    @require_auth()
     @handle_errors
     def delete(self, current_user_id):
         data = request.get_json()

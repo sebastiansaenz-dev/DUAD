@@ -1,5 +1,5 @@
 
-from JWT_Manager import JWT_Manager
+from flask_jwt_extended import JWTManager
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
@@ -7,7 +7,7 @@ from flask_bcrypt import Bcrypt
 from sqlalchemy import MetaData
 from cache import CacheManager
 
-jwt_manager = JWT_Manager(private_path='./keys/private_key.pem', public_path='./keys/public_key.pem', algorithm='RS256')
+jwt_manager = JWTManager()
 migrate = Migrate()
 metadata = MetaData(schema='lyfter_ecommerce')
 db = SQLAlchemy(metadata=metadata)
@@ -17,6 +17,7 @@ cache_manager = CacheManager()
 
 def init_extensions(app):
     db.init_app(app)
+    jwt_manager.init_app(app)
     migrate.init_app(app, db)
     ma.init_app(app)
     bcrypt.init_app(app)

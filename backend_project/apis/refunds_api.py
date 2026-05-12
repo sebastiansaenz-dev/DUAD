@@ -13,7 +13,7 @@ class RefundsAPI(MethodView):
     def __init__(self):
         self.service = RefundService()
     
-    @require_auth
+    @require_auth()
     @handle_errors
     def get(self, current_user_id):
 
@@ -21,7 +21,7 @@ class RefundsAPI(MethodView):
 
         return jsonify(refunds)
     
-    @require_auth
+    @require_auth()
     @handle_errors
     def post(self, current_user_id):
 

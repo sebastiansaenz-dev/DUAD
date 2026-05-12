@@ -14,7 +14,7 @@ class OrdersAPI(MethodView):
         self.service = OrderService()
 
 
-    @require_auth
+    @require_auth()
     @handle_errors
     def get(self, current_user_id):
 
@@ -22,7 +22,7 @@ class OrdersAPI(MethodView):
         return jsonify(orders)
 
 
-    @require_auth
+    @require_auth()
     @handle_errors
     def post(self, current_user_id):
         new_order = self.service.create_order(current_user_id)

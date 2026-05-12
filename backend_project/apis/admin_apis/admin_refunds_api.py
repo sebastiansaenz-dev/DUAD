@@ -6,7 +6,7 @@ from flask.views import MethodView
 from models import Refunds
 from schemas.refunds_schema import RefundsSchema
 from repos.admin_repos.admin_refunds_repo import AdminRefundsRepo
-from utils import require_admin, handle_errors
+from utils import require_auth, handle_errors
 
 admin_refunds_bp = Blueprint('admin_refunds', __name__, url_prefix='/staff-portal/refunds')
 
@@ -16,7 +16,7 @@ class AdminRefundsAPI(MethodView):
         self.repo = AdminRefundsRepo(Refunds, RefundsSchema())
     
 
-    @require_admin
+    @require_auth(role='admin')
     @handle_errors
     def get(self):
         filters = request.args
@@ -25,7 +25,7 @@ class AdminRefundsAPI(MethodView):
         return jsonify(refunds)
     
 
-    @require_admin
+    @require_auth(role='admin')
     @handle_errors
     def post(self, id):
 

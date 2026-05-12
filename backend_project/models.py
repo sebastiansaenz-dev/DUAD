@@ -1,6 +1,5 @@
 
 
-from datetime import date as SystemDate
 from sqlalchemy import func
 from extensions import db
 
@@ -15,6 +14,7 @@ class ProductsCarts(db.Model):
     cart = db.relationship('Carts', back_populates='items')
     product = db.relationship('Products')
 
+
 class ProductsOrders(db.Model):
     __tablename__ = 'Products_orders'
     id = db.Column(db.Integer, primary_key=True)
@@ -25,6 +25,7 @@ class ProductsOrders(db.Model):
 
     order = db.relationship('Orders', back_populates='items')
     product = db.relationship('Products')
+
 
 class ProductsRefunds(db.Model):
     __tablename__ = 'Products_refunds'
@@ -37,11 +38,13 @@ class ProductsRefunds(db.Model):
     refund = db.relationship('Refunds', back_populates='items')
     product = db.relationship('Products')
 
+
 class UsersRoles(db.Model):
     __tablename__ = 'Users_roles'
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('Users.id'), nullable=False)
     role_id = db.Column(db.Integer, db.ForeignKey('Roles.id'), server_default='2')
+
 
 class Users(db.Model):
     __tablename__ = 'Users'
@@ -55,6 +58,7 @@ class Users(db.Model):
     carts = db.relationship('Carts', back_populates='user')
     orders = db.relationship('Orders', back_populates='user')
     roles = db.relationship('Roles', secondary=UsersRoles.__table__, back_populates='users', lazy='joined')
+    token = db.relationship('TokenBlocklist', back_populates='user')
 
 
 class Carts(db.Model):
@@ -68,12 +72,14 @@ class Carts(db.Model):
     orders = db.relationship('Orders', back_populates='cart')
     status = db.relationship('CartsStatus', back_populates='carts', lazy='joined')
 
+
 class CartsStatus(db.Model):
     __tablename__ = 'Carts_status'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
 
     carts = db.relationship('Carts', back_populates='status')
+
 
 class Orders(db.Model):
     __tablename__ = 'Orders'
@@ -131,6 +137,7 @@ class PaymentMethods(db.Model):
 
     orders = db.relationship("Orders", back_populates='payment_method')
 
+
 class Products(db.Model):
     __tablename__ = 'Products'
     id = db.Column(db.Integer, primary_key=True)
@@ -148,4 +155,25 @@ class Roles(db.Model):
     name = db.Column(db.String, nullable=False, unique=True)
 
     users = db.relationship('Users', secondary=UsersRoles.__table__, back_populates='roles')
+
+
+class TokenBlocklist(db.Model):
+    __tablename__ = 'Token_blocklist'
+    id = db.Column(db.Integer, primary_key=True)
+    jti = db.Column(db.String(36), nullable=False, index=True)
+    type_id = db.Column(db.Integer, db.ForeignKey('Token_type.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('Users.id'), nullable=False)
+    created_at = db.Column(db.DateTime, server_default=func.now())
+    expires = db.Column(db.DateTime, nullable=False)
+
+    user = db.relationship('Users', back_populates='token')
+    type = db.relationship('TokenType', back_populates='token')
+
+
+class TokenType(db.Model):
+    __tablename__ = 'Token_type'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(16), nullable=False)
+
+    token = db.relationship('TokenBlocklist', back_populates='type')
 
