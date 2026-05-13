@@ -2,11 +2,8 @@
 
 from flask.views import MethodView
 from flask import request, jsonify, Blueprint
-from repos.products_repo import ProductsRepo
-from models import Products
-from schemas.products_schema import ProductsSchema
 from utils import handle_errors, require_auth
-import uuid
+from services.admin_services.admin_product_service import AdminProductService
 
 
 admin_products_bp = Blueprint('admin_products', __name__, url_prefix='/staff-portal/products')
@@ -14,18 +11,14 @@ admin_products_bp = Blueprint('admin_products', __name__, url_prefix='/staff-por
 
 class AdminProductsAPI(MethodView):
     def __init__(self):
-        self.repo = ProductsRepo(Products, ProductsSchema())
+        self.service = AdminProductService()
 
     @require_auth(role='admin')
     @handle_errors
     def post(self):
         data = request.get_json()
 
-        sku = uuid.uuid4().hex.upper()[:10]
-
-        data['sku'] = sku
-
-        new_item = self.repo.create(data)
+        new_item = self.service.create_product(data)
 
         return jsonify(new_item)
     
@@ -35,7 +28,7 @@ class AdminProductsAPI(MethodView):
     def patch(self, id):
         data = request.get_json()
 
-        updated_item = self.repo.update(id, data)
+        updated_item = self.service.update_product(id, data)
 
         return jsonify(updated_item)
 
@@ -43,7 +36,7 @@ class AdminProductsAPI(MethodView):
     @require_auth(role='admin')
     @handle_errors
     def delete(self, id):
-        deleted_item = self.repo.delete(id)
+        deleted_item = self.service.delete_product(id)
 
         if deleted_item:
             return jsonify(message='item deleted'), 200
