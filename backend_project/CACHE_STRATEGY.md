@@ -18,9 +18,6 @@ This document details the implementation of optimization layers using Redis to i
 ## 🛠️ Invalidation Strategy
 To guarantee **data consistency**, the cache is proactively cleared in the following scenarios:
 
-
-Para garantizar la **consistencia de los datos**, el caché se elimina proactivamente en los siguientes escenarios:
-
 1. **Automatic Write Invalidation:** Whenever a `POST` request is sent to `/staff-portal/products`, or a `PATCH`/`DELETE` request is executed on `/staff-portal/products/<id>`, a logic is triggered to purge all related Redis keys.
 
 2. **Stock Consistency:** Upon a successful order creation (`POST /orders`), the cache for the involved products is invalidated. This ensures that the updated stock levels are accurately reflected in the very next user query.
