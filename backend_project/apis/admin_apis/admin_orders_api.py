@@ -5,7 +5,7 @@ from flask.views import MethodView
 from models import Orders
 from schemas.orders_schema import OrdersSchema
 from repos.admin_repos.admin_orders_repo import AdminOrdersRepo
-from utils import require_admin, handle_errors
+from utils import require_auth, handle_errors
 
 
 admin_orders_bp = Blueprint('admin_orders', __name__, url_prefix='/staff-portal/orders')
@@ -16,7 +16,7 @@ class AdminOrdersAPI(MethodView):
         self.repo = AdminOrdersRepo(Orders, OrdersSchema())
 
 
-    @require_admin
+    @require_auth(role='admin')
     @handle_errors
     def get(self):
         filters = request.args
@@ -25,14 +25,14 @@ class AdminOrdersAPI(MethodView):
         return jsonify(orders)
 
 
-    @require_admin
+    @require_auth(role='admin')
     @handle_errors
     def post(self, id):
         new_order = self.repo.create_order(id)
 
         return jsonify(new_order)
 
-    @require_admin
+    @require_auth(role='admin')
     @handle_errors
     def patch(self, id):
         data = request.get_json()

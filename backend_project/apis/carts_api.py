@@ -7,7 +7,6 @@ from models import Carts
 from schemas.carts_schema import CartsSchema
 from repos.carts_repo import CartsRepo
 from utils import require_auth, handle_errors
-from constants import CartsStatusEnum
 
 
 carts_bp = Blueprint('carts', __name__, url_prefix='/cart')
@@ -16,37 +15,14 @@ class CartsAPI(MethodView):
     def __init__(self):
         self.repo = CartsRepo(Carts, CartsSchema())
 
-    @require_auth
+    @require_auth()
     @handle_errors
     def get(self, current_user_id):
 
-        cart = self.repo.get_one({'user_id': current_user_id, "status_id": CartsStatusEnum.ACTIVE})
-
-        if not cart:
-            return jsonify('nothing in your cart')
-
-
-        products = [{
-            'name': p.product.name,
-            'price': p.product.price,
-            'quantity': p.quantity,
-            'total': p.product.price * p.quantity
-        } for p in cart.items]
-
-
-        total = 0
-
-        for p in products:
-            total += p['total']
-
-
-        return jsonify({
-            'cart_products': products,
-            'total': total
-        })
+        return jsonify(self.repo.get_cart(current_user_id))
     
-    
-    @require_auth
+
+    @require_auth()
     @handle_errors
     def post(self, current_user_id):
         data = request.get_json()
@@ -56,7 +32,7 @@ class CartsAPI(MethodView):
         return jsonify('products added'), 201
 
 
-    @require_auth
+    @require_auth()
     @handle_errors
     def patch(self, current_user_id):
         data = request.get_json()
@@ -66,7 +42,7 @@ class CartsAPI(MethodView):
         return jsonify(message='product updated')
 
 
-    @require_auth
+    @require_auth()
     @handle_errors
     def delete(self, current_user_id):
         data = request.get_json()

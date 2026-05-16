@@ -1,12 +1,17 @@
 
-from flask import jsonify, request
+from flask import jsonify
 import logging
 import traceback
 from functools import wraps
-from extensions import jwt_manager
 from sqlalchemy.exc import SQLAlchemyError
-from werkzeug.exceptions import HTTPException
+from werkzeug.exceptions import HTTPException, Forbidden
 from marshmallow import ValidationError
+from redis import RedisError
+import json
+import hashlib
+from flask_jwt_extended import jwt_required, get_jwt, get_jwt_identity
+from flask_jwt_extended.exceptions import RevokedTokenError
+import inspect
 
 
 def error_response(message, status):
@@ -17,52 +22,38 @@ def error_response(message, status):
     }), status
 
 
-def require_auth(func):
-    @wraps(func)
-    def wrapper(*args, **kwargs):
-        token = request.headers.get('Authorization')
-        if not token or not token.startswith('Bearer '):
-            return jsonify('invalid token'), 400
-        
-        token = token.replace("Bearer ", "")
+def require_auth(role=None):
+    def decorator(func):
+        @wraps(func)
+        @jwt_required()
+        def wrapper(*args, **kwargs):
 
-        decoded = jwt_manager.decode(token)
+            claims = get_jwt()
+            user_roles = claims.get('roles', [])
 
-        if decoded is None:
-            return jsonify('invalid token'), 403
+            if role and role not in user_roles:
+                raise Forbidden('Invalid permissions')
+            
+            sig = inspect.signature(func)
 
-        user_id = decoded.get('id')
+            if 'current_user_id' in sig.parameters:
+                kwargs['current_user_id'] = get_jwt_identity()
 
-        kwargs['current_user_id'] = user_id
+            if 'current_user_roles' in sig.parameters:
+                kwargs['current_user_roles'] = user_roles
 
-        return func(*args, **kwargs)
-    return wrapper
-
-
-def require_admin(func):
-    @wraps(func)
-    def wrapper(*args, **kwargs):
-        token = request.headers.get('Authorization')
-        if not token or not token.startswith("Bearer "):
-            return jsonify('invalid token'), 400
-        
-        token = token.replace("Bearer ", "")
-
-        decoded = jwt_manager.decode(token)
-
-        if decoded is None:
-            return jsonify('invalid token'), 403
-        
-        user_roles = decoded.get('roles')
+            return func(*args, **kwargs)
+        return wrapper
+    return decorator
 
 
-        if 'admin' not in user_roles:
-            return jsonify('invalid permissions'), 403
+def generate_filters_hash(filters):
+    if not filters:
+        return None
+    
+    filters_sorted = json.dumps(filters, sort_keys=True, separators=(',', ':'))
 
-        
-        return func(*args, **kwargs)
-        
-    return wrapper
+    return hashlib.md5(filters_sorted.encode('utf-8')).hexdigest()
 
 
 def handle_errors(func):
@@ -70,6 +61,10 @@ def handle_errors(func):
     def wrapper(*args, **kwargs):
         try:
             return func(*args, **kwargs)
+        
+        except RevokedTokenError as ex:
+            return error_response(str(ex), 401)
+
         except ValueError as ex:
             return error_response(str(ex), 400)
         
@@ -81,6 +76,9 @@ def handle_errors(func):
         
         except HTTPException as ex:
             return error_response(ex.description, ex.code)
+        
+        except RedisError as ex:
+            return error_response(str(ex), 400)
         
         except SQLAlchemyError as ex:
             return error_response('internal server error', 500)

@@ -22,6 +22,14 @@ The project is structured to separate concerns:
 3. **Schemas**: Manage validation and JSON serialization.
 4. **Blueprints**: Define the API routes and handle logic flow.
 
+## ⚡ Cache Strategy
+To guarantee high-speed responses and low latency, this project implements a cache layer with **Redis**
+
+You can find a detailed analysis of the optimized endpoints, TTL (Time To Live) policies, and cache invalidation logic in the following document: 
+
+👉 **[Cache Strategy Documentation](./CACHE_STRATEGY.md)**
+
+
 ## 🛠️ Installation and Configuration
 
 ### 📋 Prerequisites

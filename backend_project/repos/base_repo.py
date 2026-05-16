@@ -1,5 +1,4 @@
 
-from sqlalchemy.orm import Session
 from sqlalchemy import select
 from extensions import db
 from werkzeug.exceptions import NotFound
@@ -7,9 +6,10 @@ from werkzeug.exceptions import NotFound
 
 
 class BaseRepository:
-    def __init__(self, model, schema):
+    def __init__(self, model, schema, session=None):
         self.model = model
         self.schema = schema
+        self.session = session if session else db.session
 
     def to_dict(self, obj):
 
@@ -30,7 +30,7 @@ class BaseRepository:
 
         stmt = select(self.model).filter_by(**valid_filters)
 
-        results = db.session.execute(stmt).scalars().unique().all()
+        results = self.session.execute(stmt).scalars().unique().all()
 
         return self.schema.dump(results, many=True)
 
@@ -38,47 +38,50 @@ class BaseRepository:
 
         stmt = select(self.model).filter_by(**filters)
 
-        return db.session.execute(stmt).scalars().first()
+        return self.session.execute(stmt).scalars().first()
 
     
     def get_by_id(self, id):
-        result = db.session.get(self.model, id)
+        item = self.session.get(self.model, id)
 
-        return self.schema.dump(result)
+        if not item:
+            raise NotFound('Item not found')
+
+        return self.schema.dump(item)
 
 
     def create(self, data):
         new_item = self.schema.load(data)
 
-        db.session.add(new_item)
-        db.session.commit()
-        db.session.refresh(new_item)
+        self.session.add(new_item)
+        self.session.commit()
+        self.session.refresh(new_item)
         return self.schema.dump(new_item)
 
 
     def update(self, id, data):
         stmt = select(self.model).where(self.model.id == id)
 
-        item = db.session.execute(stmt).scalars().first()
+        item = self.session.execute(stmt).scalars().first()
 
         if not item:
             raise NotFound('item not found')
 
         updated_item = self.schema.load(data, instance=item, partial=True)
-        db.session.commit()
+        self.session.commit()
         return self.schema.dump(updated_item)
 
     
     def delete(self, id):
         stmt = select(self.model).where(self.model.id == id)
 
-        item = db.session.execute(stmt).scalars().first()
+        item = self.session.execute(stmt).scalars().first()
 
         if not item:
             raise NotFound('item not found')
         
-        db.session.delete(item)
-        db.session.commit()
+        self.session.delete(item)
+        self.session.commit()
         return True
 
 

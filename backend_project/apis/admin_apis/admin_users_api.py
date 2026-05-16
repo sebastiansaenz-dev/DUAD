@@ -5,7 +5,7 @@ from flask import jsonify, request, Blueprint
 from schemas.users_schema import UsersSchema
 from repos.admin_repos.admin_users_repo import AdminUsersRepo
 from models import Users
-from utils import require_admin, handle_errors
+from utils import require_auth, handle_errors
 
 
 admin_users_bp = Blueprint('admin_users', __name__, url_prefix='/staff-portal/users')
@@ -16,7 +16,7 @@ class AdminUserAPI(MethodView):
         self.repo = AdminUsersRepo(Users, UsersSchema())
 
 
-    @require_admin
+    @require_auth(role='admin')
     @handle_errors
     def get(self):
 
@@ -27,7 +27,7 @@ class AdminUserAPI(MethodView):
         return jsonify(users)
     
 
-    @require_admin
+    @require_auth(role='admin')
     @handle_errors
     def post(self):
         data = request.get_json()
@@ -37,7 +37,7 @@ class AdminUserAPI(MethodView):
         return jsonify(new_user)
 
 
-    @require_admin
+    @require_auth(role='admin')
     @handle_errors
     def patch(self, id):
 
@@ -49,7 +49,7 @@ class AdminUserAPI(MethodView):
 
     
 
-    @require_admin
+    @require_auth(role='admin')
     @handle_errors
     def delete(self, id):
 

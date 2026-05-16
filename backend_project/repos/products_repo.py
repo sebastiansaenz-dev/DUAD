@@ -3,14 +3,16 @@
 
 from .base_repo import BaseRepository
 from sqlalchemy import select, func
-from extensions import db
 import math
 
 
 class ProductsRepo(BaseRepository):
-    def get_products(self, filters, page=1, per_page=20):
+    def __init__(self, model, schema, session=None):
+        super().__init__(model, schema, session)
 
         
+    def get_products(self, filters, page=1, per_page=20):
+
         if 'page' in filters:
             filters.pop('page')
         if 'per_page' in filters:
@@ -24,10 +26,10 @@ class ProductsRepo(BaseRepository):
 
         stmt = select(self.model).filter_by(**valid_filters).order_by(self.model.id).limit(per_page).offset(offset_value)
 
-        results = db.session.execute(stmt).scalars().all()
+        results = self.session.execute(stmt).scalars().all()
 
         total_stmt = select(func.count()).select_from(self.model).filter_by(**valid_filters)
-        total_products = db.session.execute(total_stmt).scalar()
+        total_products = self.session.execute(total_stmt).scalar()
 
         total_pages = math.ceil(total_products / per_page) if total_products > 0 else 0
 

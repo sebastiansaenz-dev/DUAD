@@ -2,13 +2,16 @@
 from .base_repo import BaseRepository
 from sqlalchemy import select
 from models import Orders, ProductsRefunds, Products
-from extensions import db
 from constants import OrdersStatusEnum
 from werkzeug.exceptions import NotFound, BadRequest
 
 
 
 class RefundsRepo(BaseRepository):
+    def __init__(self, model, schema, session=None):
+        super().__init__(model, schema, session)
+
+
     def refund_status(self, original_items, validate_items, history):
 
         total_purchase = sum(item['quantity'] for item in original_items.values())
@@ -24,23 +27,19 @@ class RefundsRepo(BaseRepository):
             return 'PARTIAL'
 
 
-    def create_refund(self, current_user_id, data):
+    def proceed_refund(self, current_user_id, data):
         try:
             self.schema.load(data, partial=True)
-            print(data['order_number'])
-            order_stmt = select(Orders).where(Orders.user_id == current_user_id).where(Orders.order_number == data['order_number'])
-            
-            # .where(Orders.status_id == OrdersStatusEnum.COMPLETED)
+            order_stmt = select(Orders).where(Orders.user_id == current_user_id).where(Orders.order_number == data['order_number']).where(Orders.status_id == OrdersStatusEnum.COMPLETED)
 
-            order = db.session.execute(order_stmt).scalars().unique().first()
+            order = self.session.execute(order_stmt).scalars().unique().first()
 
             items_to_refund = data['items']
-            print(data['items'])
 
             if not order:
                 raise NotFound('order not found')
 
-            db.session.refresh(order)
+            self.session.refresh(order)
 
             original_items = {
                 p.product.id: {
@@ -49,7 +48,6 @@ class RefundsRepo(BaseRepository):
                 } for p in order.items
             }
 
-            print(f'orders: {order.refunds}')
 
             history = {}
             for r in list(order.refunds):
@@ -58,7 +56,6 @@ class RefundsRepo(BaseRepository):
 
             total_to_refund = 0
             validate_items = []
-
 
             for item in items_to_refund:
                 p_id = item['product_id']
@@ -87,8 +84,6 @@ class RefundsRepo(BaseRepository):
                     'total_refund': subtotal
                 })
 
-            print(validate_items)
-
             new_refund = self.model(
                 user_id=current_user_id,
                 order_id=order.id,
@@ -96,8 +91,8 @@ class RefundsRepo(BaseRepository):
                 reason=data['reason']
             )
 
-            db.session.add(new_refund)
-            db.session.flush()
+            self.session.add(new_refund)
+            self.session.flush()
 
             for item in validate_items:
                 new_item = ProductsRefunds(
@@ -106,9 +101,9 @@ class RefundsRepo(BaseRepository):
                     quantity=item['quantity'],
                     total_refunded=item['total_refund']
                 )
-                db.session.add(new_item)
+                self.session.add(new_item)
 
-                product = db.session.get(Products, item['product_id'])
+                product = self.session.get(Products, item['product_id'])
                 product.stock += item['quantity']
             
             status = self.refund_status(original_items, validate_items, history)
@@ -119,13 +114,12 @@ class RefundsRepo(BaseRepository):
             elif status == 'PARTIAL':
                 order.status_id = OrdersStatusEnum.PARTIALLY_REFUNDED
 
-            db.session.commit()
+            self.session.commit()
 
-            return self.schema.dump(new_refund)
-
+            return new_refund
 
         except Exception as ex:
-            db.session.rollback()
+            self.session.rollback()
             print(ex)
             raise ex
 
