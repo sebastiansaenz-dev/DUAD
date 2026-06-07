@@ -1,0 +1,52 @@
+<!doctype html>
+<html>
+  <main>
+    <section>
+      <form
+        action="
+https://www.google.com"
+      >
+        <h1>Presidential Election</h1>
+        <label for="full_name">Full name</label>
+        <br />
+        <input type="text" name="fullName" id="full_name" />
+        <br />
+
+        <label for="email">Email</label>
+        <br />
+        <input type="email" name="email" id="email" />
+        <br />
+
+        <label for="identification">Identification</label>
+        <br />
+        <input
+          type="text"
+          inputmode="numeric"
+          pattern="[0-9]*"
+          name="identification"
+          id="identification"
+        />
+        <br />
+
+        <label for="phone">Phone</label>
+        <br />
+        <input type="tel" name="phone" id="phone" />
+        <br />
+
+        <label for="candidates_selection"
+          >Select your preferred presidential candidate</label
+        >
+        <br />
+        <select name="candidatesSelection" id="candidates_selection">
+          <option hidden>Select one</option>
+          <option value="candidate1">Candidate #1</option>
+          <option value="candidate2">Candidate #2</option>
+          <option value="candidate3">Candidate #3</option>
+        </select>
+        <br />
+
+        <input type="submit" value="Vote" />
+      </form>
+    </section>
+  </main>
+</html>

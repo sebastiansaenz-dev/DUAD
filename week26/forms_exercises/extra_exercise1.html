@@ -1,0 +1,45 @@
+<!doctype html>
+<html>
+  <main>
+    <section>
+      <form action="./additional/thankyou.html">
+        <h1>Presidential Election</h1>
+        <label for="full_name">Full name</label>
+        <br />
+        <input type="text" name="fullName" id="full_name" />
+        <br />
+
+        <label for="email">Email</label>
+        <br />
+        <input type="email" name="email" id="email" />
+        <br />
+
+        <label for="identification">Identification</label>
+        <br />
+        <input
+          type="text"
+          inputmode="numeric"
+          pattern="[0-9]*"
+          name="identification"
+          id="identification"
+        />
+        <br />
+
+        <label for="courses">Select course</label>
+        <br />
+        <select name="courses" id="courses">
+          <option hidden>Select one</option>
+          <option value="web_development">Web development</option>
+          <option value="networking">Networking</option>
+          <option value="cibersecurity">Cibersecurity</option>
+        </select>
+        <br />
+
+        <label for="terms">I agree to the Terms and Conditions</label>
+        <input type="checkbox" name="terms" id="terms" required />
+        <br />
+        <input type="submit" value="Submit" />
+      </form>
+    </section>
+  </main>
+</html>
