@@ -1,0 +1,82 @@
+<!doctype html>
+<html>
+  <header>
+    <link rel="stylesheet" href="styles.css" />
+  </header>
+  <main>
+    <form action="https://dummyjson.com/test" method="POST">
+      <h1>Contact us!</h1>
+      <p>Got something to say? Fire away!</p>
+
+      <div class="input-fields">
+        <input
+          placeholder="First name"
+          type="text"
+          id="first_name"
+          name="firstName"
+          required
+        />
+        <br />
+      </div>
+
+      <div class="input-fields">
+        <input
+          placeholder="Last name"
+          type="text"
+          id="last_name"
+          name="lastName"
+          required
+        />
+        <br />
+      </div>
+
+      <div class="input-fields">
+        <input
+          placeholder="Email"
+          type="text"
+          id="email"
+          name="email"
+          required
+        />
+        <br />
+        <svg
+          id="email-icon"
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <rect width="20" height="16" x="2" y="4" rx="2" />
+          <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+        </svg>
+      </div>
+
+      <div class="input-fields">
+        <select name="type" id="select" required>
+          <option hidden>What's your message about?</option>
+          <option value="question">Question</option>
+          <option value="suggestion">Suggestion</option>
+        </select>
+        <br />
+      </div>
+
+      <div class="input-fields">
+        <textarea
+          placeholder="Fire away!"
+          id="message"
+          name="message"
+        ></textarea>
+        <br />
+      </div>
+
+      <div id="submit-button">
+        <input id="submit" type="submit" value="Send my message" />
+      </div>
+    </form>
+  </main>
+</html>
