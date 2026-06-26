@@ -1,0 +1,42 @@
+.publicity-banner {
+  display: flex;
+  justify-content: space-evenly;
+  background-color: rgb(255, 231, 240);
+  padding: 1em;
+  border-radius: 0.5em;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.publicity-img {
+  width: 15rem;
+}
+
+.publicity-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.publicity-content h1 {
+  font-weight: lighter;
+}
+
+.publicity-content p {
+  color: rgb(53, 53, 53);
+}
+
+.publicity-content span {
+  font-weight: bold;
+  color: rgb(226, 43, 171);
+  font-size: xx-large;
+  margin-top: 1rem;
+}
+
+.publicity-content button {
+  background-color: rgb(226, 43, 171);
+  border: none;
+  border-radius: 0.5em;
+  color: white;
+  padding: 0.5rem 1rem;
+}
