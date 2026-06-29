@@ -1,13 +1,13 @@
 const sentence = "this is a string example";
 
-let devided_sentence = [];
+let devidedSentence = [];
 
 let word = "";
 
 for (const char of sentence) {
   if (char === " ") {
     if (word.length > 0) {
-      devided_sentence.push(word);
+      devidedSentence.push(word);
       word = "";
     }
   } else {
@@ -16,7 +16,7 @@ for (const char of sentence) {
 }
 
 if (word.length > 0) {
-  devided_sentence.push(word);
+  devidedSentence.push(word);
 }
 
-console.log(devided_sentence);
+console.log(devidedSentence);
