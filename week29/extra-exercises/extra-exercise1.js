@@ -1,10 +1,13 @@
 const sentence = "JavaScript and Python";
 
-let finalWord = "";
+const revertSentence = (sentence) => {
+  let finalSentence = "";
 
-for (let i = sentence.length - 1; i >= 0; i--) {
-  finalWord += sentence[i];
-  console.log(sentence[i]);
-}
+  for (let i = sentence.length - 1; i >= 0; i--) {
+    finalSentence += sentence[i];
+  }
 
-console.log(finalWord);
+  return finalSentence;
+};
+
+console.log(revertSentence(sentence));
