@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+  <body>
+    <h1>List</h1>
+    <button id="add-item">Add-item</button>
+    <button id="clear-button">Clear list</button>
+    <ol id="ordered-list"></ol>
+
+    <script>
+      const addButton = document.getElementById("add-item");
+
+      const addItem = () => {
+        const newItem = document.createElement("li");
+        newItem.classList.add("ordered-list-elements");
+
+        newItem.innerHTML = "Another item";
+
+        const list = document.getElementById("ordered-list");
+        list.appendChild(newItem);
+      };
+
+      addButton.addEventListener("click", addItem);
+
+      const clearButton = document.getElementById("clear-button");
+
+      const clearList = () => {
+        const list = document.getElementById("ordered-list");
+
+        list.innerHTML = "";
+      };
+
+      clearButton.addEventListener("click", clearList);
+    </script>
+  </body>
+</html>
