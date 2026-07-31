@@ -1,11 +1,4 @@
-const checkAuth = () => {
-  const user = localStorage.getItem("user");
-  if (!user) {
-    window.location.href = "../register-page/register.html";
-    return null;
-  }
-  return JSON.parse(user);
-};
+import { checkAuth } from "../utils/check-auth";
 
 const renderUserData = (userData) => {
   const cardsContainer = document.getElementById("card-container");

@@ -38,9 +38,9 @@ const logInUser = async () => {
       alert("successfully logged in!");
 
       const dataToSave = {
+        id: user.id,
         name: user.name,
         data: {
-          id: user.id,
           email: user.data.email,
           password: user.data.password,
         },

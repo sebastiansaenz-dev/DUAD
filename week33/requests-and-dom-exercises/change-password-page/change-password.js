@@ -1,17 +1,10 @@
-const checkAuth = () => {
-  const user = localStorage.getItem("user");
-  if (!user) {
-    window.location.href = "../login-page/login.html";
-    return null;
-  }
-  return JSON.parse(user);
-};
+import { checkAuth } from "../utils/check-auth";
 
 const updatePassword = async (userId, newPassowrd, currentUserData) => {
   const newData = {
     data: {
       ...currentUserData,
-      password: newPassowrd,
+      password: newPassword,
     },
   };
 
@@ -34,7 +27,7 @@ const changePassword = () => {
 
     const {
       "current-password": currentPassword,
-      "new-password": newPassoword,
+      "new-password": newPassword,
       "confirm-password": confirmPassword,
     } = rawData;
 
@@ -49,12 +42,12 @@ const changePassword = () => {
         return;
       }
 
-      if (newPassoword !== confirmPassword) {
+      if (newPassword !== confirmPassword) {
         alert("The password confirmation does not match your new password");
         return;
       }
 
-      await updatePassword(user.id, newPassoword, user.data);
+      await updatePassword(user.id, newPassword, user.data);
       alert("your password has been changed");
       window.location.href = "../profile-page/profile.html";
     } catch (error) {
