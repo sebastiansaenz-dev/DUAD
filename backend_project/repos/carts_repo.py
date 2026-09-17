@@ -22,10 +22,12 @@ class CartsRepo(BaseRepository):
 
 
         products = [{
+            'id': p.product_id,
             'name': p.product.name,
             'price': p.product.price,
             'quantity': p.quantity,
-            'total': p.product.price * p.quantity
+            'total': p.product.price * p.quantity,
+            'image_url': p.product.image_url
         } for p in cart.items]
 
         total = 0
@@ -128,6 +130,9 @@ class CartsRepo(BaseRepository):
             cart_stmt = select(self.model).where(self.model.user_id == user_id).where(self.model.status_id == CartsStatusEnum.ACTIVE)
 
             cart = self.session.execute(cart_stmt).scalars().first()
+            
+            if not cart:
+                raise NotFound('cart not found')
 
             for p in products:
                 product_id = p['id']

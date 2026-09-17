@@ -1,0 +1,23 @@
+@import url("../utils/css-reset.css");
+@import url("../utils/navbar.css");
+@import url("./form.css");
+@import url(../utils/error-section.css);
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  width: 100%;
+}

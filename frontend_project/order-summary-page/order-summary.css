@@ -1,0 +1,157 @@
+.checkout-container {
+  flex-direction: column;
+  max-width: 1000px;
+  padding: 2.5rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  margin: 3rem auto;
+}
+
+.checkout-container h1 {
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  font-size: 1.8rem;
+  color: #333;
+}
+
+.checkout-grid {
+  display: flex;
+  gap: 2.5rem;
+  align-items: flex-start;
+}
+
+.checkout-form-section {
+  flex: 1;
+  background: #fdfdfd;
+  border: 1px solid #eee;
+  border-radius: 6px;
+  padding: 1.5rem;
+}
+
+.checkout-summary-section {
+  flex: 1.2;
+  background: #fdfdfd;
+  border: 1px solid #eee;
+  border-radius: 6px;
+  padding: 1.5rem;
+}
+
+.checkout-form-section h2,
+.checkout-summary-section h2 {
+  font-size: 1.2rem;
+  margin-top: 0;
+  margin-bottom: 1.2rem;
+  color: #444;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  font-size: 0.9rem;
+  font-weight: bold;
+  color: #555;
+}
+
+.form-group input,
+.form-group select {
+  padding: 0.7rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+  background: #fff;
+}
+
+.summary-items-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-height: 280px;
+  overflow-y: auto;
+  margin-bottom: 1.5rem;
+  padding-right: 0.2rem;
+}
+
+.summary-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #fff;
+  padding: 0.75rem 1rem;
+  border: 1px solid #eee;
+  border-radius: 6px;
+}
+
+.summary-item img {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+}
+
+.summary-item-details {
+  flex-grow: 1;
+  margin-left: 1rem;
+}
+
+.summary-item-details h4 {
+  margin: 0 0 4px 0;
+  font-size: 1rem;
+  color: #333;
+}
+
+.summary-item-details p {
+  margin: 0;
+  color: #666;
+  font-size: 0.85rem;
+}
+
+.summary-item-price {
+  font-weight: bold;
+  color: #444;
+  font-size: 1rem;
+}
+
+.summary-footer {
+  border-top: 2px solid #eee;
+  padding-top: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.total-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #444;
+}
+
+.total-price {
+  color: #1e3a8a;
+  font-size: 1.4rem;
+}
+
+.confirm-button {
+  width: 100%;
+  background-color: #1e3a8a;
+  color: white;
+  border: none;
+  padding: 0.9rem;
+  font-size: 1rem;
+  font-weight: bold;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.confirm-button:hover {
+  background-color: #3b82f6;
+}

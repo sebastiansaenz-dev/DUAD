@@ -69,7 +69,16 @@ def handle_errors(func):
             return error_response(str(ex), 400)
         
         except ValidationError as ex:
-            return error_response(ex.messages, 400)
+            if isinstance(ex.messages, dict):
+                first_field = list(ex.messages.keys())[0]
+                first_error = ex.messages[first_field]
+                msg_text = first_error[0] if isinstance(first_error, list) else str(first_error)
+                clean_message = f"{first_field}: {msg_text}"
+            elif isinstance(ex.messages, list):
+                clean_message = str(ex.messages[0])
+            else:
+                clean_message = str(ex.messages)
+            return error_response(clean_message, 400)
         
         except TypeError as ex:
             return error_response(str(ex), 400)
