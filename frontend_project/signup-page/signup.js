@@ -1,5 +1,6 @@
 import { activePage } from "../utils/utils.js";
 import { showErrorMessage } from "../utils/utils.js";
+import { checkEmail, checkPassword } from "../utils/utils.js";
 
 const createUser = async (e) => {
   e.preventDefault();
@@ -13,6 +14,9 @@ const createUser = async (e) => {
     const username = usernameInput.value;
     const email = emailInput.value;
     const password = passwordInput.value;
+
+    if (!checkEmail(email)) return;
+    if (!checkPassword(password)) return;
 
     const userData = {
       username: username,

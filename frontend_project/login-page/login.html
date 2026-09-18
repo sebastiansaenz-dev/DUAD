@@ -51,11 +51,17 @@
         <div id="error-section" class="error-section"></div>
 
         <div class="input-container">
-          <input id="email" type="email" placeholder="Enter email" />
+          <input id="email" type="email" placeholder="Enter email" required />
           <span> </span>
         </div>
         <div class="input-container">
-          <input id="password" type="password" placeholder="Enter password" />
+          <input
+            id="password"
+            type="password"
+            placeholder="Enter password"
+            required
+            minlength="8"
+          />
         </div>
         <button type="submit" class="submit">Log in</button>
         <p class="signup-link">

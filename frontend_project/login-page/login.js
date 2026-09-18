@@ -1,5 +1,6 @@
 import { activePage } from "../utils/utils.js";
 import { showErrorMessage } from "../utils/utils.js";
+import { checkEmail, checkPassword } from "../utils/utils.js";
 
 const logInUser = async (e) => {
   e.preventDefault();
@@ -9,8 +10,11 @@ const logInUser = async (e) => {
     const emailInput = document.getElementById("email");
     const passwordInput = document.getElementById("password");
 
-    const email = emailInput.value;
+    const email = emailInput.value.trim();
     const password = passwordInput.value;
+
+    if (!checkEmail(email)) return;
+    if (!checkPassword(password)) return;
 
     const userData = {
       email: email,

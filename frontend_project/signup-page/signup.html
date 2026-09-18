@@ -49,13 +49,24 @@
         <div id="error-section" class="error-section"></div>
 
         <div class="input-container">
-          <input id="username" type="text" placeholder="Enter username" />
+          <input
+            id="username"
+            type="text"
+            placeholder="Enter username"
+            required
+          />
         </div>
         <div class="input-container">
-          <input id="email" type="email" placeholder="Enter email" />
+          <input id="email" type="email" placeholder="Enter email" required />
         </div>
         <div class="input-container">
-          <input id="password" type="password" placeholder="Enter password" />
+          <input
+            id="password"
+            type="password"
+            placeholder="Enter password"
+            required
+            minlength="8"
+          />
         </div>
         <button type="submit" class="submit">Sign up</button>
         <p class="signup-link">

@@ -264,3 +264,23 @@ export const activePage = () => {
     });
   });
 };
+
+export const checkEmail = (email) => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    showErrorMessage({ message: "Please enter a valid email" });
+    return false;
+  }
+  return true;
+};
+
+export const checkPassword = (password) => {
+  const minPasswordLength = 8;
+  if (password.length < minPasswordLength) {
+    showErrorMessage({
+      message: "Password must have at least 8 characters long",
+    });
+    return false;
+  }
+  return true;
+};
