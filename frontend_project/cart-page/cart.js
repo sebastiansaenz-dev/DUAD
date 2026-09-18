@@ -2,6 +2,7 @@ import { showUserType } from "../utils/utils.js";
 import { activePage } from "../utils/utils.js";
 import { checkAuth } from "../utils/utils.js";
 import { api } from "../utils/utils.js";
+import { showErrorMessage } from "../utils/utils.js";
 
 const checkAuthForCart = () => {
   const user = checkAuth();
@@ -21,7 +22,7 @@ const getCart = async () => {
 
     displayCartItems(response.data);
   } catch (error) {
-    console.error(error);
+    showErrorMessage(error);
   }
 };
 
@@ -92,7 +93,7 @@ const removeProductFromCart = async (event) => {
 
     getCart();
   } catch (error) {
-    console.error("Error removing product:", error);
+    showErrorMessage(error);
   }
 };
 

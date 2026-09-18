@@ -2,6 +2,7 @@ import { showUserType } from "../utils/utils.js";
 import { activePage } from "../utils/utils.js";
 import { checkAuth } from "../utils/utils.js";
 import { api } from "../utils/utils.js";
+import { showErrorMessage } from "../utils/utils.js";
 
 const checkAuthForOrderSummary = () => {
   const user = checkAuth();
@@ -21,7 +22,7 @@ const getCart = async () => {
 
     displayOrderSummary(response.data);
   } catch (error) {
-    console.error(error);
+    showErrorMessage(error);
   }
 };
 
@@ -82,7 +83,7 @@ const submitOrder = async (event) => {
   const payment = document.getElementById("payment").value;
 
   if (!name || !address || !phone) {
-    alert("Please complete all the fields");
+    showErrorMessage({ message: "Please complete all the fields" });
     return;
   }
 
@@ -105,11 +106,7 @@ const submitOrder = async (event) => {
 
     window.location.href = "../order-confirmed-page/order-confirmed.html";
   } catch (error) {
-    console.error("There was an error creating the order:", error);
-    alert(
-      "Error creating the order: " +
-        (error.response?.data?.message || error.message),
-    );
+    showErrorMessage(error);
   }
 };
 

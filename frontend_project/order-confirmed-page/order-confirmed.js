@@ -2,6 +2,7 @@ import { showUserType } from "../utils/utils.js";
 import { activePage } from "../utils/utils.js";
 import { checkAuth } from "../utils/utils.js";
 import { api } from "../utils/utils.js";
+import { showErrorMessage } from "../utils/utils.js";
 
 const checkAuthForOrderConfirmed = () => {
   const user = checkAuth();
@@ -24,7 +25,7 @@ const getOrderData = async () => {
 
     sessionStorage.removeItem("lastOrder");
   } catch (error) {
-    console.error(error);
+    showErrorMessage(error);
     window.location.href = "../product-catalog-page/products.html";
   }
 };
@@ -41,7 +42,7 @@ const displayOrderSummary = (orderData) => {
   const totalPrice = document.querySelector(".total-price");
 
   if (!orderData) {
-    console.error("Order data is undefined");
+    showErrorMessage({ message: "Unable to load order data" });
     displayEmptyCart("Unable to load order data");
     return;
   }
@@ -51,7 +52,7 @@ const displayOrderSummary = (orderData) => {
   const products = orderData.cart_products || orderData.items || [];
 
   if (!Array.isArray(products) || products.length === 0) {
-    console.warn("No products found in order data:", orderData);
+    showErrorMessage("No products found in the order");
     displayEmptyCart("No products in this order");
     return;
   }
@@ -89,7 +90,7 @@ const displayOrderSummary = (orderData) => {
 
       summaryList.appendChild(summaryItem);
     } catch (error) {
-      console.error("Error displaying product:", product, error);
+      showErrorMessage(error);
     }
   });
 
