@@ -53,7 +53,9 @@ class RegisterAPI(MethodView):
         return jsonify({
             "message": 'user created',
             "user": result['user'],
-            "token": result['token']
+            "access_token": result['access_token'],
+            "refresh_token": result['refresh_token']
+
         })
 
 

@@ -91,6 +91,9 @@ class Orders(db.Model):
     total = db.Column(db.Integer, nullable=False)
     date = db.Column(db.DateTime, server_default=func.now())
     status_id = db.Column(db.Integer, db.ForeignKey('Orders_status.id'), server_default='1')
+    full_name = db.Column(db.String(255), nullable=False, server_default="Unknouwn")
+    address = db.Column(db.String(500), nullable=False, server_default="N/A")
+    phone = db.Column(db.String(20), nullable=False, server_default='00000000')
 
     user = db.relationship('Users', back_populates='orders')
     payment_method = db.relationship("PaymentMethods", back_populates='orders')
@@ -146,7 +149,9 @@ class Products(db.Model):
     price = db.Column(db.Integer, nullable=False)
     brand = db.Column(db.String, nullable=False)
     stock = db.Column(db.Integer, nullable=False)
+    description = db.Column(db.String)
     entry_date = db.Column(db.DateTime, server_default=func.now())
+    image_url = db.Column(db.String)
 
 
 class Roles(db.Model):

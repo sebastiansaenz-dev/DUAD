@@ -1,0 +1,225 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Inventory — Admin Panel</title>
+    <link rel="stylesheet" href="./styles/main.css" />
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  </head>
+  <body>
+    <header class="navbar">
+      <div class="navbar-brand">
+        <span class="navbar-brand-mark"></span>
+        <h1>Inventory</h1>
+      </div>
+      <nav class="navbar-links">
+        <a class="navbar-link active" href="./products.html">Products</a>
+        <a class="navbar-link" href="../orders-page/orders.html">Orders</a>
+        <a class="navbar-link" href="../users-page/users.html">Users</a>
+        <a class="navbar-link" href="../../product-catalog-page/products.html"
+          >Client Panel</a
+        >
+      </nav>
+    </header>
+
+    <div class="app">
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <div>
+          <div class="filter-title">Brands</div>
+          <ul class="filter-list" id="brandList"></ul>
+        </div>
+      </aside>
+
+      <!-- Main -->
+      <main class="main">
+        <div class="topbar">
+          <div>
+            <h2>Products</h2>
+            <p id="subtitle">
+              Manage your catalog: add, edit, or remove products.
+            </p>
+          </div>
+          <div class="controls">
+            <div class="search">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <circle cx="11" cy="11" r="7" />
+                <path d="m21 21-4.3-4.3" />
+              </svg>
+              <input
+                type="text"
+                id="searchInput"
+                placeholder="Search product or SKU…"
+              />
+            </div>
+            <button class="btn btn-accent" id="addBtn">+ New product</button>
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Product</th>
+                <th>Brand</th>
+                <th>Price</th>
+                <th>Stock</th>
+                <th style="text-align: right">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="tableBody"></tbody>
+          </table>
+          <div class="empty-state" id="emptyState" style="display: none">
+            <h3>No products match</h3>
+            <p>Try a different search or brand, or add a new product.</p>
+            <button class="btn btn-primary" id="emptyAddBtn">
+              + New product
+            </button>
+          </div>
+        </div>
+
+        <nav class="pagination" id="pagination" aria-label="Product pages">
+          <button
+            type="button"
+            class="pagination-btn"
+            id="prevPageBtn"
+            aria-label="Previous page"
+          >
+            ‹ Prev
+          </button>
+
+          <div class="pagination-pages" id="paginationPages"></div>
+
+          <button
+            type="button"
+            class="pagination-btn"
+            id="nextPageBtn"
+            aria-label="Next page"
+          >
+            Next ›
+          </button>
+        </nav>
+      </main>
+    </div>
+
+    <!-- Slide panel -->
+    <div class="overlay" id="overlay"></div>
+    <div class="panel" id="panel">
+      <div class="panel-head">
+        <h2 id="panelTitle">New product</h2>
+        <button class="panel-close" id="panelClose" aria-label="Close">
+          <svg
+            viewBox="0 0 24 24"
+            width="20"
+            height="20"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path d="M18 6 6 18M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      <form id="productForm">
+        <div class="panel-body">
+          <div class="field">
+            <label for="f_name">Product name</label>
+            <input
+              type="text"
+              id="f_name"
+              required
+              placeholder="E.g. Basic cotton t-shirt"
+            />
+          </div>
+
+          <div class="field-row">
+            <div class="field">
+              <label for="f_brand">Brand</label>
+              <input
+                type="text"
+                id="f_brand"
+                list="brandOptions"
+                required
+                placeholder="E.g. Nike"
+              />
+              <datalist id="brandOptions"></datalist>
+            </div>
+            <div class="field">
+              <label for="f_sku">SKU</label>
+              <input
+                type="text"
+                id="f_sku"
+                readonly
+                placeholder="Auto-generated - left blank"
+              />
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="f_image_url">Image URL</label>
+            <input
+              type="text"
+              id="f_image_url"
+              placeholder="https://example.com/product.jpg"
+            />
+            <div class="field-hint">
+              Any image size or ratio works, it gets cropped to fit the
+              thumbnail.
+            </div>
+          </div>
+
+          <div class="field-row">
+            <div class="field">
+              <label for="f_price">Price</label>
+              <input
+                type="number"
+                id="f_price"
+                min="0"
+                step="0.01"
+                required
+                placeholder="0.00"
+              />
+            </div>
+            <div class="field">
+              <label for="f_stock">Stock on hand</label>
+              <input
+                type="number"
+                id="f_stock"
+                min="0"
+                step="1"
+                required
+                placeholder="0"
+              />
+              <div class="field-hint">Flagged as low stock below 5 units.</div>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="f_description">Description</label>
+            <textarea
+              id="f_description"
+              placeholder="Details, material, sizes, internal notes…"
+            ></textarea>
+          </div>
+        </div>
+
+        <div class="panel-foot">
+          <button type="button" class="btn btn-ghost" id="cancelBtn">
+            Cancel
+          </button>
+          <button type="submit" class="btn btn-accent" id="saveBtn">
+            Save product
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script type="module" src="./scripts/main.js"></script>
+  </body>
+</html>

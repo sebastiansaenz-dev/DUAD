@@ -1,0 +1,66 @@
+.brand {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+}
+
+.brand-mark {
+  width: 0.625rem;
+  height: 0.625rem;
+  background-color: #1e3a8a;
+  border-radius: 0.0625rem;
+  display: inline-block;
+  transform: translateY(-0.0625rem);
+}
+
+.brand h1 {
+  font-size: 1.25rem;
+  letter-spacing: -0.01em;
+}
+
+.filter-title {
+  font-size: 0.78rem;
+  color: #5b5850;
+  margin-bottom: 0.625rem;
+}
+
+.filter-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.filter-list li {
+  margin-bottom: 0.125rem;
+}
+
+.filter-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 0.4375rem 0.5rem;
+  border-radius: 0.1875rem;
+  font-size: 0.88rem;
+  font-family: inherit;
+  color: #1b1d1e;
+}
+
+.filter-btn:hover {
+  background-color: #eae8e2;
+}
+
+.filter-btn.active {
+  background-color: #1b1d1e;
+  color: #f6f6f3;
+}
+
+.filter-count {
+  font-size: 0.76rem;
+  opacity: 0.6;
+  margin-left: 0.5em;
+}

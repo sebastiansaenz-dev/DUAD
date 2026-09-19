@@ -1,0 +1,29 @@
+.search {
+  position: relative;
+}
+
+.search input {
+  font-family: inherit;
+  font-size: 0.9rem;
+  padding: 0.5625rem 0.75rem 0.5625rem 2rem;
+  border: 0.0625rem solid #ddd9d0;
+  border-radius: 0.1875rem;
+  background-color: #ffffff;
+  width: 13.75rem;
+  color: #1b1d1e;
+}
+
+.search input:focus {
+  outline: 0.125rem solid #3b82f6;
+  outline-offset: 0.0625rem;
+}
+
+.search svg {
+  position: absolute;
+  left: 0.625rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0.875rem;
+  height: 0.875rem;
+  color: #5b5850;
+}
