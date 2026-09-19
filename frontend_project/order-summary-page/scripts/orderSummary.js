@@ -19,8 +19,8 @@ const loadCart = async () => {
   try {
     const cartData = await getCartRequest();
 
-    if (cartData === "nothing in your cart") {
-      displayEmptyCart(cartData);
+    if (!cartData?.cart_products?.length) {
+      displayEmptyCart("nothing in your cart");
       return;
     }
 
