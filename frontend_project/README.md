@@ -1,36 +1,3 @@
-├── cart-page/ # View and remove cart items
-├── order-summary-page/ # Order summary + shipping form
-├── order-confirmed-page/ # Order confirmation
-├── login-page/ # Login
-├── signup-page/ # User registration
-├── user-page/ # Client profile
-├── admin-pages/ # Admin panel
-│ ├── edit-products-page/ # Product CRUD
-│ ├── orders-page/ # Order management
-│ └── users-page/ # User management
-├── utils/ # Shared utilities (API, auth, navbar)
-└── svgs/ # SVG icons
-
-```
-Each page follows the same pattern:
-```
-
-page-name/
-├── page.html # Static HTML
-├── scripts/ # JS logic (api.js, render.js, main/init)
-└── styles/ # Modular CSS per section
-
-````
----
-## Backend Connection
-### API Configuration
-All backend communication goes through `utils/utils.js`:
-```javascript
-export const api = axios.create({
-  baseURL: "http://localhost:5002",
-});
-````
-
 - **`api`**: Authenticated requests (JWT attached automatically).
 - **`apiPublic`**: Public requests (login, register, product listing).
 
@@ -53,7 +20,6 @@ export const api = axios.create({
 | Add to cart      | `POST`   | `/cart/`        | Single product          |
 | Remove from cart | `DELETE` | `/cart/`        | Cart                    |
 | Create order     | `POST`   | `/orders/`      | Order summary           |
-| List my orders   | `GET`    | `/orders/`      | —                       |
 | Refresh token    | `POST`   | `/refresh/`     | Automatic (interceptor) |
 
 #### Admin (requires `admin` role)
