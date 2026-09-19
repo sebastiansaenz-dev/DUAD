@@ -15,6 +15,7 @@ class OrderService:
     def create_order(self, user_id, order_data):
 
         new_order = self.repo.proceed_order(user_id, order_data)
+        self.cache.delete_data((f"cart:user:{user_id}"))
         clear_pages = False
 
         for item in new_order.items:
