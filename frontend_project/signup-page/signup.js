@@ -1,12 +1,10 @@
-import { activePage } from "../utils/utils.js";
+import { activePage, apiPublic } from "../utils/utils.js";
 import { showErrorMessage } from "../utils/utils.js";
 import { checkEmail, checkPassword } from "../utils/utils.js";
 
 const createUser = async (e) => {
   e.preventDefault();
   try {
-    const url = "http://localhost:5002/users/register-user";
-
     const usernameInput = document.getElementById("username");
     const emailInput = document.getElementById("email");
     const passwordInput = document.getElementById("password");
@@ -24,7 +22,7 @@ const createUser = async (e) => {
       password: password,
     };
 
-    const response = await axios.post(url, userData);
+    const response = await apiPublic.post("/users/register-user", userData);
 
     localStorage.setItem("user", JSON.stringify(response.data));
 

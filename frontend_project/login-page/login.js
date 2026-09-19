@@ -1,12 +1,10 @@
-import { activePage } from "../utils/utils.js";
+import { activePage, apiPublic } from "../utils/utils.js";
 import { showErrorMessage } from "../utils/utils.js";
 import { checkEmail, checkPassword } from "../utils/utils.js";
 
 const logInUser = async (e) => {
   e.preventDefault();
   try {
-    const url = "http://localhost:5002/users/login";
-
     const emailInput = document.getElementById("email");
     const passwordInput = document.getElementById("password");
 
@@ -21,7 +19,7 @@ const logInUser = async (e) => {
       password: password,
     };
 
-    const response = await axios.post(url, userData);
+    const response = await apiPublic.post("/users/login", userData);
 
     localStorage.setItem("user", JSON.stringify(response.data));
 

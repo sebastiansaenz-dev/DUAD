@@ -1,4 +1,4 @@
-import { showUserType } from "../utils/utils.js";
+import { showUserType, apiPublic } from "../utils/utils.js";
 import { activePage } from "../utils/utils.js";
 import { showErrorMessage } from "../utils/utils.js";
 
@@ -113,11 +113,11 @@ const filterProducts = (e) => {
 
 const getProducts = async (page = 1, search = "") => {
   try {
-    let url = `http://localhost:5002/products/?page=${page}`;
+    let url = `/products/?page=${page}`;
     if (search) {
       url += `&name=${encodeURIComponent(search)}`;
     }
-    const response = await axios.get(url);
+    const response = await apiPublic.get(url);
     products = response.data.items;
     currentPage = response.data.page;
     totalPages = response.data.total_pages;
