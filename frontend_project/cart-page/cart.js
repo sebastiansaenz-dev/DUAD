@@ -15,8 +15,8 @@ const getCart = async () => {
   try {
     const response = await api.get("/cart/");
 
-    if (response.data === "nothing in your cart") {
-      displayEmptyCart(response.data);
+    if (response.data.cart_products.length === 0) {
+      displayEmptyCart("nothing in your cart");
       return;
     }
 

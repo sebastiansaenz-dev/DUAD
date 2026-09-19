@@ -18,7 +18,10 @@ class CartsRepo(BaseRepository):
         cart = self.get_one({'user_id': current_user_id, "status_id": CartsStatusEnum.ACTIVE})
 
         if not cart:
-            return 'nothing in your cart'
+            return {
+            'cart_products': [],
+            'total': 0
+        }
 
 
         products = [{
