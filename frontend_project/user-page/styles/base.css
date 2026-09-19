@@ -1,0 +1,22 @@
+:root {
+  --bg: #ebedf0;
+  --card-bg: #ffffff;
+  --text: #171a21;
+  --text-muted: #6b7280;
+  --border: #e1e3e8;
+  --radius: 10px;
+  --font-heading: "Source Serif 4", Georgia, serif;
+  --font-body: Arial;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}

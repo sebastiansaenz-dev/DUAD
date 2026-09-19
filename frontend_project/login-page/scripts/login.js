@@ -1,6 +1,10 @@
-import { activePage, apiPublic } from "../utils/utils.js";
-import { showErrorMessage } from "../utils/utils.js";
-import { checkEmail, checkPassword } from "../utils/utils.js";
+import {
+  activePage,
+  showErrorMessage,
+  checkEmail,
+  checkPassword,
+} from "../../utils/utils.js";
+import { loginRequest } from "./api.js";
 
 const logInUser = async (e) => {
   e.preventDefault();
@@ -14,14 +18,9 @@ const logInUser = async (e) => {
     if (!checkEmail(email)) return;
     if (!checkPassword(password)) return;
 
-    const userData = {
-      email: email,
-      password: password,
-    };
+    const user = await loginRequest(email, password);
 
-    const response = await apiPublic.post("/users/login", userData);
-
-    localStorage.setItem("user", JSON.stringify(response.data));
+    localStorage.setItem("user", JSON.stringify(user));
 
     window.location.href = "../product-catalog-page/products.html";
   } catch (error) {

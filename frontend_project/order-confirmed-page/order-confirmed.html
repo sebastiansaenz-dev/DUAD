@@ -2,7 +2,7 @@
 <html>
   <head>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <link rel="stylesheet" href="./main.css" />
+    <link rel="stylesheet" href="./styles/main.css" />
     <title>PawStore - Order Confirmed</title>
   </head>
   <body>
@@ -86,20 +86,16 @@
       </section>
 
       <div class="confirmation-actions">
-        <button
-          href="/landing-page/home.html"
-          id="go-to-home-button"
-          class="go-back-button"
+        <a href="../landing-page/home.html"
+          ><button id="go-to-home-button" class="go-back-button">
+            Go to Home
+          </button></a
         >
-          Go to Home
-        </button>
-        <button
-          href="/frontend_project/product-catalog-page/products.html"
-          id="back-to-products-button"
-          class="go-back-button"
+        <a href="../product-catalog-page/products.html"
+          ><button id="back-to-products-button" class="go-back-button">
+            Back to Products
+          </button></a
         >
-          Back to Products
-        </button>
       </div>
     </main>
     <script type="module" src="./order-confirmed.js"></script>

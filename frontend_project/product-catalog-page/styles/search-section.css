@@ -13,7 +13,9 @@
   background-color: #f8fafc;
   color: #1e293b;
   font: inherit;
-  transition: border-color 160ms ease, box-shadow 160ms ease,
+  transition:
+    border-color 160ms ease,
+    box-shadow 160ms ease,
     background-color 160ms ease;
 }
 

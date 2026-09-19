@@ -84,6 +84,8 @@ class CartsRepo(BaseRepository):
                     )
                     self.session.add(new_item)                
             self.session.commit()
+
+            return self.get_cart(user_id)
         except Exception as ex:
             self.session.rollback()
             raise ex
@@ -121,6 +123,7 @@ class CartsRepo(BaseRepository):
                 item.quantity = new_quantity
 
             self.session.commit()
+            return self.get_cart(user_id)
 
 
         except Exception as ex:
@@ -154,6 +157,7 @@ class CartsRepo(BaseRepository):
                 self.session.delete(item)
 
             self.session.commit()
+            return self.get_cart(user_id)
 
         except Exception as ex:
             self.session.rollback()

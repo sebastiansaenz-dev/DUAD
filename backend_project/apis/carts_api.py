@@ -3,9 +3,7 @@
 
 from flask import request, jsonify, Blueprint
 from flask.views import MethodView
-from models import Carts
-from schemas.carts_schema import CartsSchema
-from repos.carts_repo import CartsRepo
+from services.cart_service import CartService
 from utils import require_auth, handle_errors
 
 
@@ -13,13 +11,13 @@ carts_bp = Blueprint('carts', __name__, url_prefix='/cart')
 
 class CartsAPI(MethodView):
     def __init__(self):
-        self.repo = CartsRepo(Carts, CartsSchema())
+        self.service = CartService()
 
     @require_auth()
     @handle_errors
     def get(self, current_user_id):
 
-        return jsonify(self.repo.get_cart(current_user_id))
+        return jsonify(self.service.get_cart(current_user_id))
     
 
     @require_auth()
@@ -27,7 +25,7 @@ class CartsAPI(MethodView):
     def post(self, current_user_id):
         data = request.get_json()
 
-        self.repo.add_products(current_user_id, data)
+        self.service.add_products(current_user_id, data)
 
         return jsonify('products added'), 201
 
@@ -37,7 +35,7 @@ class CartsAPI(MethodView):
     def patch(self, current_user_id):
         data = request.get_json()
 
-        self.repo.update_quantity(current_user_id, data)
+        self.service.update_quantity(current_user_id, data)
 
         return jsonify(message='product updated')
 
@@ -47,7 +45,7 @@ class CartsAPI(MethodView):
     def delete(self, current_user_id):
         data = request.get_json()
 
-        self.repo.delete_product(current_user_id, data)
+        self.service.delete_product(current_user_id, data)
 
         return jsonify(message='product/s deleted')
 

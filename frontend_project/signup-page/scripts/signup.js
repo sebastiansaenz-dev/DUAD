@@ -1,6 +1,10 @@
-import { activePage, apiPublic } from "../utils/utils.js";
-import { showErrorMessage } from "../utils/utils.js";
-import { checkEmail, checkPassword } from "../utils/utils.js";
+import {
+  activePage,
+  showErrorMessage,
+  checkEmail,
+  checkPassword,
+} from "../../utils/utils.js";
+import { registerUserRequest } from "./api.js";
 
 const createUser = async (e) => {
   e.preventDefault();
@@ -16,15 +20,8 @@ const createUser = async (e) => {
     if (!checkEmail(email)) return;
     if (!checkPassword(password)) return;
 
-    const userData = {
-      username: username,
-      email: email,
-      password: password,
-    };
-
-    const response = await apiPublic.post("/users/register-user", userData);
-
-    localStorage.setItem("user", JSON.stringify(response.data));
+    const user = await registerUserRequest(username, email, password);
+    localStorage.setItem("user", JSON.stringify(user));
 
     window.location.href = "../product-catalog-page/products.html";
   } catch (error) {

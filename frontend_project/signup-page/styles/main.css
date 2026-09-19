@@ -1,7 +1,7 @@
-@import url("../utils/css-reset.css");
-@import url("../utils/navbar.css");
+@import url("../../utils/css-reset.css");
+@import url("../../utils/navbar.css");
 @import url("./form.css");
-@import url(../utils/error-section.css);
+@import url("../../utils/error-section.css");
 
 html,
 body {

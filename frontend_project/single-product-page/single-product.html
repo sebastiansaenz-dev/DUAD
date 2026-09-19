@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
   <head>
-    <link rel="stylesheet" href="./main.css" />
+    <link rel="stylesheet" href="./styles/main.css" />
     <title>PawStore - Apple</title>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   </head>
@@ -52,12 +52,12 @@
 
         <div class="quantity-selector">
           <button id="decrease-quantity" class="quantity-btn">−</button>
-          <input 
-            type="number" 
-            id="quantity-input" 
-            class="quantity-input" 
-            value="1" 
-            min="1" 
+          <input
+            type="number"
+            id="quantity-input"
+            class="quantity-input"
+            value="1"
+            min="1"
             max="100"
           />
           <button id="increase-quantity" class="quantity-btn">+</button>
@@ -70,6 +70,6 @@
         <div id="success-message" class="success-message"></div>
       </div>
     </main>
-    <script type="module" src="./single-product.js"></script>
+    <script type="module" src="./scripts/single-product.js"></script>
   </body>
 </html>
