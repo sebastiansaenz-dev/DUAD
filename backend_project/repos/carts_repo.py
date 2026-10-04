@@ -18,14 +18,19 @@ class CartsRepo(BaseRepository):
         cart = self.get_one({'user_id': current_user_id, "status_id": CartsStatusEnum.ACTIVE})
 
         if not cart:
-            return 'nothing in your cart'
+            return {
+            'cart_products': [],
+            'total': 0
+        }
 
 
         products = [{
+            'id': p.product_id,
             'name': p.product.name,
             'price': p.product.price,
             'quantity': p.quantity,
-            'total': p.product.price * p.quantity
+            'total': p.product.price * p.quantity,
+            'image_url': p.product.image_url
         } for p in cart.items]
 
         total = 0
@@ -79,6 +84,8 @@ class CartsRepo(BaseRepository):
                     )
                     self.session.add(new_item)                
             self.session.commit()
+
+            return self.get_cart(user_id)
         except Exception as ex:
             self.session.rollback()
             raise ex
@@ -116,6 +123,7 @@ class CartsRepo(BaseRepository):
                 item.quantity = new_quantity
 
             self.session.commit()
+            return self.get_cart(user_id)
 
 
         except Exception as ex:
@@ -128,6 +136,9 @@ class CartsRepo(BaseRepository):
             cart_stmt = select(self.model).where(self.model.user_id == user_id).where(self.model.status_id == CartsStatusEnum.ACTIVE)
 
             cart = self.session.execute(cart_stmt).scalars().first()
+            
+            if not cart:
+                raise NotFound('cart not found')
 
             for p in products:
                 product_id = p['id']
@@ -146,6 +157,7 @@ class CartsRepo(BaseRepository):
                 self.session.delete(item)
 
             self.session.commit()
+            return self.get_cart(user_id)
 
         except Exception as ex:
             self.session.rollback()

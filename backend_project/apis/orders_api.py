@@ -1,6 +1,6 @@
 
 
-from flask import jsonify, Blueprint
+from flask import jsonify, Blueprint, request
 from flask.views import MethodView
 from utils import require_auth, handle_errors
 from services.order_service import OrderService
@@ -25,7 +25,9 @@ class OrdersAPI(MethodView):
     @require_auth()
     @handle_errors
     def post(self, current_user_id):
-        new_order = self.service.create_order(current_user_id)
+        data = request.get_json()
+        
+        new_order = self.service.create_order(current_user_id, data)
 
         return jsonify(self.service.repo.schema.dump(new_order))
 

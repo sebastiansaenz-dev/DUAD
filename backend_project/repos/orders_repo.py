@@ -15,7 +15,7 @@ class OrdersRepo(BaseRepository):
         super().__init__(model, schema, session)
 
 
-    def proceed_order(self, user_id):
+    def proceed_order(self, user_id, order_data):
         try:
 
             cart_stmt = select(Carts).where(Carts.user_id == user_id).where(Carts.status_id == CartsStatusEnum.ACTIVE)
@@ -60,7 +60,10 @@ class OrdersRepo(BaseRepository):
                 user_id=cart.user_id,
                 cart_id=cart.id,
                 payment_method_id=PaymentMethodsEnum.SINPE,
-                total=total
+                total=total,
+                full_name=order_data.get('full_name'),
+                address=order_data.get('address'),
+                phone=order_data.get('phone')
             )
 
             self.session.add(new_order)

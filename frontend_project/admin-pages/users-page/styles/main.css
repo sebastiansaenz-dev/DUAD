@@ -1,0 +1,39 @@
+@import url(../../edit-products-page/styles/navbar.css);
+@import url(../../edit-products-page/styles/pagination.css);
+@import url(../../edit-products-page/styles/buttons.css);
+@import url(../../edit-products-page/styles/empty-state.css);
+@import url(../../edit-products-page/styles/product-thumbnail.css);
+@import url(../../edit-products-page/styles/search-section.css);
+@import url(../../edit-products-page/styles/sidebar.css);
+@import url(../../edit-products-page/styles/slide-panel.css);
+@import url(../../edit-products-page/styles/structure.css);
+@import url(../../edit-products-page/styles/table.css);
+@import url(../../edit-products-page/styles/toast.css);
+@import url(../../edit-products-page/styles/topbar.css);
+@import url(../../edit-products-page/styles/form-fields.css);
+
+.role-pill {
+  display: inline-block;
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.1875rem 0.5625rem;
+  border-radius: 0.75rem;
+  background-color: #eae8e2;
+  color: #5b5850;
+}
+
+.role-pill.admin {
+  background-color: #f1dfd4;
+  color: #a8461f;
+}
+
+.role-pill.client {
+  background-color: #dce4ec;
+  color: #3e5c76;
+}
+
+.role-pill.no-role {
+  background-color: #eae8e2;
+  color: #5b5850;
+  font-style: italic;
+}

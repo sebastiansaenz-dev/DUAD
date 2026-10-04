@@ -1,0 +1,167 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Orders — Admin Panel</title>
+    <link rel="stylesheet" href="./styles/main.css" />
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  </head>
+  <body>
+    <header class="navbar">
+      <div class="navbar-brand">
+        <span class="navbar-brand-mark"></span>
+        <h1>Inventory</h1>
+      </div>
+      <nav class="navbar-links">
+        <a class="navbar-link" href="../edit-products-page/products.html"
+          >Products</a
+        >
+        <a class="navbar-link active" href="./orders.html">Orders</a>
+        <a class="navbar-link" href="../users-page/users.html">Users</a>
+        <a class="navbar-link" href="../../product-catalog-page/products.html"
+          >Client Panel</a
+        >
+      </nav>
+    </header>
+
+    <div class="app">
+      <aside class="sidebar">
+        <div>
+          <div class="filter-title">Status</div>
+          <ul class="filter-list" id="statusList"></ul>
+        </div>
+      </aside>
+
+      <main class="main">
+        <div class="topbar">
+          <div>
+            <h2>Orders</h2>
+            <p id="subtitle">
+              Browse customer orders and view their details. Orders are placed
+              by customers, so they can only be viewed here.
+            </p>
+          </div>
+          <div class="controls">
+            <div class="search">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <circle cx="11" cy="11" r="7" />
+                <path d="m21 21-4.3-4.3" />
+              </svg>
+              <input
+                type="text"
+                id="searchInput"
+                placeholder="Search order # or customer"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Order</th>
+                <th>Customer</th>
+                <th>Date</th>
+                <th>Status</th>
+                <th>Total</th>
+                <th style="text-align: right">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="tableBody"></tbody>
+          </table>
+          <div class="empty-state" id="emptyState" style="display: none">
+            <h3>No orders match</h3>
+            <p>Try a different search or status.</p>
+          </div>
+        </div>
+
+        <nav class="pagination" id="pagination" aria-label="Order pages">
+          <button
+            type="button"
+            class="pagination-btn"
+            id="prevPageBtn"
+            aria-label="Previous page"
+          >
+            ‹ Prev
+          </button>
+
+          <div class="pagination-pages" id="paginationPages"></div>
+
+          <button
+            type="button"
+            class="pagination-btn"
+            id="nextPageBtn"
+            aria-label="Next page"
+          >
+            Next ›
+          </button>
+        </nav>
+      </main>
+    </div>
+
+    <div class="overlay" id="overlay"></div>
+    <div class="panel" id="panel">
+      <div class="panel-head">
+        <h2 id="panelTitle">Order details</h2>
+        <button class="panel-close" id="panelClose" aria-label="Close">
+          <svg
+            viewBox="0 0 24 24"
+            width="20"
+            height="20"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path d="M18 6 6 18M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <div class="panel-body">
+        <div class="order-meta" id="orderMeta"></div>
+
+        <div class="field">
+          <label for="f_status">Status</label>
+          <select id="f_status"></select>
+        </div>
+
+        <div>
+          <div class="filter-title">Products in this order</div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Product</th>
+                  <th>Quantity</th>
+                  <th>Unit price</th>
+                  <th style="text-align: right">Subtotal</th>
+                </tr>
+              </thead>
+              <tbody id="orderItemsBody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="order-total" id="orderTotal"></div>
+      </div>
+
+      <div class="panel-foot">
+        <button type="button" class="btn btn-ghost" id="closeDetailBtn">
+          Close
+        </button>
+        <button type="button" class="btn btn-accent" id="saveStatusBtn">
+          Save status
+        </button>
+      </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script type="module" src="./scripts/main.js"></script>
+  </body>
+</html>

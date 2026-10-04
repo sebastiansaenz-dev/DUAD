@@ -57,16 +57,18 @@ class UsersRepo(BaseRepository):
 
             roles = [r.name for r in new_user.roles]
 
-            payload = {
+            claims = {
                 'id': new_user.id,
                 'roles': roles
             }
 
-            token = jwt_manager.encode(payload)
+            access_token = create_access_token(identity=str(new_user.id), additional_claims=claims, fresh=True)
+            refresh_token = create_refresh_token(identity=str(new_user.id))
 
             return {
                 'user': self.schema.dump(new_user),
-                'token': token
+                'access_token': access_token,
+                'refresh_token': refresh_token
             }
         
         

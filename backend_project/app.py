@@ -1,5 +1,6 @@
 
 from flask import Flask
+from flask_cors import CORS
 import os
 from dotenv import load_dotenv
 from datetime import timedelta
@@ -17,6 +18,8 @@ load_dotenv()
 def create_app(config_override=None):
     
     app = Flask(__name__)
+    CORS(app, resources={r"/*": {"origins": ["http://127.0.0.1:5500", "http://localhost:5500"]}}, supports_credentials=True)
+
 
     app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DATABASE_URL")
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -55,7 +58,7 @@ def create_app(config_override=None):
 app = create_app()
 
 if __name__ == "__main__":
-    app.run(host="localhost", port=5002, debug=True)
+    app.run(host="127.0.0.1", port=5002, debug=True)
 
 
 

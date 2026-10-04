@@ -1,0 +1,12 @@
+@import url(../../utils/navbar.css);
+@import url(../../utils/css-reset.css);
+@import url(./order-summary.css);
+@import url(./confirmation-actions.css);
+@import url(../../utils/error-section.css);
+
+main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 5rem;
+}

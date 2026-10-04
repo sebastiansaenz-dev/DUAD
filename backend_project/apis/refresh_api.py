@@ -24,8 +24,11 @@ class RefreshAPI(MethodView):
 
         current_user_id = get_jwt_identity()
 
-        claims = get_jwt()
-        additional_claims = {"roles": claims.get("roles", [])}
+        user = self.repo.get_by_id(current_user_id)
+
+        user_roles = [role["name"] for role in user["roles"]]
+
+        additional_claims = {"roles": user_roles}
 
         new_access_token = create_access_token(
             identity=current_user_id,

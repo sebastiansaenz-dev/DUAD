@@ -9,6 +9,12 @@ from repos.orders_repo import OrdersRepo
 from schemas.orders_schema import OrdersSchema
 from werkzeug.exceptions import BadRequest
 
+ORDER_DATA = {
+    "full_name": "Test User",
+    "address": "123 Test St",
+    "phone": "88888888"
+}
+
 
 def test_order_service_create_order(session):
     #Arrange
@@ -41,7 +47,7 @@ def test_order_service_create_order(session):
 
     #Act
 
-    result = service.create_order(user_id)
+    result = service.create_order(user_id, ORDER_DATA)
 
 
     #Assert
@@ -76,7 +82,7 @@ def test_order_service_create_order_with_no_items(session):
 
     #Act
     with pytest.raises(ValueError):
-        service.create_order(user_id)
+        service.create_order(user_id, ORDER_DATA)
 
 
     #Assert
@@ -103,7 +109,7 @@ def test_order_service_create_order_with_no_items_added_yet(session):
 
     #Act
     with pytest.raises(BadRequest):
-        service.create_order(user_id)
+        service.create_order(user_id, ORDER_DATA)
 
 
     #Assert

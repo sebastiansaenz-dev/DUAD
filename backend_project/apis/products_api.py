@@ -20,9 +20,16 @@ class ProductsAPI(MethodView):
         if id:
             return jsonify(self.service.get(page=1, per_page=1, id=id))
 
-        page = request.args.get('page', 1, type=int)
-        per_page = request.args.get('per_page', 20, type=int)
+        get_all = request.args.get('all', 'false').lower() == 'true'
+
+        if get_all:
+            page = 1
+            per_page = None
+        else:
+            page = request.args.get('page', 1, type=int)
+            per_page = request.args.get('per_page', 20, type=int)
         filters = request.args.to_dict()
+        filters.pop('all', None)
 
         return jsonify(self.service.get(page, per_page, filters=filters))
 

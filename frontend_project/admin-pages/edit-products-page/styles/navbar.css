@@ -1,0 +1,52 @@
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.875rem 1.5rem;
+  border-bottom: 0.0625rem solid #ddd9d0;
+  background-color: #ffffff;
+}
+
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.navbar-brand-mark {
+  width: 0.625rem;
+  height: 0.625rem;
+  background-color: #3b82f6;
+  display: inline-block;
+}
+
+.navbar-brand h1 {
+  font-family: "Fraunces", serif;
+  font-weight: 500;
+  font-size: 1.15rem;
+  margin: 0;
+}
+
+.navbar-links {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.navbar-link {
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  color: #5b5850;
+  padding: 0.5rem 0.875rem;
+  border-radius: 0.1875rem;
+}
+
+.navbar-link:hover {
+  background-color: #eae8e2;
+}
+
+.navbar-link.active {
+  background-color: #1b1d1e;
+  color: #f6f6f3;
+}

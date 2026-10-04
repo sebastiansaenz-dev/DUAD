@@ -65,13 +65,13 @@ class AdminOrdersRepo(BaseRepository):
             self.session.rollback()
             raise ex
         
-    def update_status(self, user_id, data):
+
+    def update_status(self, order_id, data):
 
         if 'status' not in data:
             raise BadRequest('missing field: status')
 
-        order_stmt = select(Orders).where(Orders.user_id == user_id)
-
+        order_stmt = select(Orders).where(Orders.id == order_id)
         order = self.session.execute(order_stmt).scalars().unique().first()
 
         if not order:
@@ -81,8 +81,8 @@ class AdminOrdersRepo(BaseRepository):
         new_status = self.session.execute(new_status_stmt).scalars().first()
 
         if not new_status:
-            raise BadRequest(f'invalid status: {data['status']}')
-                
+            raise BadRequest(f'invalid status: {data["status"]}')
+
         order.status_id = new_status.id
 
         self.session.commit()
