@@ -27,3 +27,8 @@
   cursor: pointer;
   margin-top: auto;
 }
+
+.product-category {
+  color: gray;
+  font-size: medium;
+}

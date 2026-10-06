@@ -5,13 +5,18 @@ const Home = ({ setCurrentPage }) => {
     <main>
       <div className={styles["welcome-section"]}>
         <div className={styles["welcome-text"]}>
-          <h1>Welcome to PawStore</h1>
+          <h1>Bienvenido a PawStore</h1>
           <p>
-            Everything your best friend needs to live a happy, healthy life.
-            Discover premium products designed with love for pets of all kinds.
+            Somos una tienda dedicada a ofrecer productos de calidad para tus
+            mascotas
+          </p>
+          <br />
+          <p>
+            Explora nuestro catálogo para encontrar camas, juguetes, accesorios
+            y más.
           </p>
         </div>
-        <a>
+        <div className={styles["welcome-actions"]}>
           <button
             onClick={(e) => {
               e.preventDefault();
@@ -20,7 +25,11 @@ const Home = ({ setCurrentPage }) => {
           >
             View products
           </button>
-        </a>
+          <p>
+            Esta es la página principal de la aplicación. Más adelante aquí se
+            podrán mostrar productos destacados.
+          </p>
+        </div>
       </div>
     </main>
   );

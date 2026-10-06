@@ -12,21 +12,19 @@ const App = () => {
   return (
     <>
       <Navbar currentPage={currentPage} setCurrentPage={setCurrentPage} />
-      <main>
-        {currentPage === "home" && <Home setCurrentPage={setCurrentPage} />}
-        {currentPage === "products" && (
-          <Products
-            setCurrentPage={setCurrentPage}
-            setSelectedProduct={setSelectedProduct}
-          />
-        )}
-        {currentPage === "product-detail" && (
-          <ProductDetail
-            product={selectedProduct}
-            setCurrentPage={setCurrentPage}
-          />
-        )}
-      </main>
+      {currentPage === "home" && <Home setCurrentPage={setCurrentPage} />}
+      {currentPage === "products" && (
+        <Products
+          setCurrentPage={setCurrentPage}
+          setSelectedProduct={setSelectedProduct}
+        />
+      )}
+      {currentPage === "product-detail" && (
+        <ProductDetail
+          product={selectedProduct}
+          setCurrentPage={setCurrentPage}
+        />
+      )}
       <Footer setCurrentPage={setCurrentPage} />
     </>
   );

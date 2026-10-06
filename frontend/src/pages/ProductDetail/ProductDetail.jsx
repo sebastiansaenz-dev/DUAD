@@ -1,7 +1,7 @@
 import { useState } from "react";
 import styles from "./ProductDetail.module.css";
 
-const ProductDetail = ({ product }) => {
+const ProductDetail = ({ product, setCurrentPage }) => {
   const [quantity, setQuantity] = useState(1);
   const [successMessage, setSuccessMessage] = useState("");
 
@@ -17,14 +17,24 @@ const ProductDetail = ({ product }) => {
     }
   };
 
-  const handleQuuantityChange = (e) => {
-    const value = parseInt(e.target.value, 10);
-    if (isNaN(value) || value < 1) {
-      setQuantity(1);
-    } else if (value > 100) {
-      setQuantity(100);
-    } else {
-      setQuantity(value);
+  const handleQuantityChange = (e) => {
+    const rawValue = e.target.value;
+
+    if (rawValue === "") {
+      setQuantity("");
+      return;
+    }
+
+    const value = parseInt(rawValue, 10);
+
+    if (!isNaN(value)) {
+      if (value > product.stock) {
+        setQuantity(product.stock);
+      } else if (value < 1) {
+        setQuantity(1);
+      } else {
+        setQuantity(value);
+      }
     }
   };
 
@@ -48,9 +58,9 @@ const ProductDetail = ({ product }) => {
 
       <div className={styles["product-details"]}>
         <div className={styles["product-info"]}>
-          <span className={styles["product-brand"]}>{product.brand}</span>
           <h1 className={styles["product-name"]}>{product.name}</h1>
-          <span className={styles["product-price"]}>{product.price}</span>
+          <span className={styles["product-price"]}>{`$${product.price}`}</span>
+          <span className={styles["product-category"]}>{product.category}</span>
           <p className={styles["product-description"]}>{product.description}</p>
         </div>
 
@@ -65,7 +75,7 @@ const ProductDetail = ({ product }) => {
             type="number"
             className={styles["quantity-input"]}
             value={quantity}
-            onChange={handleQuuantityChange}
+            onChange={handleQuantityChange}
             min="1"
             max="100"
           />
@@ -77,16 +87,31 @@ const ProductDetail = ({ product }) => {
           </button>
         </div>
 
-        <button
+        <p>
+          Más adelante aquí se podrá agregar este producto al carrito y
+          completar la compra
+        </p>
+        {/* ADD TO CART BUTTON */}
+        {/* <button
           className={styles["add-to-cart-button"]}
           onClick={handleAddToCart}
         >
           Add to cart
+        </button> */}
+        <button
+          className={styles["add-to-cart-button"]}
+          onClick={(e) => {
+            e.preventDefault();
+            setCurrentPage("products");
+          }}
+        >
+          Volver al catálogo
         </button>
 
-        {successMessage && (
+        {/* SUCCESS MESSAGE */}
+        {/* {successMessage && (
           <div className={styles["success-message"]}>{successMessage}</div>
-        )}
+        )} */}
       </div>
     </main>
   );

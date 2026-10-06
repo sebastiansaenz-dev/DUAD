@@ -16,3 +16,20 @@ main {
   flex-direction: column;
   padding: 1em;
 }
+
+.no-results {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.no-results svg {
+  width: 5rem;
+  height: 5rem;
+}
+
+.no-results p {
+  color: gray;
+}
