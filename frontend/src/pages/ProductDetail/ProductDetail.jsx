@@ -1,5 +1,6 @@
 import { useState } from "react";
 import styles from "./ProductDetail.module.css";
+import { formatPrice } from "../../utils/utils";
 
 const ProductDetail = ({ product, setCurrentPage }) => {
   const [quantity, setQuantity] = useState(1);
@@ -59,7 +60,9 @@ const ProductDetail = ({ product, setCurrentPage }) => {
       <div className={styles["product-details"]}>
         <div className={styles["product-info"]}>
           <h1 className={styles["product-name"]}>{product.name}</h1>
-          <span className={styles["product-price"]}>{`$${product.price}`}</span>
+          <span className={styles["product-price"]}>
+            {formatPrice(product.price)}
+          </span>
           <span className={styles["product-category"]}>{product.category}</span>
           <p className={styles["product-description"]}>{product.description}</p>
         </div>

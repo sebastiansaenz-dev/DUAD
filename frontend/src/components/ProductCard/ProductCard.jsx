@@ -1,4 +1,5 @@
 import styles from "./ProductCard.module.css";
+import { formatPrice } from "../../utils/utils";
 
 const ProductCard = ({ product, onViewDetails }) => {
   return (
@@ -10,7 +11,9 @@ const ProductCard = ({ product, onViewDetails }) => {
       />
       <div className={styles["product-data-container"]}>
         <h2 className={styles["product-name"]}>{product.name}</h2>
-        <span className={styles["product-price"]}>{`$${product.price}`}</span>
+        <span className={styles["product-price"]}>
+          {formatPrice(product.price)}
+        </span>
         <p className={styles["product-category"]}>{product.category}</p>
       </div>
       <button
