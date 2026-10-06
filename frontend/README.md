@@ -1,16 +1,36 @@
-# React + Vite
+# PawStore - Frontend (React)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Web app for the **PawStore** shop, built with **React** and **Vite**. This is **Stage 1**: navigation between views (Home, Catalog, and Product detail) and product data loaded from a local JSON file (`data/products.json`).
 
-Currently, two official plugins are available:
+## Requirements
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- [Node.js](https://nodejs.org/) **18 or later** (**20+** recommended)
+- npm (included with Node.js)
 
-## React Compiler
+## Install dependencies
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+```bash
+npm install
 
-## Expanding the ESLint configuration
+```
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Development
+
+Start the Vite dev server:
+
+```bash
+npm run dev
+```
+
+Open in your browser the URL shown in the terminal (default: http://localhost:5173)
+
+## Proyect layout
+
+frontend/
+├── data/products.json # Product data (JSON)
+├── public/ # Static assets
+└── src/
+├── components/ # Navbar, Footer, ProductCard, Logo
+├── pages/ # Home, Products, ProductDetail
+├── App.jsx # View switching via component state
+└── main.jsx # React entry point
