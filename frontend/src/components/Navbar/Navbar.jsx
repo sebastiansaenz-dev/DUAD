@@ -10,8 +10,9 @@ const Navbar = ({ currentPage, setCurrentPage }) => {
 
   return (
     <nav id="navbar" className={styles["navbar"]}>
-      <div>
+      <div className={styles["logo-section"]}>
         <Logo className={styles["logo"]} setCurrentPage={setCurrentPage} />
+        <span>PawStore</span>
       </div>
       <ul className={styles["nav-links"]}>
         {navItems.map((item) => (
