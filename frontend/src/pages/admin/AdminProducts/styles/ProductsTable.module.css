@@ -1,0 +1,9 @@
+.title-section {
+  margin-bottom: 1rem;
+}
+
+.products-managment-section {
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  padding: 1rem 1rem;
+  border-radius: 1rem;
+}

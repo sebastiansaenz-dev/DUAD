@@ -6,6 +6,7 @@ const Navbar = ({ currentPage, setCurrentPage }) => {
     { key: "home", label: "Inicio", href: "#home" },
     { key: "products", label: "Productos", href: "#products" },
     { key: "contact", label: "Contacto", href: "#contact" },
+    { key: "administration", label: "Administración", href: "#administration" },
   ];
 
   return (
