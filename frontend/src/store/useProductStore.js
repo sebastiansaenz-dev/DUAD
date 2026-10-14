@@ -9,9 +9,15 @@ export const useProductStore = create((set) => ({
     set((state) => {
       const [adaptedNewProduct] = adaptProducts([newProduct]);
 
+      const newId =
+        state.products.reduce(
+          (max, product) => (product.id > max ? product.id : max),
+          0,
+        ) + 1;
+
       const productWithId = {
         ...adaptedNewProduct,
-        id: `${state.products.length + 1}`,
+        id: newId,
       };
 
       return {
