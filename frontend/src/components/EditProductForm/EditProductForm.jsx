@@ -39,7 +39,7 @@ const EditProductForm = ({ product, setCurrentPage }) => {
     <>
       {Object.keys(errors).length > 0 && (
         <span role="alert" className={styles["error-message"]}>
-          Por favor completa todos los campos antes de guardar los cambios
+          Por favor completa todos los campos antes de guardar los cambios.
         </span>
       )}
       <form

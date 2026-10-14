@@ -32,7 +32,7 @@ const AddProductForm = () => {
       </div>
 
       <div className={styles["form-group"]}>
-        <label htmlFor="descripcion">Descripcion</label>
+        <label htmlFor="descripcion">Descripción</label>
         <textarea
           id="descripcion"
           placeholder="Descripcion detallada del producto"
@@ -63,11 +63,11 @@ const AddProductForm = () => {
           )}
         </div>
         <div className={styles["form-group"]}>
-          <label htmlFor="categoria">Categoria</label>
+          <label htmlFor="categoria">Categoría</label>
           <input
             id="categoria"
             type="text"
-            placeholder="Cateogria del producto (ej. Alimento, Juguetes)"
+            placeholder="Categoría del producto (ej. Alimento, Juguetes)"
             {...register("categoria", { required: "Campo obligatorio" })}
           />
           {errors.categoria && (
@@ -115,7 +115,7 @@ const AddProductForm = () => {
 
       {Object.keys(errors).length > 0 && (
         <span role="alert" className={styles["error-message"]}>
-          Por favor completa todos los campos antes de guardar los cambios
+          Por favor completa todos los campos antes de guardar los cambios.
         </span>
       )}
     </form>

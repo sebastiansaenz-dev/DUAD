@@ -13,7 +13,7 @@ const AdminProducts = ({ setCurrentPage, setSelectedProduct }) => {
         <section className={ProductTableStyles["title-section"]}>
           <h1>Administración de productos</h1>
           <p>
-            En esta seccion puedes gestionar el catalogo de productos de
+            En esta sección puedes gestionar el catálogo de productos de
             PawStore
           </p>
         </section>
@@ -28,7 +28,7 @@ const AdminProducts = ({ setCurrentPage, setSelectedProduct }) => {
       </div>
       <div className={AddProductFormStyles["add-product-form-section"]}>
         <section className={AddProductFormStyles["title-section"]}>
-          <h1>Agregar producto</h1>
+          <h1>Agregar nuevo producto</h1>
         </section>
         <AddProductForm />
       </div>
