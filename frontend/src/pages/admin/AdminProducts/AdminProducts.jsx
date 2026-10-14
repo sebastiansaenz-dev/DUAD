@@ -5,9 +5,7 @@ import ProductTableStyles from "./styles/ProductsTable.module.css";
 import AddProductFormStyles from "./styles/AddProductFormSection.module.css";
 
 const AdminProducts = ({ setCurrentPage, setSelectedProduct }) => {
-  const { products: productsObj, deleteProduct } = useProductStore();
-
-  const products = Object.values(productsObj);
+  const { products, deleteProduct } = useProductStore();
 
   return (
     <main>
