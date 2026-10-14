@@ -14,6 +14,6 @@ export const adaptProducts = (rawProducts) => {
     price: Number(product.precio || product.price),
     category: product.categoria || product.category,
     image_url: product.imagen || product.image_url,
-    stock: Number(product.stock || product.stock),
+    stock: Number(product.stock ?? 0),
   }));
 };
