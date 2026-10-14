@@ -22,12 +22,12 @@ const EditProductForm = ({ product, setCurrentPage }) => {
 
   const onSubmit = (data) => {
     const formattedProduct = {
-      id: product.id,
+      id: Number(product.id),
       name: data.nombre,
       description: data.descripcion,
       price: Number(data.precio),
       category: data.categoria,
-      image_url: data.image,
+      image_url: data.imagen,
       stock: Number(data.stock),
     };
 
