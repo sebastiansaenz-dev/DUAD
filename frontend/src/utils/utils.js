@@ -8,12 +8,12 @@ export const formatPrice = (price) => {
 
 export const adaptProducts = (rawProducts) => {
   return rawProducts.map((product) => ({
-    id: product.id,
+    id: Number(product.id),
     name: product.nombre || product.name,
     description: product.descripcion || product.description,
-    price: product.precio || product.price,
+    price: Number(product.precio || product.price),
     category: product.categoria || product.category,
     image_url: product.imagen || product.image_url,
-    stock: product.stock || product.stock,
+    stock: Number(product.stock || product.stock),
   }));
 };
