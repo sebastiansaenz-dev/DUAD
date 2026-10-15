@@ -11,15 +11,6 @@ const AdminProducts = ({ setCurrentPage, setSelectedProduct }) => {
     addProduct(data);
   };
 
-  const formPlaceholders = {
-    name: "Nombre del producto",
-    description: "Descripción detallada del producto",
-    price: "0.00",
-    category: "Categoría del producto (ej. Alimento, Juguetes)",
-    image_url: "/api/placehold.co/600x400",
-    stock: "0",
-  };
-
   return (
     <main>
       <div className={ProductTableStyles["products-managment-section"]}>
@@ -41,7 +32,7 @@ const AdminProducts = ({ setCurrentPage, setSelectedProduct }) => {
       </div>
       <div className={AddProductFormStyles["add-product-form-section"]}>
         <section className={AddProductFormStyles["title-section"]}>
-          <h1>Agregar nuevo producto</h1>
+          <h2>Agregar nuevo producto</h2>
         </section>
         <ProductForm
           onSubmit={onSubmit}
