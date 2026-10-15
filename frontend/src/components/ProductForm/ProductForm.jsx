@@ -6,6 +6,7 @@ const ProductForm = ({
   submitButtonText,
   onCancel,
   styles,
+  resetAfterSubmit = false,
 }) => {
   const {
     register,
@@ -23,6 +24,14 @@ const ProductForm = ({
     },
   });
 
+  const handleFormSubmit = (data) => {
+    onSubmit(data);
+
+    if (resetAfterSubmit) {
+      reset();
+    }
+  };
+
   return (
     <>
       {Object.keys(errors).length > 0 && (
@@ -31,7 +40,7 @@ const ProductForm = ({
         </span>
       )}
       <form
-        onSubmit={handleSubmit(onSubmit)}
+        onSubmit={handleSubmit(handleFormSubmit)}
         className={styles["product-form"]}
       >
         <div className={styles["form-group"]}>

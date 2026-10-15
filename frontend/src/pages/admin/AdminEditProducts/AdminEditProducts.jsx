@@ -1,8 +1,11 @@
 import ProductForm from "../../../components/ProductForm/ProductForm";
 import styles from "./styles/AdminEditProducts.module.css";
 import EditProductFormStyles from "./styles/EditProductForm.module.css";
+import { useProductStore } from "../../../store/useProductStore";
 
 const AdminEditProducts = ({ product, setCurrentPage }) => {
+  const { updateProduct } = useProductStore();
+
   const onSubmit = (data) => {
     const formattedProduct = {
       id: Number(product.id),

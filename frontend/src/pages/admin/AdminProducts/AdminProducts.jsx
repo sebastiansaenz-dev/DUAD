@@ -47,6 +47,7 @@ const AdminProducts = ({ setCurrentPage, setSelectedProduct }) => {
           onSubmit={onSubmit}
           submitButtonText={"Agregar nuevo producto"}
           styles={AddProductFormStyles}
+          resetAfterSubmit={true}
         />
       </div>
     </main>
