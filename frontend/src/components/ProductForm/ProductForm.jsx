@@ -1,39 +1,27 @@
 import { useForm } from "react-hook-form";
-import { useProductStore } from "../../store/useProductStore";
-import styles from "./styles/EditProductForm.module.css";
 
-const EditProductForm = ({ product, setCurrentPage }) => {
+const ProductForm = ({
+  initialValues = {},
+  onSubmit,
+  submitButtonText,
+  onCancel,
+  styles,
+}) => {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm({
     defaultValues: {
-      nombre: product.name,
-      descripcion: product.description,
-      precio: product.price,
-      categoria: product.category,
-      imagen: product.image_url,
-      stock: product.stock,
+      nombre: initialValues.name,
+      descripcion: initialValues.description,
+      precio: initialValues.price,
+      categoria: initialValues.category,
+      imagen: initialValues.image_url,
+      stock: initialValues.stock,
     },
   });
-
-  const { updateProduct } = useProductStore();
-
-  const onSubmit = (data) => {
-    const formattedProduct = {
-      id: Number(product.id),
-      name: data.nombre,
-      description: data.descripcion,
-      price: Number(data.precio),
-      category: data.categoria,
-      image_url: data.imagen,
-      stock: Number(data.stock),
-    };
-
-    updateProduct(formattedProduct);
-    setCurrentPage("administration");
-  };
 
   return (
     <>
@@ -50,6 +38,7 @@ const EditProductForm = ({ product, setCurrentPage }) => {
           <label htmlFor="nombre">Nombre</label>
           <input
             id="nombre"
+            placeholder="Nombre del producto"
             {...register("nombre", { required: "Campo obligatorio" })}
           />
           {errors.nombre && (
@@ -60,9 +49,10 @@ const EditProductForm = ({ product, setCurrentPage }) => {
         </div>
 
         <div className={styles["form-group"]}>
-          <label htmlFor="descripcion">Descripcion</label>
+          <label htmlFor="descripcion">Descripción</label>
           <textarea
             id="descripcion"
+            placeholder="Descripción detallada del producto"
             {...register("descripcion", { required: "Campo obligatorio" })}
           />
           {errors.descripcion && (
@@ -72,33 +62,37 @@ const EditProductForm = ({ product, setCurrentPage }) => {
           )}
         </div>
 
-        <div className={styles["form-group"]}>
-          <label htmlFor="precio">Precio</label>
-          <input
-            id="precio"
-            type="number"
-            step="0.01"
-            min="0"
-            {...register("precio", { required: "Campo obligatorio" })}
-          />
-          {errors.precio && (
-            <span role="alert" className={styles["error-message"]}>
-              {errors.precio.message}
-            </span>
-          )}
-        </div>
-        <div className={styles["form-group"]}>
-          <label htmlFor="categoria">Categoria</label>
-          <input
-            id="categoria"
-            type="text"
-            {...register("categoria", { required: "Campo obligatorio" })}
-          />
-          {errors.categoria && (
-            <span role="alert" className={styles["error-message"]}>
-              {errors.categoria.message}
-            </span>
-          )}
+        <div className={styles["form-row"]}>
+          <div className={styles["form-group"]}>
+            <label htmlFor="precio">Precio</label>
+            <input
+              id="precio"
+              type="number"
+              step="0.01"
+              min="0"
+              placeholder="0.00"
+              {...register("precio", { required: "Campo obligatorio" })}
+            />
+            {errors.precio && (
+              <span role="alert" className={styles["error-message"]}>
+                {errors.precio.message}
+              </span>
+            )}
+          </div>
+          <div className={styles["form-group"]}>
+            <label htmlFor="categoria">Categoría</label>
+            <input
+              id="categoria"
+              type="text"
+              placeholder="Categoría del producto (ej. Alimento, Juguetes)"
+              {...register("categoria", { required: "Campo obligatorio" })}
+            />
+            {errors.categoria && (
+              <span role="alert" className={styles["error-message"]}>
+                {errors.categoria.message}
+              </span>
+            )}
+          </div>
         </div>
 
         <div className={styles["form-group"]}>
@@ -106,6 +100,7 @@ const EditProductForm = ({ product, setCurrentPage }) => {
           <input
             id="imagen"
             type="url"
+            placeholder="/api/placehold.co/600x400"
             {...register("imagen", { required: "Campo obligatorio" })}
           />
           {errors.imagen && (
@@ -122,6 +117,7 @@ const EditProductForm = ({ product, setCurrentPage }) => {
             type="number"
             step="1"
             min="0"
+            placeholder="0"
             {...register("stock", { required: "Campo obligatorio" })}
           />
           {errors.stock && (
@@ -130,19 +126,19 @@ const EditProductForm = ({ product, setCurrentPage }) => {
             </span>
           )}
         </div>
-
         <div className={styles["form-btns"]}>
           <button
+            type="button"
             className={styles["cancel-btn"]}
-            onClick={(e) => {
-              e.preventDefault();
-              setCurrentPage("administration");
+            onClick={() => {
+              reset();
+              if (onCancel) onCancel();
             }}
           >
             Cancelar
           </button>
           <button className={styles["submit-btn"]} type="submit">
-            Guardar cambios
+            {submitButtonText}
           </button>
         </div>
       </form>
@@ -150,4 +146,4 @@ const EditProductForm = ({ product, setCurrentPage }) => {
   );
 };
 
-export default EditProductForm;
+export default ProductForm;

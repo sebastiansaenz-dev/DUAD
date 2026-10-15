@@ -1,11 +1,24 @@
-import AddProductForm from "../../../components/AddProductForm/AddProductForm";
+import ProductForm from "../../../components/ProductForm/ProductForm";
 import ProductTable from "../../../components/ProductTable/ProductTable";
 import { useProductStore } from "../../../store/useProductStore";
 import ProductTableStyles from "./styles/ProductsTable.module.css";
 import AddProductFormStyles from "./styles/AddProductFormSection.module.css";
 
 const AdminProducts = ({ setCurrentPage, setSelectedProduct }) => {
-  const { products, deleteProduct } = useProductStore();
+  const { products, deleteProduct, addProduct } = useProductStore();
+
+  const onSubmit = (data) => {
+    addProduct(data);
+  };
+
+  const formPlaceholders = {
+    name: "Nombre del producto",
+    description: "Descripción detallada del producto",
+    price: "0.00",
+    category: "Categoría del producto (ej. Alimento, Juguetes)",
+    image_url: "/api/placehold.co/600x400",
+    stock: "0",
+  };
 
   return (
     <main>
@@ -30,7 +43,11 @@ const AdminProducts = ({ setCurrentPage, setSelectedProduct }) => {
         <section className={AddProductFormStyles["title-section"]}>
           <h1>Agregar nuevo producto</h1>
         </section>
-        <AddProductForm />
+        <ProductForm
+          onSubmit={onSubmit}
+          submitButtonText={"Agregar nuevo producto"}
+          styles={AddProductFormStyles}
+        />
       </div>
     </main>
   );

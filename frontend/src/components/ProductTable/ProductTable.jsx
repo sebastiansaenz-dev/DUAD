@@ -8,7 +8,7 @@ const ProductTable = ({ products, onEdit, onDelete }) => {
         <span>ID</span>
         <span>NOMBRE</span>
         <span>PRECIO</span>
-        <span>CATEGORIA</span>
+        <span>CATEGORÍA</span>
         <span>STOCK</span>
         <span>ACCIONES</span>
       </div>
