@@ -44,11 +44,11 @@ const ProductForm = ({
         className={styles["product-form"]}
       >
         <div className={styles["form-group"]}>
-          <label htmlFor="nombre">Nombre</label>
+          <label htmlFor="name">Nombre</label>
           <input
-            id="nombre"
+            id="name"
             placeholder="Nombre del producto"
-            {...register("nombre", { required: "Campo obligatorio" })}
+            {...register("name", { required: "Campo obligatorio" })}
           />
           {errors.nombre && (
             <span role="alert" className={styles["error-message"]}>
@@ -58,11 +58,11 @@ const ProductForm = ({
         </div>
 
         <div className={styles["form-group"]}>
-          <label htmlFor="descripcion">Descripción</label>
+          <label htmlFor="description">Descripción</label>
           <textarea
-            id="descripcion"
+            id="description"
             placeholder="Descripción detallada del producto"
-            {...register("descripcion", { required: "Campo obligatorio" })}
+            {...register("description", { required: "Campo obligatorio" })}
           />
           {errors.descripcion && (
             <span role="alert" className={styles["error-message"]}>
@@ -73,14 +73,14 @@ const ProductForm = ({
 
         <div className={styles["form-row"]}>
           <div className={styles["form-group"]}>
-            <label htmlFor="precio">Precio</label>
+            <label htmlFor="price">Precio</label>
             <input
-              id="precio"
+              id="price"
               type="number"
               step="0.01"
               min="0"
               placeholder="0.00"
-              {...register("precio", { required: "Campo obligatorio" })}
+              {...register("price", { required: "Campo obligatorio" })}
             />
             {errors.precio && (
               <span role="alert" className={styles["error-message"]}>
@@ -89,12 +89,12 @@ const ProductForm = ({
             )}
           </div>
           <div className={styles["form-group"]}>
-            <label htmlFor="categoria">Categoría</label>
+            <label htmlFor="category">Categoría</label>
             <input
-              id="categoria"
+              id="category"
               type="text"
               placeholder="Categoría del producto (ej. Alimento, Juguetes)"
-              {...register("categoria", { required: "Campo obligatorio" })}
+              {...register("category", { required: "Campo obligatorio" })}
             />
             {errors.categoria && (
               <span role="alert" className={styles["error-message"]}>
@@ -105,12 +105,12 @@ const ProductForm = ({
         </div>
 
         <div className={styles["form-group"]}>
-          <label htmlFor="imagen">URL de la imagen</label>
+          <label htmlFor="image">URL de la imagen</label>
           <input
-            id="imagen"
+            id="image"
             type="url"
             placeholder="/api/placehold.co/600x400"
-            {...register("imagen", { required: "Campo obligatorio" })}
+            {...register("image", { required: "Campo obligatorio" })}
           />
           {errors.imagen && (
             <span role="alert" className={styles["error-message"]}>

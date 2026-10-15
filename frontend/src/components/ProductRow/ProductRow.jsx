@@ -1,7 +1,7 @@
 import styles from "./ProductRow.module.css";
 import { formatPrice } from "../../utils/utils";
 
-const ProductCard = ({ product, onEdit, onDelete }) => {
+const ProductRow = ({ product, onEdit, onDelete }) => {
   return (
     <div className={styles["product"]}>
       <span className={styles["product-data"]}>{product.id}</span>
@@ -19,4 +19,4 @@ const ProductCard = ({ product, onEdit, onDelete }) => {
   );
 };
 
-export default ProductCard;
+export default ProductRow;
