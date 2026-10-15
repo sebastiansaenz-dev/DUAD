@@ -1,6 +1,5 @@
 import { useState } from "react";
 import ProductCard from "../../components/ProductCard/ProductCard";
-// import rawProducts from "../../../data/products.json";
 import paginationStyles from "./Pagination.module.css";
 import searchSectionStyles from "./SearchSection.module.css";
 import errorStyles from "../../utils/errorSections.module.css";
