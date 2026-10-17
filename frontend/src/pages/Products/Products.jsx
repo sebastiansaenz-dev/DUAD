@@ -5,7 +5,6 @@ import searchSectionStyles from "./SearchSection.module.css";
 import errorStyles from "../../utils/errorSections.module.css";
 import mainStyles from "./Main.module.css";
 
-import { adaptProducts } from "../../utils/utils";
 import { useProductStore } from "../../store/useProductStore";
 
 const Products = ({ setCurrentPage, setSelectedProduct }) => {
@@ -15,14 +14,12 @@ const Products = ({ setCurrentPage, setSelectedProduct }) => {
 
   const { products } = useProductStore();
 
-  const adaptedProducts = adaptProducts(products);
-
   const handleViewDetail = (product) => {
     setSelectedProduct(product);
     setCurrentPage("product-detail");
   };
 
-  if (!adaptedProducts || adaptedProducts.length === 0) {
+  if (!products || products.length === 0) {
     return (
       <div className={errorStyles["error-section"]}>
         No hay productos disponibles por el momento.
@@ -30,7 +27,7 @@ const Products = ({ setCurrentPage, setSelectedProduct }) => {
     );
   }
 
-  const filteredProducts = adaptedProducts.filter((product) =>
+  const filteredProducts = products.filter((product) =>
     product.name.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
