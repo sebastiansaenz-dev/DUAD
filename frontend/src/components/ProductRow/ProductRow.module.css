@@ -1,0 +1,20 @@
+.product {
+  display: grid;
+  grid-template-columns: repeat(6, 4fr);
+  gap: 1rem;
+  align-items: center;
+}
+
+.actions button {
+  border: none;
+}
+
+.actions button:hover {
+  color: #1e3a8a;
+  cursor: pointer;
+}
+
+.actions button:active {
+  cursor: pointer;
+  color: #3b82f6;
+}

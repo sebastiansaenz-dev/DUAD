@@ -1,0 +1,20 @@
+.title-section {
+  text-align: center;
+}
+
+.admin-edit-products {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-self: center;
+  width: 90vw;
+}
+
+.warning-text {
+  display: flex;
+  color: red;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1rem;
+}

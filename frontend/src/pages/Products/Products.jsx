@@ -1,29 +1,18 @@
 import { useState } from "react";
 import ProductCard from "../../components/ProductCard/ProductCard";
-import rawProducts from "../../../data/products.json";
 import paginationStyles from "./Pagination.module.css";
 import searchSectionStyles from "./SearchSection.module.css";
 import errorStyles from "../../utils/errorSections.module.css";
 import mainStyles from "./Main.module.css";
 
-const adaptProducts = (rawProducts) => {
-  return rawProducts.map((product) => ({
-    id: product.id,
-    name: product.nombre,
-    description: product.descripcion,
-    price: product.precio,
-    category: product.categoria,
-    image_url: product.imagen,
-    stock: product.stock,
-  }));
-};
+import { useProductStore } from "../../store/useProductStore";
 
 const Products = ({ setCurrentPage, setSelectedProduct }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPageNum] = useState(1);
   const itemsPerPage = 20;
 
-  const products = adaptProducts(rawProducts);
+  const { products } = useProductStore();
 
   const handleViewDetail = (product) => {
     setSelectedProduct(product);

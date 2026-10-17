@@ -6,12 +6,14 @@ const Navbar = ({ currentPage, setCurrentPage }) => {
     { key: "home", label: "Inicio", href: "#home" },
     { key: "products", label: "Productos", href: "#products" },
     { key: "contact", label: "Contacto", href: "#contact" },
+    { key: "administration", label: "Administración", href: "#administration" },
   ];
 
   return (
     <nav id="navbar" className={styles["navbar"]}>
-      <div>
+      <div className={styles["logo-section"]}>
         <Logo className={styles["logo"]} setCurrentPage={setCurrentPage} />
+        <span>PawStore</span>
       </div>
       <ul className={styles["nav-links"]}>
         {navItems.map((item) => (
