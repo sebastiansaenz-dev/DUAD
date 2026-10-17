@@ -7,6 +7,7 @@ const ProductForm = ({
   onCancel,
   styles,
   resetAfterSubmit = false,
+  errorMessage,
 }) => {
   const {
     register,
@@ -15,11 +16,11 @@ const ProductForm = ({
     formState: { errors },
   } = useForm({
     defaultValues: {
-      nombre: initialValues.name,
-      descripcion: initialValues.description,
-      precio: initialValues.price,
-      categoria: initialValues.category,
-      imagen: initialValues.image_url,
+      name: initialValues.name,
+      description: initialValues.description,
+      price: initialValues.price,
+      category: initialValues.category,
+      image: initialValues.image_url,
       stock: initialValues.stock,
     },
   });
@@ -36,7 +37,7 @@ const ProductForm = ({
     <>
       {Object.keys(errors).length > 0 && (
         <span role="alert" className={styles["error-message"]}>
-          Por favor completa todos los campos antes de guardar los cambios.
+          {errorMessage}
         </span>
       )}
       <form
@@ -50,9 +51,9 @@ const ProductForm = ({
             placeholder="Nombre del producto"
             {...register("name", { required: "Campo obligatorio" })}
           />
-          {errors.nombre && (
+          {errors.name && (
             <span role="alert" className={styles["error-message"]}>
-              {errors.nombre.message}
+              {errors.name.message}
             </span>
           )}
         </div>
@@ -64,9 +65,9 @@ const ProductForm = ({
             placeholder="Descripción detallada del producto"
             {...register("description", { required: "Campo obligatorio" })}
           />
-          {errors.descripcion && (
+          {errors.description && (
             <span role="alert" className={styles["error-message"]}>
-              {errors.descripcion.message}
+              {errors.description.message}
             </span>
           )}
         </div>
@@ -82,9 +83,9 @@ const ProductForm = ({
               placeholder="0.00"
               {...register("price", { required: "Campo obligatorio" })}
             />
-            {errors.precio && (
+            {errors.price && (
               <span role="alert" className={styles["error-message"]}>
-                {errors.precio.message}
+                {errors.price.message}
               </span>
             )}
           </div>
@@ -96,9 +97,9 @@ const ProductForm = ({
               placeholder="Categoría del producto (ej. Alimento, Juguetes)"
               {...register("category", { required: "Campo obligatorio" })}
             />
-            {errors.categoria && (
+            {errors.category && (
               <span role="alert" className={styles["error-message"]}>
-                {errors.categoria.message}
+                {errors.category.message}
               </span>
             )}
           </div>
@@ -112,9 +113,9 @@ const ProductForm = ({
             placeholder="/api/placehold.co/600x400"
             {...register("image", { required: "Campo obligatorio" })}
           />
-          {errors.imagen && (
+          {errors.image && (
             <span role="alert" className={styles["error-message"]}>
-              {errors.imagen.message}
+              {errors.image.message}
             </span>
           )}
         </div>
