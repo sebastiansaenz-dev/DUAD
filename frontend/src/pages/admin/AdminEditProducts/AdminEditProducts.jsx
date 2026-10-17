@@ -9,11 +9,11 @@ const AdminEditProducts = ({ product, setCurrentPage }) => {
   const onSubmit = (data) => {
     const formattedProduct = {
       id: Number(product.id),
-      name: data.nombre,
-      description: data.descripcion,
-      price: Number(data.precio),
-      category: data.categoria,
-      image_url: data.imagen,
+      name: data.name,
+      description: data.description,
+      price: Number(data.price),
+      category: data.category,
+      image_url: data.image,
       stock: Number(data.stock),
     };
 
