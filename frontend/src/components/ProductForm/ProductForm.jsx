@@ -79,9 +79,14 @@ const ProductForm = ({
               id="price"
               type="number"
               step="0.01"
-              min="0"
               placeholder="0.00"
-              {...register("price", { required: "Campo obligatorio" })}
+              {...register("price", {
+                required: "Campo obligatorio",
+                min: {
+                  value: 0.01,
+                  message: "El valor debe ser superior o igual a 0.01",
+                },
+              })}
             />
             {errors.price && (
               <span role="alert" className={styles["error-message"]}>
@@ -109,9 +114,15 @@ const ProductForm = ({
           <label htmlFor="image">URL de la imagen</label>
           <input
             id="image"
-            type="url"
+            type="text"
             placeholder="/api/placehold.co/600x400"
-            {...register("image", { required: "Campo obligatorio" })}
+            {...register("image", {
+              required: "Campo obligatorio",
+              pattern: {
+                value: /^(https?:\/\/|www\.)[\w\-]+(\.[\w\-]+)+[/#?]?.*$/,
+                message: "Por favor ingresa una URL válida",
+              },
+            })}
           />
           {errors.image && (
             <span role="alert" className={styles["error-message"]}>

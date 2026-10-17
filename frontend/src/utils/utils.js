@@ -9,11 +9,11 @@ export const formatPrice = (price) => {
 export const adaptProducts = (rawProducts) => {
   return rawProducts.map((product) => ({
     id: Number(product.id),
-    name: product.nombre || product.name,
-    description: product.descripcion || product.description,
-    price: Number(product.precio || product.price),
-    category: product.categoria || product.category,
-    image_url: product.imagen || product.image_url,
+    name: product.nombre ?? product.name,
+    description: product.descripcion ?? product.description,
+    price: Number(product.precio ?? product.price ?? 0),
+    category: product.categoria ?? product.category,
+    image_url: product.imagen ?? product.image_url,
     stock: Number(product.stock ?? 0),
   }));
 };
