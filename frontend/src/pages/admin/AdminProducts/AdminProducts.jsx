@@ -18,7 +18,7 @@ const AdminProducts = ({ setCurrentPage, setSelectedProduct }) => {
           <h1>Administración de productos</h1>
           <p>
             En esta sección puedes gestionar el catálogo de productos de
-            PawStore
+            PawStore.
           </p>
         </section>
         <ProductTable
@@ -36,9 +36,12 @@ const AdminProducts = ({ setCurrentPage, setSelectedProduct }) => {
         </section>
         <ProductForm
           onSubmit={onSubmit}
-          submitButtonText={"Agregar nuevo producto"}
+          submitButtonText={"Agregar producto"}
           styles={AddProductFormStyles}
           resetAfterSubmit={true}
+          errorMessage={
+            "Por favor completa todos los campos antes de agregar el producto."
+          }
         />
       </div>
     </main>

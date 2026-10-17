@@ -38,6 +38,9 @@ const AdminEditProducts = ({ product, setCurrentPage }) => {
           submitButtonText={"Guardar cambios"}
           onCancel={onCancel}
           styles={EditProductFormStyles}
+          errorMessage={
+            "Por favor completa todos los campos antes de guardar los cambios."
+          }
         />
       </div>
     </main>
