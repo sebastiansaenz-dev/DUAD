@@ -4,6 +4,8 @@ import Navbar from "./components/Navbar/Navbar.jsx";
 import Footer from "./components/Footer/Footer.jsx";
 import Products from "./pages/Products/Products.jsx";
 import ProductDetail from "./pages/ProductDetail/ProductDetail.jsx";
+import AdminProducts from "./pages/admin/AdminProducts/AdminProducts.jsx";
+import AdminEditProducts from "./pages/admin/AdminEditProducts/AdminEditProducts.jsx";
 import "./App.css";
 
 const App = () => {
@@ -25,6 +27,20 @@ const App = () => {
           setCurrentPage={setCurrentPage}
         />
       )}
+      {currentPage === "administration" && (
+        <AdminProducts
+          setCurrentPage={setCurrentPage}
+          setSelectedProduct={setSelectedProduct}
+        />
+      )}
+
+      {currentPage === "admin-edit" && (
+        <AdminEditProducts
+          product={selectedProduct}
+          setCurrentPage={setCurrentPage}
+        />
+      )}
+
       <Footer setCurrentPage={setCurrentPage} />
     </>
   );

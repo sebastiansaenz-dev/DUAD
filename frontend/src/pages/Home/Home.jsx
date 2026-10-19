@@ -8,7 +8,7 @@ const Home = ({ setCurrentPage }) => {
           <h1>Bienvenido a PawStore</h1>
           <p>
             Somos una tienda dedicada a ofrecer productos de calidad para tus
-            mascotas
+            mascotas.
           </p>
           <br />
           <p>
