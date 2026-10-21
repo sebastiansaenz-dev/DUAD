@@ -31,9 +31,9 @@ const buildProductCard = (product) => {
   productPrice.classList.add("product-price");
   productPrice.textContent = `$${product.price}`;
 
-  const productBrand = document.createElement("p");
-  productBrand.classList.add("product-brand");
-  productBrand.textContent = product.brand;
+  const productCategory = document.createElement("p");
+  productCategory.classList.add("product-category");
+  productCategory.textContent = product.category;
 
   const viewDetailsButton = document.createElement("button");
   viewDetailsButton.classList.add("view-details-button");
@@ -42,7 +42,7 @@ const buildProductCard = (product) => {
 
   productDataDiv.appendChild(productTitle);
   productDataDiv.appendChild(productPrice);
-  productDataDiv.appendChild(productBrand);
+  productDataDiv.appendChild(productCategory);
   productDiv.appendChild(productImage);
   productDiv.appendChild(productDataDiv);
   productDiv.appendChild(viewDetailsButton);

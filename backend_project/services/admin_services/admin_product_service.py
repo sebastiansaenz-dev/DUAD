@@ -4,6 +4,7 @@ from repos.products_repo import ProductsRepo
 from models import Products
 from schemas.products_schema import ProductsSchema
 from utils import generate_filters_hash
+from werkzeug.exceptions import BadRequest
 import uuid
 
 
@@ -41,11 +42,26 @@ class AdminProductService:
 
         return products
     
+    def _resolve_category(self, data, required=False):
+        if 'category' not in data:
+            if required:
+                raise BadRequest('category is required')
+            return data
+
+        category_name = data.pop('category')
+        if not category_name or not str(category_name).strip():
+            raise BadRequest('category is required')
+
+        category = self.repo.get_or_create_category(str(category_name))
+        data['category_id'] = category.id
+        return data
+
     def create_product(self, data):
 
         sku = uuid.uuid4().hex.upper()[:10]
 
         data['sku'] = sku
+        data = self._resolve_category(data, required=True)
 
         new_item = self.repo.create(data)
 
@@ -54,6 +70,7 @@ class AdminProductService:
         return new_item
     
     def update_product(self, id, data):
+        data = self._resolve_category(data)
 
         updated_item = self.repo.update(id, data)
 

@@ -5,7 +5,7 @@ from app import create_app
 from sqlalchemy.orm import sessionmaker
 from unittest.mock import patch
 
-from models import Products, ProductsOrders, ProductsCarts, Carts, Orders
+from models import Products, ProductsOrders, ProductsCarts, Carts, Orders, Categories
 from constants import OrdersStatusEnum, PaymentMethodsEnum
 
 @pytest.fixture(scope='session')
@@ -19,16 +19,18 @@ def app():
     return app
 
 
-@pytest.fixture(scope='session')
+@pytest.fixture()
 def db(app):
     with app.app_context():
 
         if _db.engine.url.drivername == 'sqlite':
+            _db.metadata.schema = None
             for table in _db.metadata.tables.values():
                 table.schema = None
 
         _db.create_all()
         yield _db
+        _db.session.remove()
         _db.drop_all()
 
 
@@ -50,14 +52,16 @@ def session(db, app):
         connection.close()
 
 @pytest.fixture()
-def client(app):
+def client(app, db):
     return app.test_client()
 
 @pytest.fixture(autouse=True)
 def mock_redis():
     with patch('extensions.cache_manager.redis_client') as mocked_redis:
         mocked_redis.get.return_value = None
-        yield mock_redis
+        mocked_redis.delete.return_value = 0
+        mocked_redis.scan_iter.return_value = []
+        yield mocked_redis
 
 
 @pytest.fixture()
@@ -65,9 +69,9 @@ def setup_order(session):
     user_id = 1
 
 
-    product1 = Products(id=1, name='Apple', sku='12345', price=5000, brand='apple', stock=1000)
+    product1 = Products(id=1, name='Apple', sku='12345', price=5000, category=Categories(name='apple'), stock=1000)
 
-    product2 = Products(id=2, name='Banana', sku='123456', price=3400, brand='sunbum', stock=100)
+    product2 = Products(id=2, name='Banana', sku='123456', price=3400, category=Categories(name='sunbum'), stock=100)
 
     session.add_all([product1, product2])
     session.flush()

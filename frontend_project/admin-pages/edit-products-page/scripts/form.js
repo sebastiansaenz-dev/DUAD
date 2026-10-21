@@ -8,7 +8,7 @@ import { renderAll } from "./render.js";
 const readFormValues = () => {
   return {
     name: getEl("f_name").value.trim(),
-    brand: getEl("f_brand").value.trim(),
+    category: getEl("f_category").value.trim(),
     sku: getEl("f_sku").value.trim(),
     image_url: getEl("f_image_url").value.trim(),
     price: parseFloat(getEl("f_price").value),
@@ -20,7 +20,7 @@ const readFormValues = () => {
 const isFormValid = (values) => {
   return (
     Boolean(values.name) &&
-    Boolean(values.brand) &&
+    Boolean(values.category) &&
     !isNaN(values.price) &&
     !isNaN(values.stock)
   );
@@ -29,7 +29,7 @@ const isFormValid = (values) => {
 const buildProductPayload = (values) => {
   return {
     name: values.name,
-    brand: values.brand,
+    category: values.category,
     image_url: values.image_url,
     price: values.price,
     stock: values.stock,

@@ -32,8 +32,8 @@ const buildProductRow = (product) => {
     '<td data-label="Product">' +
     buildProductCell(product) +
     "</td>" +
-    '<td data-label="Brand"><span class="tag">' +
-    escapeHtml(product.brand) +
+    '<td data-label="Category"><span class="tag">' +
+    escapeHtml(product.category) +
     "</span></td>" +
     '<td data-label="Price" class="price">' +
     formatPrice(product.price) +

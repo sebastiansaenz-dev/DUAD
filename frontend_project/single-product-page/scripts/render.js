@@ -1,6 +1,6 @@
 export const renderProduct = (product) => {
   document.getElementById("image").src = product.image_url;
-  document.getElementById("brand").textContent = product.brand;
+  document.getElementById("category").textContent = product.category;
   document.getElementById("name").textContent = product.name;
   document.getElementById("price").textContent = `$${product.price}`;
   document.getElementById("description").textContent = product.description;

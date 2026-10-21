@@ -29,7 +29,7 @@ def test_require_auth_admin_token(client):
         "name": "apple",
         "price": 123,
         'stock': 44,
-        'brand': 'apples_brand'
+        'category': 'apples_category'
     }
 
     response = client.post('/staff-portal/products/', headers=headers, json=payload)

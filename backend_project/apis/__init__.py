@@ -6,6 +6,7 @@ from .orders_api import orders_bp
 from .users_api import users_bp
 from .refunds_api import refunds_bp
 from .refresh_api import refresh_bp
+from .categories_api import categories_bp
 
 
 
@@ -16,6 +17,7 @@ def register_blueprints(app):
     app.register_blueprint(users_bp)
     app.register_blueprint(refunds_bp)
     app.register_blueprint(refresh_bp)
+    app.register_blueprint(categories_bp)
 
 
 

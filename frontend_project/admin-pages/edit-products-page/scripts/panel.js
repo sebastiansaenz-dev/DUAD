@@ -36,7 +36,7 @@ const resetForm = () => {
 
 const fillFormWithProduct = (product) => {
   getEl("f_name").value = product.name;
-  getEl("f_brand").value = product.brand;
+  getEl("f_category").value = product.category;
   getEl("f_sku").value = product.sku;
   getEl("f_image_url").value = product.image_url || "";
   getEl("f_price").value = product.price;
