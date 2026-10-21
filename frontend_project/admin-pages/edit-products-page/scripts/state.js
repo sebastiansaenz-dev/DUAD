@@ -1,6 +1,6 @@
 export const state = {
   products: [],
-  currentBrandFilter: "all",
+  currentCategoryFilter: "all",
   searchTerm: "",
   editingProductId: null,
   currentPage: 1,

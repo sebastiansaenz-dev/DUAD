@@ -113,6 +113,8 @@ python app.py
 
 - **Products** ➤ `GET` `/products` ➜ List All Items
 
+- **Categories** ➤ `GET` `/categories` ➜ List categories (read only)
+
 - **Add products to cart** ➤ `POST` `/carts` ➜ Add products to cart
 
 ### 🛠️ Admin Endpoints
@@ -122,6 +124,16 @@ python app.py
 - **Update** ➤ `PATCH` `/staff-portal/products/<id>` ➜ [Auth Required]
 
 - **Delete** ➤ `DELETE` `/staff-portal/products/<id>` ➜ [Auth Required]
+
+- **List Categories** ➤ `GET` `/staff-portal/categories` ➜ [Admin Required]
+
+- **Get Category** ➤ `GET` `/staff-portal/categories/<id>` ➜ [Admin Required]
+
+- **Add Category** ➤ `POST` `/staff-portal/categories` ➜ [Admin Required]
+
+- **Update Category** ➤ `PATCH` `/staff-portal/categories/<id>` ➜ [Admin Required]
+
+- **Delete Category** ➤ `DELETE` `/staff-portal/categories/<id>` ➜ [Admin Required]
 
 ## 🔐 Login Example
 

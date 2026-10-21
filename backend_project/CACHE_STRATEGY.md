@@ -16,7 +16,7 @@ This document details the implementation of optimization layers using Redis to i
 | :----------------------- | :------------ | :--------------------------------------------------------------------------------------------------------------------------------- |
 | **General Product List** | 600 (10 min)  | Balances catalog freshness with server resource optimization.                                                                      |
 | **Product Details**      | 3600 (1 h)    | Individual item data changes less frequently then global stock or availability.                                                    |
-| **Filtered Lists**       | 300 (5 min)   | Optimizes performance for common search patterns (name, price, brand) with a shorter window to ensure query accuracy.              |
+| **Filtered Lists**       | 300 (5 min)   | Optimizes performance for common search patterns (name, price, category) with a shorter window to ensure query accuracy.              |
 | **Carts**                | 1800 (30 min) | Speeds up cart and checkout loading for authenticated users. Paired with strict proactive invalidation to guarantee data accuracy. |
 
 ## 🛠️ Invalidation Strategy

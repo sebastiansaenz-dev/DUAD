@@ -141,17 +141,27 @@ class PaymentMethods(db.Model):
     orders = db.relationship("Orders", back_populates='payment_method')
 
 
+class Categories(db.Model):
+    __tablename__ = 'Categories'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String, nullable=False, unique=True)
+
+    products = db.relationship('Products', back_populates='category')
+
+
 class Products(db.Model):
     __tablename__ = 'Products'
     id = db.Column(db.Integer, primary_key=True)
     sku = db.Column(db.String, nullable=False, unique=True)
     name = db.Column(db.String, nullable=False)
     price = db.Column(db.Integer, nullable=False)
-    brand = db.Column(db.String, nullable=False)
+    category_id = db.Column(db.Integer, db.ForeignKey('Categories.id'), nullable=False)
     stock = db.Column(db.Integer, nullable=False)
     description = db.Column(db.String)
     entry_date = db.Column(db.DateTime, server_default=func.now())
     image_url = db.Column(db.String)
+
+    category = db.relationship('Categories', back_populates='products', lazy='joined')
 
 
 class Roles(db.Model):

@@ -4,21 +4,21 @@ export const findProductById = (id) => {
   return state.products.find((product) => product.id === id);
 };
 
-export const getBrandCounts = () => {
+export const getCategoryCounts = () => {
   const counts = {};
   state.products.forEach((product) => {
-    counts[product.brand] = (counts[product.brand] || 0) + 1;
+    counts[product.category] = (counts[product.category] || 0) + 1;
   });
   return counts;
 };
 
-export const matchesBrandFilter = (product) => {
+export const matchesCategoryFilter = (product) => {
   return (
-    state.currentBrandFilter === "all" ||
-    product.brand === state.currentBrandFilter
+    state.currentCategoryFilter === "all" ||
+    product.category === state.currentCategoryFilter
   );
 };
 
 export const getFilteredProducts = () => {
-  return state.products.filter((product) => matchesBrandFilter(product));
+  return state.products.filter((product) => matchesCategoryFilter(product));
 };

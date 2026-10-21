@@ -2,7 +2,7 @@
 import pytest
 from unittest.mock import MagicMock
 from services.product_service import ProductService
-from models import Products
+from models import Products, Categories
 from repos.products_repo import ProductsRepo
 from schemas.products_schema import ProductsSchema
 from werkzeug.exceptions import NotFound
@@ -19,8 +19,8 @@ def test_product_service_get_function(session):
 
     service = ProductService(cache=mock_cache, repo=repo)
 
-    product1 = Products(id=1, name='Apple', sku='12345', price=5000, brand='apple', stock=1000)
-    product2 = Products(id=2, name='Banana', sku='123456', price=3400, brand='sunbum', stock=100)
+    product1 = Products(id=1, name='Apple', sku='12345', price=5000, category=Categories(name='apple'), stock=1000)
+    product2 = Products(id=2, name='Banana', sku='123456', price=3400, category=Categories(name='sunbum'), stock=100)
     session.add_all([product1, product2])
     session.flush()
 
@@ -47,8 +47,8 @@ def test_product_service_get_function_with_filters(session):
 
     service = ProductService(cache=mock_cache, repo=repo)
 
-    product1 = Products(id=1, name='Apple', sku='12345', price=5000, brand='apple', stock=1000)
-    product2 = Products(id=2, name='Banana', sku='123456', price=3400, brand='sunbum', stock=100)
+    product1 = Products(id=1, name='Apple', sku='12345', price=5000, category=Categories(name='apple'), stock=1000)
+    product2 = Products(id=2, name='Banana', sku='123456', price=3400, category=Categories(name='sunbum'), stock=100)
     session.add_all([product1, product2])
     session.flush()
 
@@ -75,8 +75,8 @@ def test_product_service_get_function_with_id(session):
 
     service = ProductService(cache=mock_cache, repo=repo)
 
-    product1 = Products(id=1, name='Apple', sku='12345', price=5000, brand='apple', stock=1000)
-    product2 = Products(id=2, name='Banana', sku='123456', price=3400, brand='sunbum', stock=100)
+    product1 = Products(id=1, name='Apple', sku='12345', price=5000, category=Categories(name='apple'), stock=1000)
+    product2 = Products(id=2, name='Banana', sku='123456', price=3400, category=Categories(name='sunbum'), stock=100)
     session.add_all([product1, product2])
     session.flush()
 
@@ -102,8 +102,8 @@ def test_product_service_get_function_with_filters_and_id(session):
 
     service = ProductService(cache=mock_cache, repo=repo)
 
-    product1 = Products(id=1, name='Apple', sku='12345', price=5000, brand='apple', stock=1000)
-    product2 = Products(id=2, name='Banana', sku='123456', price=3400, brand='sunbum', stock=100)
+    product1 = Products(id=1, name='Apple', sku='12345', price=5000, category=Categories(name='apple'), stock=1000)
+    product2 = Products(id=2, name='Banana', sku='123456', price=3400, category=Categories(name='sunbum'), stock=100)
     session.add_all([product1, product2])
     session.flush()
 
@@ -129,8 +129,8 @@ def test_product_service_get_function_with_invalid_id(session):
 
     service = ProductService(cache=mock_cache, repo=repo)
 
-    product1 = Products(id=1, name='Apple', sku='12345', price=5000, brand='apple', stock=1000)
-    product2 = Products(id=2, name='Banana', sku='123456', price=3400, brand='sunbum', stock=100)
+    product1 = Products(id=1, name='Apple', sku='12345', price=5000, category=Categories(name='apple'), stock=1000)
+    product2 = Products(id=2, name='Banana', sku='123456', price=3400, category=Categories(name='sunbum'), stock=100)
     session.add_all([product1, product2])
     session.flush()
 

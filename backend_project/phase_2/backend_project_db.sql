@@ -8,12 +8,17 @@ CREATE TABLE users (
     created_at TIMESTAMP DEFAULT datetime('now')
 );
 
+CREATE TABLE categories (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name VARCHAR(50) NOT NULL UNIQUE
+);
+
 CREATE TABLE products (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     sku VARCHAR(30) NOT NULL UNIQUE,
     name VARCHAR(100) NOT NULL,
     price REAL NOT NULL,
-    brand VARCHAR(50) NOT NULL,
+    category_id INTEGER NOT NULL REFERENCES categories(id),
     stock INTEGER NOT NULL,
     entry_date TIMESTAMP DEFAULT datetime('now')
 );

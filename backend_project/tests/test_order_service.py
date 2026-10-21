@@ -4,7 +4,7 @@
 import pytest
 from unittest.mock import MagicMock
 from services.order_service import OrderService
-from models import Orders, Products, Carts, ProductsCarts
+from models import Orders, Products, Carts, ProductsCarts, Categories
 from repos.orders_repo import OrdersRepo
 from schemas.orders_schema import OrdersSchema
 from werkzeug.exceptions import BadRequest
@@ -27,8 +27,8 @@ def test_order_service_create_order(session):
 
     user_id = 1
 
-    product1 = Products(id=1, name='Apple', sku='12345', price=5000, brand='apple', stock=1000)
-    product2 = Products(id=2, name='Banana', sku='123456', price=3400, brand='sunbum', stock=100)
+    product1 = Products(id=1, name='Apple', sku='12345', price=5000, category=Categories(name='apple'), stock=1000)
+    product2 = Products(id=2, name='Banana', sku='123456', price=3400, category=Categories(name='sunbum'), stock=100)
     session.add_all([product1, product2])
     session.flush()
 
@@ -69,8 +69,8 @@ def test_order_service_create_order_with_no_items(session):
 
     user_id = 1
 
-    product1 = Products(id=1, name='Apple', sku='12345', price=5000, brand='apple', stock=1000)
-    product2 = Products(id=2, name='Banana', sku='123456', price=3400, brand='sunbum', stock=100)
+    product1 = Products(id=1, name='Apple', sku='12345', price=5000, category=Categories(name='apple'), stock=1000)
+    product2 = Products(id=2, name='Banana', sku='123456', price=3400, category=Categories(name='sunbum'), stock=100)
     session.add_all([product1, product2])
     session.flush()
 
@@ -102,8 +102,8 @@ def test_order_service_create_order_with_no_items_added_yet(session):
 
     user_id = 1
 
-    product1 = Products(id=1, name='Apple', sku='12345', price=5000, brand='apple', stock=1000)
-    product2 = Products(id=2, name='Banana', sku='123456', price=3400, brand='sunbum', stock=100)
+    product1 = Products(id=1, name='Apple', sku='12345', price=5000, category=Categories(name='apple'), stock=1000)
+    product2 = Products(id=2, name='Banana', sku='123456', price=3400, category=Categories(name='sunbum'), stock=100)
     session.add_all([product1, product2])
     session.flush()
 
