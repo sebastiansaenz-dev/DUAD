@@ -1,14 +1,46 @@
 import ProductForm from "../../../components/ProductForm/ProductForm";
 import ProductTable from "../../../components/ProductTable/ProductTable";
-import { useProductStore } from "../../../store/useProductStore";
 import ProductTableStyles from "./styles/ProductsTable.module.css";
 import AddProductFormStyles from "./styles/AddProductFormSection.module.css";
+import { useState, useEffect } from "react";
+import { getProducts } from "../../../api/productsApi.js";
+import {
+  createProduct,
+  deleteProduct,
+} from "../../../api/admin/adminProductsApi.js";
+import Loader from "../../../components/loading-ui/Loader.jsx";
 
 const AdminProducts = ({ setCurrentPage, setSelectedProduct }) => {
-  const { products, deleteProduct, addProduct } = useProductStore();
+  const [loading, setLoading] = useState(true);
+  const [data, setData] = useState(null);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    setLoading(true);
+    setError(null);
+
+    getProducts(1, "", true)
+      .then((response) => setData(response.data))
+      .catch((error) => setError(error.message))
+      .finally(() => setLoading(false));
+  }, []);
+
+  if (loading)
+    return (
+      <div className={ProductTableStyles["loader-wrap"]}>
+        <Loader />
+      </div>
+    );
+  if (error) return <span>{error}</span>;
+
+  const products = data?.items ?? [];
 
   const onSubmit = (data) => {
-    addProduct(data);
+    createProduct(data)
+      .then(() => getProducts(1, "", true))
+      .then((response) => setData(response.data))
+      .catch((error) => setError(error.message))
+      .finally(() => setLoading(false));
   };
 
   return (
@@ -27,7 +59,12 @@ const AdminProducts = ({ setCurrentPage, setSelectedProduct }) => {
             setSelectedProduct(product);
             setCurrentPage("admin-edit");
           }}
-          onDelete={deleteProduct}
+          onDelete={(id) => {
+            deleteProduct(id)
+              .then(() => getProducts(1, "", true))
+              .then((response) => setData(response.data))
+              .catch((error) => setError(error.message));
+          }}
         />
       </div>
       <div className={AddProductFormStyles["add-product-form-section"]}>

@@ -20,7 +20,7 @@ const ProductForm = ({
       description: initialValues.description,
       price: initialValues.price,
       category: initialValues.category,
-      image: initialValues.image_url,
+      image_url: initialValues.image_url,
       stock: initialValues.stock,
     },
   });
@@ -111,12 +111,12 @@ const ProductForm = ({
         </div>
 
         <div className={styles["form-group"]}>
-          <label htmlFor="image">URL de la imagen</label>
+          <label htmlFor="image_url">URL de la imagen</label>
           <input
-            id="image"
+            id="image_url"
             type="text"
             placeholder="/api/placehold.co/600x400"
-            {...register("image", {
+            {...register("image_url", {
               required: "Campo obligatorio",
               pattern: {
                 value: /^(https?:\/\/|www\.)[\w\-]+(\.[\w\-]+)+[/#?]?.*$/,
@@ -124,9 +124,9 @@ const ProductForm = ({
               },
             })}
           />
-          {errors.image && (
+          {errors.image_url && (
             <span role="alert" className={styles["error-message"]}>
-              {errors.image.message}
+              {errors.image_url.message}
             </span>
           )}
         </div>

@@ -7,9 +7,12 @@ import ProductDetail from "./pages/ProductDetail/ProductDetail.jsx";
 import AdminProducts from "./pages/admin/AdminProducts/AdminProducts.jsx";
 import AdminEditProducts from "./pages/admin/AdminEditProducts/AdminEditProducts.jsx";
 import "./App.css";
+import Login from "./pages/Login/Login.jsx";
+import { usePageStore } from "./store/usePageStore";
 
 const App = () => {
-  const [currentPage, setCurrentPage] = useState("home");
+  const currentPage = usePageStore((state) => state.currentPage);
+  const setCurrentPage = usePageStore((state) => state.setCurrentPage);
   const [selectedProduct, setSelectedProduct] = useState(null);
   return (
     <>
@@ -40,6 +43,8 @@ const App = () => {
           setCurrentPage={setCurrentPage}
         />
       )}
+
+      {currentPage === "login" && <Login setCurrentPage={setCurrentPage} />}
 
       <Footer setCurrentPage={setCurrentPage} />
     </>

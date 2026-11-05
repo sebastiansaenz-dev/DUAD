@@ -2,27 +2,13 @@ import ProductForm from "../../../components/ProductForm/ProductForm";
 import styles from "./styles/AdminEditProducts.module.css";
 import EditProductFormStyles from "./styles/EditProductForm.module.css";
 import { useProductStore } from "../../../store/useProductStore";
+import { updateProduct } from "../../../api/admin/adminProductsApi.js";
 
 const AdminEditProducts = ({ product, setCurrentPage }) => {
-  const { updateProduct } = useProductStore();
-
   const onSubmit = (data) => {
-    const formattedProduct = {
-      id: Number(product.id),
-      name: data.name,
-      description: data.description,
-      price: Number(data.price),
-      category: data.category,
-      image_url: data.image,
-      stock: Number(data.stock),
-    };
-
-    updateProduct(formattedProduct);
-    setCurrentPage("administration");
-  };
-
-  const onCancel = () => {
-    setCurrentPage("administration");
+    updateProduct(product.id, data)
+      .then(() => setCurrentPage("administration"))
+      .catch((error) => setError(error.message));
   };
 
   return (
@@ -36,7 +22,7 @@ const AdminEditProducts = ({ product, setCurrentPage }) => {
           initialValues={product}
           onSubmit={onSubmit}
           submitButtonText={"Guardar cambios"}
-          onCancel={onCancel}
+          onCancel={() => setCurrentPage("administration")}
           styles={EditProductFormStyles}
           errorMessage={
             "Por favor completa todos los campos antes de guardar los cambios."

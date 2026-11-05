@@ -85,3 +85,22 @@
   font-weight: bold;
   font-size: 1rem;
 }
+
+.login-logout-button-container {
+  display: flex;
+  align-items: center;
+  justify-content: end;
+}
+
+.login-logout-button {
+  background-color: #3b82f6;
+  border: none;
+  border-radius: 0.5em;
+  padding: 0.5em 1em;
+  color: white;
+  cursor: pointer;
+}
+
+.login-logout-button:hover {
+  background-color: #2563eb;
+}
