@@ -9,11 +9,17 @@ import AdminEditProducts from "./pages/admin/AdminEditProducts/AdminEditProducts
 import "./App.css";
 import Login from "./pages/Login/Login.jsx";
 import { usePageStore } from "./store/usePageStore";
+import { useAuthStore } from "./store/useAuthStore.js";
 
 const App = () => {
   const currentPage = usePageStore((state) => state.currentPage);
   const setCurrentPage = usePageStore((state) => state.setCurrentPage);
   const [selectedProduct, setSelectedProduct] = useState(null);
+
+  const user = useAuthStore((state) => state.user);
+  const roles = user?.user?.roles || user?.roles || [];
+  const isAdmin = roles.some((role) => role.name === "admin");
+
   return (
     <>
       <Navbar currentPage={currentPage} setCurrentPage={setCurrentPage} />
@@ -30,14 +36,14 @@ const App = () => {
           setCurrentPage={setCurrentPage}
         />
       )}
-      {currentPage === "administration" && (
+      {currentPage === "administration" && isAdmin && (
         <AdminProducts
           setCurrentPage={setCurrentPage}
           setSelectedProduct={setSelectedProduct}
         />
       )}
 
-      {currentPage === "admin-edit" && (
+      {currentPage === "admin-edit" && isAdmin && (
         <AdminEditProducts
           product={selectedProduct}
           setCurrentPage={setCurrentPage}
