@@ -22,7 +22,9 @@ const Login = ({ setCurrentPage }) => {
     loginRequest(formData.email, formData.password)
       .then((res) => {
         login(res.data);
-        setCurrentPage("home");
+        const roles = res.data.user?.roles ?? [];
+        const isAdmin = roles.some((role) => role.name === "admin");
+        setCurrentPage(isAdmin ? "administration" : "home");
       })
       .catch((err) => {
         const status = err.response?.status;
