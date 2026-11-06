@@ -84,7 +84,7 @@ class UsersRepo(BaseRepository):
             user = self.get_one({'email': email})
 
             if not user or not bcrypt.check_password_hash(user.password, password):
-                raise Unauthorized('Las credenciales proporcionadas no son válidas. Por favor verifica tu correo y contraseña.')
+                raise Unauthorized('invalid username or password')
             
             claims = {
                 "roles": [r.name for r in user.roles]

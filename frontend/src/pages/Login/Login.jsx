@@ -24,9 +24,30 @@ const Login = ({ setCurrentPage }) => {
         login(res.data);
         setCurrentPage("home");
       })
-      .catch((err) =>
-        setError(err.response?.data?.error?.message || err.message)
-      )
+      .catch((err) => {
+        const status = err.response?.status;
+
+        if (status === 401) {
+          setError(
+            "Las credenciales proporcionadas no son válidas. Por favor verifica tu correo y contraseña."
+          );
+          return;
+        }
+
+        if (status === 400) {
+          setError("Revisa los datos del formulario");
+          return;
+        }
+
+        if (status >= 500) {
+          setError(
+            "El servidor no está disponible en este momento. Por favor intenta nuevamente más tarde."
+          );
+          return;
+        }
+
+        setError("Error al iniciar sesión");
+      })
       .finally(() => setLoading(false));
   };
 
@@ -88,7 +109,7 @@ const Login = ({ setCurrentPage }) => {
           <a
             href="/signup"
             className={styles["signup-link"]}
-            onClick={(e) => {
+            onClick={(e) => { 
               e.preventDefault();
               setCurrentPage("signup");
             }}
