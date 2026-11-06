@@ -1,7 +1,6 @@
 import ProductForm from "../../../components/ProductForm/ProductForm";
 import styles from "./styles/AdminEditProducts.module.css";
 import EditProductFormStyles from "./styles/EditProductForm.module.css";
-import { useProductStore } from "../../../store/useProductStore";
 import { updateProduct } from "../../../api/admin/adminProductsApi.js";
 
 const AdminEditProducts = ({ product, setCurrentPage }) => {
