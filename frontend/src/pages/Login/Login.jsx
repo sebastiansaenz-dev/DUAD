@@ -83,7 +83,7 @@ const Login = ({ setCurrentPage }) => {
         <button className={styles["submit"]} type="submit">
           Ingresar
         </button>
-        <p>
+        {/* <p>
           No tienes una cuenta?{" "}
           <a
             href="/signup"
@@ -95,7 +95,7 @@ const Login = ({ setCurrentPage }) => {
           >
             Regístrate
           </a>
-        </p>
+        </p> */}
       </form>
     </main>
   );
