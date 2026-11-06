@@ -2,6 +2,7 @@ import ProductForm from "../../../components/ProductForm/ProductForm";
 import ProductTable from "../../../components/ProductTable/ProductTable";
 import ProductTableStyles from "./styles/ProductsTable.module.css";
 import AddProductFormStyles from "./styles/AddProductFormSection.module.css";
+import errorStyle from "../../../utils/errorSections.module.css";
 import { useState, useEffect } from "react";
 import { getProducts } from "../../../api/productsApi.js";
 import {
@@ -31,16 +32,27 @@ const AdminProducts = ({ setCurrentPage, setSelectedProduct }) => {
         <Loader />
       </div>
     );
-  if (error) return <span>{error}</span>;
 
   const products = data?.items ?? [];
 
-  const onSubmit = (data) => {
-    createProduct(data)
+  const onSubmit = (formData) => {
+    setError(null);
+    createProduct(formData)
       .then(() => getProducts(1, "", true))
       .then((response) => setData(response.data))
-      .catch((error) => setError(error.message))
-      .finally(() => setLoading(false));
+      .catch((err) =>
+        setError(err.response?.data?.error?.message || err.message)
+      );
+  };
+
+  const onDelete = (id) => {
+    setError(null);
+    deleteProduct(id)
+      .then(() => getProducts(1, "", true))
+      .then((response) => setData(response.data))
+      .catch((err) =>
+        setError(err.response?.data?.error?.message || err.message)
+      );
   };
 
   return (
@@ -53,18 +65,18 @@ const AdminProducts = ({ setCurrentPage, setSelectedProduct }) => {
             PawStore.
           </p>
         </section>
+        {error && (
+          <div className={errorStyle["error-section"]}>
+            <span>{error}</span>
+          </div>
+        )}
         <ProductTable
           products={products}
           onEdit={(product) => {
             setSelectedProduct(product);
             setCurrentPage("admin-edit");
           }}
-          onDelete={(id) => {
-            deleteProduct(id)
-              .then(() => getProducts(1, "", true))
-              .then((response) => setData(response.data))
-              .catch((error) => setError(error.message));
-          }}
+          onDelete={onDelete}
         />
       </div>
       <div className={AddProductFormStyles["add-product-form-section"]}>
