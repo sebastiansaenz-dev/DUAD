@@ -6,7 +6,7 @@ import { logoutRequest } from "../../api/usersApi";
 const Navbar = ({ currentPage, setCurrentPage }) => {
   const user = useAuthStore((state) => state.user);
   const logoutUser = useAuthStore((state) => state.logout);
-  const roles = user?.user?.roles || user?.roles || [];
+  const roles = user?.user?.roles ?? [];
   const isAdmin = roles.some((role) => role.name === "admin");
 
   const handleLogout = () => {
@@ -63,7 +63,9 @@ const Navbar = ({ currentPage, setCurrentPage }) => {
       <div className={styles["login-logout-button-container"]}>
         {user && (
           <span className={styles["session-user"]}>
-            <span className={styles["session-label"]}>Sesión iniciada como</span>
+            <span className={styles["session-label"]}>
+              Sesión iniciada como
+            </span>
             <span className={styles["session-name"]}>
               {user?.user?.username}
             </span>

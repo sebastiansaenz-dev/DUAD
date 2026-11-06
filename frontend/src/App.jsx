@@ -19,7 +19,7 @@ const App = () => {
   const [selectedProduct, setSelectedProduct] = useState(null);
 
   const user = useAuthStore((state) => state.user);
-  const roles = user?.user?.roles || user?.roles || [];
+  const roles = user?.user?.roles ?? [];
   const isAdmin = roles.some((role) => role.name === "admin");
 
   return (
