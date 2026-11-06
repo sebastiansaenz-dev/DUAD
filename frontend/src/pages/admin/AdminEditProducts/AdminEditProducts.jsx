@@ -1,28 +1,20 @@
+import { useState } from "react";
 import ProductForm from "../../../components/ProductForm/ProductForm";
 import styles from "./styles/AdminEditProducts.module.css";
 import EditProductFormStyles from "./styles/EditProductForm.module.css";
-import { useProductStore } from "../../../store/useProductStore";
+import errorStyle from "../../../utils/errorSections.module.css";
+import { updateProduct } from "../../../api/admin/adminProductsApi.js";
 
 const AdminEditProducts = ({ product, setCurrentPage }) => {
-  const { updateProduct } = useProductStore();
+  const [error, setError] = useState(null);
 
   const onSubmit = (data) => {
-    const formattedProduct = {
-      id: Number(product.id),
-      name: data.name,
-      description: data.description,
-      price: Number(data.price),
-      category: data.category,
-      image_url: data.image,
-      stock: Number(data.stock),
-    };
-
-    updateProduct(formattedProduct);
-    setCurrentPage("administration");
-  };
-
-  const onCancel = () => {
-    setCurrentPage("administration");
+    setError(null);
+    updateProduct(product.id, data)
+      .then(() => setCurrentPage("administration"))
+      .catch((err) =>
+        setError(err.response?.data?.error?.message || err.message),
+      );
   };
 
   return (
@@ -32,11 +24,16 @@ const AdminEditProducts = ({ product, setCurrentPage }) => {
       </section>
 
       <div className={styles["edit-prouct-form"]}>
+        {error && (
+          <div className={errorStyle["error-section"]}>
+            <span>{error}</span>
+          </div>
+        )}
         <ProductForm
           initialValues={product}
           onSubmit={onSubmit}
           submitButtonText={"Guardar cambios"}
-          onCancel={onCancel}
+          onCancel={() => setCurrentPage("administration")}
           styles={EditProductFormStyles}
           errorMessage={
             "Por favor completa todos los campos antes de guardar los cambios."

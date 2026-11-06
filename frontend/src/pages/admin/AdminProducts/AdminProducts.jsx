@@ -1,14 +1,58 @@
 import ProductForm from "../../../components/ProductForm/ProductForm";
 import ProductTable from "../../../components/ProductTable/ProductTable";
-import { useProductStore } from "../../../store/useProductStore";
 import ProductTableStyles from "./styles/ProductsTable.module.css";
 import AddProductFormStyles from "./styles/AddProductFormSection.module.css";
+import errorStyle from "../../../utils/errorSections.module.css";
+import { useState, useEffect } from "react";
+import { getProducts } from "../../../api/productsApi.js";
+import {
+  createProduct,
+  deleteProduct,
+} from "../../../api/admin/adminProductsApi.js";
+import Loader from "../../../components/loading-ui/Loader.jsx";
 
 const AdminProducts = ({ setCurrentPage, setSelectedProduct }) => {
-  const { products, deleteProduct, addProduct } = useProductStore();
+  const [loading, setLoading] = useState(true);
+  const [data, setData] = useState(null);
+  const [error, setError] = useState(null);
 
-  const onSubmit = (data) => {
-    addProduct(data);
+  useEffect(() => {
+    setLoading(true);
+    setError(null);
+
+    getProducts(1, "", true)
+      .then((response) => setData(response.data))
+      .catch((error) => setError(error.message))
+      .finally(() => setLoading(false));
+  }, []);
+
+  if (loading)
+    return (
+      <div className={ProductTableStyles["loader-wrap"]}>
+        <Loader />
+      </div>
+    );
+
+  const products = data?.items ?? [];
+
+  const onSubmit = (formData) => {
+    setError(null);
+    createProduct(formData)
+      .then(() => getProducts(1, "", true))
+      .then((response) => setData(response.data))
+      .catch((err) =>
+        setError(err.response?.data?.error?.message || err.message)
+      );
+  };
+
+  const onDelete = (id) => {
+    setError(null);
+    deleteProduct(id)
+      .then(() => getProducts(1, "", true))
+      .then((response) => setData(response.data))
+      .catch((err) =>
+        setError(err.response?.data?.error?.message || err.message)
+      );
   };
 
   return (
@@ -21,13 +65,18 @@ const AdminProducts = ({ setCurrentPage, setSelectedProduct }) => {
             PawStore.
           </p>
         </section>
+        {error && (
+          <div className={errorStyle["error-section"]}>
+            <span>{error}</span>
+          </div>
+        )}
         <ProductTable
           products={products}
           onEdit={(product) => {
             setSelectedProduct(product);
             setCurrentPage("admin-edit");
           }}
-          onDelete={deleteProduct}
+          onDelete={onDelete}
         />
       </div>
       <div className={AddProductFormStyles["add-product-form-section"]}>

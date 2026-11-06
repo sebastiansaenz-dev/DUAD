@@ -1,12 +1,39 @@
 import styles from "./Navbar.module.css";
 import Logo from "../Logo/Logo";
+import { useAuthStore } from "../../store/useAuthStore";
+import { logoutRequest } from "../../api/usersApi";
 
 const Navbar = ({ currentPage, setCurrentPage }) => {
+  const user = useAuthStore((state) => state.user);
+  const logoutUser = useAuthStore((state) => state.logout);
+  const roles = user?.user?.roles ?? [];
+  const isAdmin = roles.some((role) => role.name === "admin");
+
+  const handleLogout = () => {
+    logoutRequest()
+      .then(() => {
+        logoutUser();
+        setCurrentPage("home");
+      })
+      .catch(() => {
+        logoutUser();
+        setCurrentPage("home");
+      });
+  };
+
   const navItems = [
     { key: "home", label: "Inicio", href: "#home" },
     { key: "products", label: "Productos", href: "#products" },
     { key: "contact", label: "Contacto", href: "#contact" },
-    { key: "administration", label: "Administración", href: "#administration" },
+    ...(isAdmin
+      ? [
+          {
+            key: "administration",
+            label: "Administración",
+            href: "#administration",
+          },
+        ]
+      : []),
   ];
 
   return (
@@ -33,7 +60,24 @@ const Navbar = ({ currentPage, setCurrentPage }) => {
           </li>
         ))}
       </ul>
-      <div className={styles["cart-logo-container"]}></div>
+      <div className={styles["login-logout-button-container"]}>
+        {user && (
+          <span className={styles["session-user"]}>
+            <span className={styles["session-label"]}>
+              Sesión iniciada como
+            </span>
+            <span className={styles["session-name"]}>
+              {user?.user?.username}
+            </span>
+          </span>
+        )}
+        <button
+          onClick={user ? handleLogout : () => setCurrentPage("login")}
+          className={styles["login-logout-button"]}
+        >
+          {user ? "Cerrar sesión" : "Iniciar sesión"}
+        </button>
+      </div>
     </nav>
   );
 };
