@@ -34,14 +34,6 @@ const Navbar = ({ currentPage, setCurrentPage }) => {
           },
         ]
       : []),
-    ...(user
-      ? [
-          {
-            key: "loginAs",
-            label: `Sesión iniciada como: ${user?.user?.username}`,
-          },
-        ]
-      : []),
   ];
 
   return (
@@ -69,6 +61,14 @@ const Navbar = ({ currentPage, setCurrentPage }) => {
         ))}
       </ul>
       <div className={styles["login-logout-button-container"]}>
+        {user && (
+          <span className={styles["session-user"]}>
+            <span className={styles["session-label"]}>Sesión iniciada como</span>
+            <span className={styles["session-name"]}>
+              {user?.user?.username}
+            </span>
+          </span>
+        )}
         <button
           onClick={user ? handleLogout : () => setCurrentPage("login")}
           className={styles["login-logout-button"]}
