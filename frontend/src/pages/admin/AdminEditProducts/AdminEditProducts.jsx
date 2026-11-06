@@ -1,13 +1,20 @@
+import { useState } from "react";
 import ProductForm from "../../../components/ProductForm/ProductForm";
 import styles from "./styles/AdminEditProducts.module.css";
 import EditProductFormStyles from "./styles/EditProductForm.module.css";
+import errorStyle from "../../../utils/errorSections.module.css";
 import { updateProduct } from "../../../api/admin/adminProductsApi.js";
 
 const AdminEditProducts = ({ product, setCurrentPage }) => {
+  const [error, setError] = useState(null);
+
   const onSubmit = (data) => {
+    setError(null);
     updateProduct(product.id, data)
       .then(() => setCurrentPage("administration"))
-      .catch((error) => setError(error.message));
+      .catch((err) =>
+        setError(err.response?.data?.error?.message || err.message),
+      );
   };
 
   return (
@@ -17,6 +24,11 @@ const AdminEditProducts = ({ product, setCurrentPage }) => {
       </section>
 
       <div className={styles["edit-prouct-form"]}>
+        {error && (
+          <div className={errorStyle["error-section"]}>
+            <span>{error}</span>
+          </div>
+        )}
         <ProductForm
           initialValues={product}
           onSubmit={onSubmit}
