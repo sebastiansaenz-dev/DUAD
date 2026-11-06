@@ -11,6 +11,8 @@ import Login from "./pages/Login/Login.jsx";
 import { usePageStore } from "./store/usePageStore";
 import { useAuthStore } from "./store/useAuthStore.js";
 
+import errorStyle from "./utils/errorSections.module.css";
+
 const App = () => {
   const currentPage = usePageStore((state) => state.currentPage);
   const setCurrentPage = usePageStore((state) => state.setCurrentPage);
@@ -43,11 +45,23 @@ const App = () => {
         />
       )}
 
+      {currentPage === "administration" && !isAdmin && (
+        <div className={errorStyle["error-section"]}>
+          <span>No tienes permisos para acceder a esta página</span>
+        </div>
+      )}
+
       {currentPage === "admin-edit" && isAdmin && (
         <AdminEditProducts
           product={selectedProduct}
           setCurrentPage={setCurrentPage}
         />
+      )}
+
+      {currentPage === "admin-edit" && !isAdmin && (
+        <div className={errorStyle["error-section"]}>
+          <span>No tienes permisos para acceder a esta página</span>
+        </div>
       )}
 
       {currentPage === "login" && <Login setCurrentPage={setCurrentPage} />}
