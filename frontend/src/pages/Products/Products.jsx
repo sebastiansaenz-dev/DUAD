@@ -1,44 +1,74 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ProductCard from "../../components/ProductCard/ProductCard";
+import Loader from "../../components/loading-ui/Loader";
 import paginationStyles from "./Pagination.module.css";
 import searchSectionStyles from "./SearchSection.module.css";
-import errorStyles from "../../utils/errorSections.module.css";
 import mainStyles from "./Main.module.css";
-
-import { useProductStore } from "../../store/useProductStore";
+import { getProducts } from "../../api/productsApi";
 
 const Products = ({ setCurrentPage, setSelectedProduct }) => {
+  const [loading, setLoading] = useState(true);
+  const [data, setData] = useState(null);
+  const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
-  const [currentPage, setCurrentPageNum] = useState(1);
-  const itemsPerPage = 20;
+  const [debouncedSearch, setDebouncedSearch] = useState("");
+  const [page, setPage] = useState(1);
 
-  const { products } = useProductStore();
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      const nextSearch = searchTerm.trim();
+      setDebouncedSearch((prevSearch) => {
+        if (prevSearch !== nextSearch) {
+          setPage(1);
+        }
+        return nextSearch;
+      });
+    }, 350);
+
+    return () => clearTimeout(timer);
+  }, [searchTerm]);
+
+  useEffect(() => {
+    setLoading(true);
+    setError(null);
+
+    getProducts(page, debouncedSearch)
+      .then((res) => setData(res.data))
+      .catch((err) => setError(err.message))
+      .finally(() => setLoading(false));
+  }, [page, debouncedSearch]);
 
   const handleViewDetail = (product) => {
     setSelectedProduct(product);
     setCurrentPage("product-detail");
   };
 
-  if (!products || products.length === 0) {
+  if (loading) {
     return (
-      <div className={errorStyles["error-section"]}>
-        No hay productos disponibles por el momento.
-      </div>
+      <main className={mainStyles["main"]}>
+        <section className={mainStyles["title-section"]}>
+          <h1>Catalogo de productos</h1>
+        </section>
+        <div className={mainStyles["loader-wrap"]}>
+          <Loader />
+        </div>
+      </main>
     );
   }
 
-  const filteredProducts = products.filter((product) =>
-    product.name.toLowerCase().includes(searchTerm.toLowerCase()),
-  );
+  if (error) {
+    return (
+      <main className={mainStyles["main"]}>
+        <section className={mainStyles["title-section"]}>
+          <h1>Catalogo de productos</h1>
+        </section>
+        <p className={mainStyles["error-message"]}>{error}</p>
+      </main>
+    );
+  }
 
-  const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
-
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentProducts = filteredProducts.slice(
-    indexOfFirstItem,
-    indexOfLastItem,
-  );
+  const products = data?.items ?? [];
+  const totalPages = data?.total_pages ?? 0;
 
   return (
     <main className={mainStyles["main"]}>
@@ -51,14 +81,11 @@ const Products = ({ setCurrentPage, setSelectedProduct }) => {
           type="text"
           placeholder="Buscar producto"
           value={searchTerm}
-          onChange={(e) => {
-            setSearchTerm(e.target.value);
-            setCurrentPageNum(1);
-          }}
+          onChange={(e) => setSearchTerm(e.target.value)}
         />
       </div>
 
-      {filteredProducts.length === 0 && (
+      {products.length === 0 && (
         <div className={mainStyles["no-results"]}>
           <svg
             className={mainStyles["no-results"]}
@@ -100,51 +127,60 @@ const Products = ({ setCurrentPage, setSelectedProduct }) => {
             />
           </svg>
           <h2>No se encontraron productos</h2>
-          <p>Intenta cambiar los filtros o la busqueda</p>
+          <p>
+            {debouncedSearch
+              ? "Intenta cambiar los filtros o la busqueda"
+              : "No hay productos disponibles por el momento."}
+          </p>
         </div>
       )}
 
-      <div className={mainStyles["products-container"]}>
-        {currentProducts.map((product) => (
-          <ProductCard
-            key={product.id}
-            product={product}
-            onViewDetails={handleViewDetail}
-          ></ProductCard>
-        ))}
-      </div>
+      {products.length > 0 && (
+        <>
+          <div className={mainStyles["products-container"]}>
+            {products.map((product) => (
+              <ProductCard
+                key={product.id}
+                product={product}
+                onViewDetails={handleViewDetail}
+              />
+            ))}
+          </div>
 
-      {/* PAGINATION */}
-      {/* <div className={paginationStyles["pagination-container"]}>
-        <button
-          className={paginationStyles["pagination-button"]}
-          disabled={currentPage === 1}
-          onClick={() => setCurrentPageNum(currentPage - 1)}
-        >
-          «
-        </button>
+          {totalPages > 1 && (
+            <div className={paginationStyles["pagination-container"]}>
+              <button
+                className={paginationStyles["pagination-button"]}
+                disabled={page === 1}
+                onClick={() => setPage(page - 1)}
+              >
+                «
+              </button>
 
-        {Array.from({ length: totalPages }, (_, index) => {
-          const pageNumber = index + 1;
-          return (
-            <button
-              key={pageNumber}
-              className={`${paginationStyles["pagination-button"]} ${pageNumber === currentPage ? paginationStyles["active"] : ""}`}
-              onClick={() => setCurrentPageNum(pageNumber)}
-            >
-              {pageNumber}
-            </button>
-          );
-        })}
+              {Array.from({ length: totalPages }, (_, index) => {
+                const pageNumber = index + 1;
+                return (
+                  <button
+                    key={pageNumber}
+                    className={`${paginationStyles["pagination-button"]} ${pageNumber === page ? paginationStyles["active"] : ""}`}
+                    onClick={() => setPage(pageNumber)}
+                  >
+                    {pageNumber}
+                  </button>
+                );
+              })}
 
-        <button
-          className={paginationStyles["pagination-button"]}
-          disabled={currentPage >= totalPages || totalPages === 0}
-          onClick={() => setCurrentPageNum(currentPage + 1)}
-        >
-          »
-        </button>
-      </div> */}
+              <button
+                className={paginationStyles["pagination-button"]}
+                disabled={page >= totalPages}
+                onClick={() => setPage(page + 1)}
+              >
+                »
+              </button>
+            </div>
+          )}
+        </>
+      )}
     </main>
   );
 };

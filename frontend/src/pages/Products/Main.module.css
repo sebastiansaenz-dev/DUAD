@@ -33,3 +33,13 @@ main {
 .no-results p {
   color: gray;
 }
+
+.loader-wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 3rem;
+  margin: 2rem auto;
+  border-radius: 0.5rem;
+  width: fit-content;
+}
