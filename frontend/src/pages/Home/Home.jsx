@@ -1,6 +1,8 @@
+import { useNavigate } from "react-router-dom";
 import styles from "./Home.module.css";
 
-const Home = ({ setCurrentPage }) => {
+const Home = () => {
+  const navigate = useNavigate();
   return (
     <main>
       <div className={styles["welcome-section"]}>
@@ -18,9 +20,8 @@ const Home = ({ setCurrentPage }) => {
         </div>
         <div className={styles["welcome-actions"]}>
           <button
-            onClick={(e) => {
-              e.preventDefault();
-              setCurrentPage("products");
+            onClick={() => {
+              navigate("/products");
             }}
           >
             View products

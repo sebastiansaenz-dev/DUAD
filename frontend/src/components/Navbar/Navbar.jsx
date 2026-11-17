@@ -1,66 +1,62 @@
+import { NavLink, useNavigate } from "react-router-dom";
 import styles from "./Navbar.module.css";
 import Logo from "../Logo/Logo";
-import { useAuthStore } from "../../store/useAuthStore";
+import CartIcon from "../CartIcon/CartIcon";
+import { useAuth } from "../../context/AuthContext.jsx";
 import { logoutRequest } from "../../api/usersApi";
 
-const Navbar = ({ currentPage, setCurrentPage }) => {
-  const user = useAuthStore((state) => state.user);
-  const logoutUser = useAuthStore((state) => state.logout);
+const Navbar = () => {
+  const navigate = useNavigate();
+  const { user, logout } = useAuth();
   const roles = user?.user?.roles ?? [];
   const isAdmin = roles.some((role) => role.name === "admin");
 
   const handleLogout = () => {
     logoutRequest()
       .then(() => {
-        logoutUser();
-        setCurrentPage("home");
+        logout();
+        navigate("/");
       })
       .catch(() => {
-        logoutUser();
-        setCurrentPage("home");
+        logout();
+        navigate("/");
       });
   };
 
   const navItems = [
-    { key: "home", label: "Inicio", href: "#home" },
-    { key: "products", label: "Productos", href: "#products" },
-    { key: "contact", label: "Contacto", href: "#contact" },
-    ...(isAdmin
-      ? [
-          {
-            key: "administration",
-            label: "Administración",
-            href: "#administration",
-          },
-        ]
-      : []),
+    { to: "/", label: "Inicio", end: true },
+    { to: "/products", label: "Productos" },
+    ...(isAdmin ? [{ to: "/admin", label: "Administración" }] : []),
+    { to: "/contact", label: "Contacto", end: true },
   ];
 
   return (
     <nav id="navbar" className={styles["navbar"]}>
       <div className={styles["logo-section"]}>
-        <Logo className={styles["logo"]} setCurrentPage={setCurrentPage} />
+        <Logo className={styles["logo"]} />
         <span>PawStore</span>
       </div>
       <ul className={styles["nav-links"]}>
         {navItems.map((item) => (
-          <li
-            key={item.key}
-            className={`${styles["nav-link"]} ${currentPage === item.key ? styles["active"] : ""}`}
-          >
-            <a
-              href={item.href}
-              onClick={(e) => {
-                e.preventDefault();
-                setCurrentPage(item.key);
-              }}
+          <li key={item.to} className={styles["nav-link"]}>
+            <NavLink
+              to={item.to}
+              end={item.end}
+              className={({ isActive }) =>
+                isActive ? styles["active"] : undefined
+              }
             >
               {item.label}
-            </a>
+            </NavLink>
           </li>
         ))}
       </ul>
       <div className={styles["login-logout-button-container"]}>
+        <div className={styles["cart-logo-container"]}>
+          <NavLink to="/carrito" aria-label="Carrito">
+            <CartIcon />
+          </NavLink>
+        </div>
         {user && (
           <span className={styles["session-user"]}>
             <span className={styles["session-label"]}>
@@ -72,7 +68,7 @@ const Navbar = ({ currentPage, setCurrentPage }) => {
           </span>
         )}
         <button
-          onClick={user ? handleLogout : () => setCurrentPage("login")}
+          onClick={user ? handleLogout : () => navigate("/login")}
           className={styles["login-logout-button"]}
         >
           {user ? "Cerrar sesión" : "Iniciar sesión"}

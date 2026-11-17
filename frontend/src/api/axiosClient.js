@@ -1,6 +1,5 @@
 import axios from "axios";
-import { useAuthStore } from "../store/useAuthStore";
-import { usePageStore } from "../store/usePageStore";
+import { getAuthUser, runLogout } from "../context/AuthContext";
 
 const BASE_URL = import.meta.env.VITE_API_URL;
 
@@ -13,19 +12,29 @@ export const apiAuth = axios.create({
 });
 
 const goToLogin = () => {
-  useAuthStore.getState().logout();
-  usePageStore.getState().setCurrentPage("login");
+  runLogout();
+  if (window.location.pathname !== "/login") {
+    window.location.assign("/login");
+  }
 };
 
-apiAuth.interceptors.request.use(
-  (request) => {
-    const accessToken = useAuthStore.getState().user?.access_token;
-    if (accessToken) {
-      request.headers.Authorization = `Bearer ${accessToken}`;
-    }
+const attachAccessToken = (request) => {
+  if (request.headers.Authorization) {
     return request;
-  },
-  (error) => Promise.reject(error)
+  }
+  const accessToken = getAuthUser()?.access_token;
+  if (accessToken) {
+    request.headers.Authorization = `Bearer ${accessToken}`;
+  }
+  return request;
+};
+
+api.interceptors.request.use(attachAccessToken, (error) =>
+  Promise.reject(error)
+);
+
+apiAuth.interceptors.request.use(attachAccessToken, (error) =>
+  Promise.reject(error)
 );
 
 apiAuth.interceptors.response.use(
@@ -40,8 +49,8 @@ apiAuth.interceptors.response.use(
     ) {
       originalRequest._retry = true;
 
-      const userData = useAuthStore.getState().user;
-      if (!userData?.refresh_token) {
+      const user = getAuthUser();
+      if (!user?.refresh_token) {
         goToLogin();
         return Promise.reject(error);
       }
@@ -52,16 +61,16 @@ apiAuth.interceptors.response.use(
           {},
           {
             headers: {
-              Authorization: `Bearer ${userData.refresh_token}`,
+              Authorization: `Bearer ${user.refresh_token}`,
             },
           }
         );
 
         const updatedUser = {
-          ...userData,
+          ...user,
           access_token: response.data.access_token,
         };
-        useAuthStore.getState().login(updatedUser);
+        localStorage.setItem("user", JSON.stringify(updatedUser));
 
         originalRequest.headers = originalRequest.headers || {};
         originalRequest.headers.Authorization = `Bearer ${updatedUser.access_token}`;

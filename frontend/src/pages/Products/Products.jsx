@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import ProductCard from "../../components/ProductCard/ProductCard";
 import Loader from "../../components/loading-ui/Loader";
 import paginationStyles from "./Pagination.module.css";
@@ -6,7 +7,8 @@ import searchSectionStyles from "./SearchSection.module.css";
 import mainStyles from "./Main.module.css";
 import { getProducts } from "../../api/productsApi";
 
-const Products = ({ setCurrentPage, setSelectedProduct }) => {
+const Products = () => {
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
@@ -39,8 +41,7 @@ const Products = ({ setCurrentPage, setSelectedProduct }) => {
   }, [page, debouncedSearch]);
 
   const handleViewDetail = (product) => {
-    setSelectedProduct(product);
-    setCurrentPage("product-detail");
+    navigate(`/products/${product.id}`);
   };
 
   if (loading) {

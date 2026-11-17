@@ -1,4 +1,8 @@
-const Logo = ({ className, setCurrentPage }) => {
+import { useNavigate } from "react-router-dom";
+
+const Logo = ({ className }) => {
+  const navigate = useNavigate();
+
   return (
     <svg
       version="1.1"
@@ -10,9 +14,8 @@ const Logo = ({ className, setCurrentPage }) => {
       viewBox="0 0 110 135"
       style={{ enableBackground: "new 0 0 110 135" }}
       xmlSpace="preserve"
-      onClick={(e) => {
-        e.preventDefault();
-        setCurrentPage("home");
+      onClick={() => {
+        navigate("/");
       }}
       className={className}
     >

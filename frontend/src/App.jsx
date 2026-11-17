@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { Navigate, Outlet, Route, Routes } from "react-router-dom";
 import Home from "./pages/Home/Home.jsx";
 import Navbar from "./components/Navbar/Navbar.jsx";
 import Footer from "./components/Footer/Footer.jsx";
@@ -8,65 +8,54 @@ import AdminProducts from "./pages/admin/AdminProducts/AdminProducts.jsx";
 import AdminEditProducts from "./pages/admin/AdminEditProducts/AdminEditProducts.jsx";
 import "./App.css";
 import Login from "./pages/Login/Login.jsx";
-import { usePageStore } from "./store/usePageStore";
-import { useAuthStore } from "./store/useAuthStore.js";
-
+import { useAuth } from "./context/AuthContext.jsx";
 import errorStyle from "./utils/errorSections.module.css";
+import NotFound from "./pages/NotFound/NotFound.jsx";
+import Contact from "./pages/contact/Contact.jsx";
+import Cart from "./pages/Cart/Cart.jsx";
+import Checkout from "./pages/Checkout/Checkout.jsx";
+import OrderConfirmed from "./pages/OrderConfirmed/OrderConfirmed.jsx";
 
-const App = () => {
-  const currentPage = usePageStore((state) => state.currentPage);
-  const setCurrentPage = usePageStore((state) => state.setCurrentPage);
-  const [selectedProduct, setSelectedProduct] = useState(null);
-
-  const user = useAuthStore((state) => state.user);
+const AdminRoute = () => {
+  const { user } = useAuth();
   const roles = user?.user?.roles ?? [];
   const isAdmin = roles.some((role) => role.name === "admin");
 
+  if (!user) {
+    return <Navigate to="/login" replace />;
+  }
+
+  if (!isAdmin) {
+    return (
+      <div className={errorStyle["error-section"]}>
+        <span>No tienes permisos para acceder a esta página</span>
+      </div>
+    );
+  }
+
+  return <Outlet />;
+};
+
+const App = () => {
   return (
     <>
-      <Navbar currentPage={currentPage} setCurrentPage={setCurrentPage} />
-      {currentPage === "home" && <Home setCurrentPage={setCurrentPage} />}
-      {currentPage === "products" && (
-        <Products
-          setCurrentPage={setCurrentPage}
-          setSelectedProduct={setSelectedProduct}
-        />
-      )}
-      {currentPage === "product-detail" && (
-        <ProductDetail
-          product={selectedProduct}
-          setCurrentPage={setCurrentPage}
-        />
-      )}
-      {currentPage === "administration" && isAdmin && (
-        <AdminProducts
-          setCurrentPage={setCurrentPage}
-          setSelectedProduct={setSelectedProduct}
-        />
-      )}
-
-      {currentPage === "administration" && !isAdmin && (
-        <div className={errorStyle["error-section"]}>
-          <span>No tienes permisos para acceder a esta página</span>
-        </div>
-      )}
-
-      {currentPage === "admin-edit" && isAdmin && (
-        <AdminEditProducts
-          product={selectedProduct}
-          setCurrentPage={setCurrentPage}
-        />
-      )}
-
-      {currentPage === "admin-edit" && !isAdmin && (
-        <div className={errorStyle["error-section"]}>
-          <span>No tienes permisos para acceder a esta página</span>
-        </div>
-      )}
-
-      {currentPage === "login" && <Login setCurrentPage={setCurrentPage} />}
-
-      <Footer setCurrentPage={setCurrentPage} />
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/products" element={<Products />} />
+        <Route path="/products/:id" element={<ProductDetail />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/contacto" element={<Contact />} />
+        <Route path="/carrito" element={<Cart />} />
+        <Route path="/checkout" element={<Checkout />} />
+        <Route path="/order-confirmed" element={<OrderConfirmed />} />
+        <Route element={<AdminRoute />}>
+          <Route path="/admin" element={<AdminProducts />} />
+          <Route path="/admin/edit/:id" element={<AdminEditProducts />} />
+        </Route>
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+      <Footer />
     </>
   );
 };

@@ -68,7 +68,7 @@
   white-space: nowrap;
 }
 
-.active a {
+.nav-links a.active {
   color: #3b82f6;
   text-decoration: underline;
 }
