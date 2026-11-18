@@ -11,7 +11,7 @@ import Login from "./pages/Login/Login.jsx";
 import { useAuth } from "./context/AuthContext.jsx";
 import errorStyle from "./utils/errorSections.module.css";
 import NotFound from "./pages/NotFound/NotFound.jsx";
-import Contact from "./pages/contact/Contact.jsx";
+import Contact from "./pages/Contact/Contact.jsx";
 import Cart from "./pages/Cart/Cart.jsx";
 import Checkout from "./pages/Checkout/Checkout.jsx";
 import OrderConfirmed from "./pages/OrderConfirmed/OrderConfirmed.jsx";
