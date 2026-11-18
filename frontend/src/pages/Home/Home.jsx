@@ -21,7 +21,7 @@ const Home = () => {
         <div className={styles["welcome-actions"]}>
           <button
             onClick={() => {
-              navigate("/products");
+              navigate("/productos");
             }}
           >
             View products

@@ -42,8 +42,8 @@ const App = () => {
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/products" element={<Products />} />
-        <Route path="/products/:id" element={<ProductDetail />} />
+        <Route path="/productos" element={<Products />} />
+        <Route path="/productos/:id" element={<ProductDetail />} />
         <Route path="/login" element={<Login />} />
         <Route path="/contacto" element={<Contact />} />
         <Route path="/carrito" element={<Cart />} />
@@ -51,7 +51,7 @@ const App = () => {
         <Route path="/order-confirmed" element={<OrderConfirmed />} />
         <Route element={<AdminRoute />}>
           <Route path="/admin" element={<AdminProducts />} />
-          <Route path="/admin/edit/:id" element={<AdminEditProducts />} />
+          <Route path="/admin/editar/:id" element={<AdminEditProducts />} />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>

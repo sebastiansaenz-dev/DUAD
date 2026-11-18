@@ -25,9 +25,9 @@ const Navbar = () => {
 
   const navItems = [
     { to: "/", label: "Inicio", end: true },
-    { to: "/products", label: "Productos" },
+    { to: "/productos", label: "Productos" },
     ...(isAdmin ? [{ to: "/admin", label: "Administración" }] : []),
-    { to: "/contact", label: "Contacto", end: true },
+    { to: "/contacto", label: "Contacto", end: true },
   ];
 
   return (
