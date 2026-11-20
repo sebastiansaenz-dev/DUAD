@@ -1,12 +1,12 @@
 import styles from "./Footer.module.css";
 import Logo from "../Logo/Logo";
 
-const Footer = ({ setCurrentPage }) => {
+const Footer = () => {
   return (
     <footer className={styles["footer"]}>
       <div className={styles["footer-content"]}>
         <div className={styles["footer-brand"]}>
-          <Logo className={styles["logo"]} setCurrentPage={setCurrentPage} />
+          <Logo className={styles["logo"]} />
           <span className={styles["brand-name"]}>PawStore</span>
         </div>
 

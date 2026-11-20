@@ -1,10 +1,30 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import styles from "./ProductDetail.module.css";
 import { formatPrice } from "../../utils/utils";
+import { getProductById } from "../../api/productsApi";
+import Loader from "../../components/loading-ui/Loader";
+import EmptyState from "../../components/EmptyState/EmptyState";
+import { useCart } from "../../context/CartContext";
 
-const ProductDetail = ({ product, setCurrentPage }) => {
+const ProductDetail = () => {
+  const { id } = useParams();
+  const { addToCart } = useCart();
+  const [product, setProduct] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const [successMessage, setSuccessMessage] = useState("");
+
+  useEffect(() => {
+    setLoading(true);
+    setError(null);
+
+    getProductById(id)
+      .then((res) => setProduct(res.data))
+      .catch(() => setError("Producto no encontrado."))
+      .finally(() => setLoading(false));
+  }, [id]);
 
   const handleQuantityDecrease = () => {
     if (quantity > 1) {
@@ -40,15 +60,34 @@ const ProductDetail = ({ product, setCurrentPage }) => {
   };
 
   const handleAddToCart = () => {
-    setSuccessMessage("Product added to cart!");
+    setSuccessMessage("Producto agregado al carrito!");
+
+    addToCart({ ...product, quantity });
 
     setTimeout(() => {
       setSuccessMessage("");
     }, 3000);
   };
 
-  if (!product) {
-    return <div className={styles["error-section"]}>Product not found</div>;
+  if (loading) {
+    return (
+      <main className={styles["product-container"]}>
+        <Loader />
+      </main>
+    );
+  }
+
+  if (error || !product) {
+    return (
+      <main className={styles["empty-page"]}>
+        <EmptyState
+          title="Producto no encontrado"
+          message="El producto que buscas no existe o ya no está disponible."
+          actionTo="/productos"
+          actionLabel="Volver al catálogo"
+        />
+      </main>
+    );
   }
 
   return (
@@ -90,31 +129,16 @@ const ProductDetail = ({ product, setCurrentPage }) => {
           </button>
         </div>
 
-        <p>
-          Más adelante aquí se podrá agregar este producto al carrito y
-          completar la compra
-        </p>
-        {/* ADD TO CART BUTTON */}
-        {/* <button
+        <button
           className={styles["add-to-cart-button"]}
           onClick={handleAddToCart}
         >
-          Add to cart
-        </button> */}
-        <button
-          className={styles["add-to-cart-button"]}
-          onClick={(e) => {
-            e.preventDefault();
-            setCurrentPage("products");
-          }}
-        >
-          Volver al catálogo
+          Agregar al carrito
         </button>
 
-        {/* SUCCESS MESSAGE */}
-        {/* {successMessage && (
+        {successMessage && (
           <div className={styles["success-message"]}>{successMessage}</div>
-        )} */}
+        )}
       </div>
     </main>
   );
