@@ -2,22 +2,16 @@ import { useState } from "react";
 import styles from "./styles/OrderSummary.module.css";
 import errorStyle from "../../utils/errorSections.module.css";
 import { useCart } from "../../context/CartContext";
-import { useAuth } from "../../context/AuthContext";
 import { formatPrice } from "../../utils/utils";
 import { useNavigate } from "react-router-dom";
-import { createOrder, syncCartToBackend } from "../../api/orderAPI";
+import { createOrder } from "../../api/orderAPI";
 
 const Checkout = () => {
-  const { cart } = useCart();
-  const { user } = useAuth();
+  const { cart, total, clearCart } = useCart();
   const navigate = useNavigate();
   const [error, setError] = useState(null);
   const [submitting, setSubmitting] = useState(false);
   const items = cart ?? [];
-  const total = items.reduce(
-    (sum, item) => sum + Number(item.price ?? 0) * Number(item.quantity ?? 1),
-    0,
-  );
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -47,19 +41,20 @@ const Checkout = () => {
 
     setSubmitting(true);
 
-    const submitOrder = user
-      ? syncCartToBackend(items).then(() => createOrder(orderData))
-      : createOrder(orderData);
-
-    submitOrder.then(() => {
-      navigate("/order-confirmed");
-    })
-      .catch((err) => {
+    createOrder(orderData)
+      .then(() => {
+        navigate("/order-confirmed", {
+          replace: true,
+          state: {
+            items,
+            total,
+          },
+        });
+        clearCart();
+      })
+      .catch(() => {
         setError(
-          err.response?.data?.error?.message ||
-            err.response?.data?.message ||
-            err.message ||
-            "Error al crear el pedido",
+          "Ocurrió un problema al procesar tu compra. Por favor intenta de nuevo."
         );
       })
       .finally(() => setSubmitting(false));

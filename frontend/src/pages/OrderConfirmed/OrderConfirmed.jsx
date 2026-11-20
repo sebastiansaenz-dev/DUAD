@@ -1,15 +1,15 @@
 import styles from "./styles/OrderConfirmed.module.css";
-import { Link } from "react-router-dom";
-import { useCart } from "../../context/CartContext";
+import { Link, Navigate, useLocation } from "react-router-dom";
 import { formatPrice } from "../../utils/utils";
 
 const OrderConfirmed = () => {
-  const { cart, clearCart } = useCart();
-  const items = cart ?? [];
-  const total = items.reduce(
-    (sum, item) => sum + Number(item.price ?? 0) * Number(item.quantity ?? 1),
-    0,
-  );
+  const { state } = useLocation();
+  const items = state?.items;
+  const total = state?.total;
+
+  if (!items) {
+    return <Navigate to="/productos" replace />;
+  }
 
   return (
     <main className={styles["confirmation-container"]}>
@@ -40,9 +40,9 @@ const OrderConfirmed = () => {
       </p>
 
       <section className={styles["confirmation-summary-box"]}>
-        <h2>Order Summary</h2>
+        <h2>Resumen de la orden</h2>
         <div className={styles["summary-items-list"]}>
-          {items.length === 0 && <p>No products in this order</p>}
+          {items.length === 0 && <p>No hay productos en este pedido</p>}
           {items.map((item) => {
             const quantity = Number(item.quantity ?? 1);
             const itemTotal = Number(item.price ?? 0) * quantity;
@@ -52,7 +52,7 @@ const OrderConfirmed = () => {
                 <img src={item.image_url} alt={item.name} />
                 <div className={styles["summary-item-details"]}>
                   <h4>{item.name}</h4>
-                  <p>Quantity: {quantity}</p>
+                  <p>Cantidad: {quantity}</p>
                 </div>
                 <span className={styles["summary-item-price"]}>
                   {formatPrice(itemTotal)}
@@ -64,20 +64,20 @@ const OrderConfirmed = () => {
 
         <div className={styles["summary-footer"]}>
           <div className={styles["total-line"]}>
-            <span className={styles["total-label"]}>Total Paid:</span>
+            <span className={styles["total-label"]}>Total pagado:</span>
             <span className={styles["total-price"]}>{formatPrice(total)}</span>
           </div>
         </div>
       </section>
 
       <div className={styles["confirmation-actions"]}>
-        <Link to="/products" onClick={clearCart}>
-          <button
-            id="back-to-products-button"
-            className={styles["go-back-button"]}
-          >
-            Volver al catálogo
-          </button>
+        <Link
+          to="/productos"
+          replace
+          id="back-to-products-button"
+          className={styles["go-back-button"]}
+        >
+          Volver al catálogo
         </Link>
       </div>
     </main>
