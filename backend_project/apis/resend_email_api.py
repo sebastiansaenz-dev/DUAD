@@ -2,16 +2,18 @@ import json
 import logging
 import os
 import subprocess
+import threading
 from pathlib import Path
 
 WORKER_DIR = Path(__file__).resolve().parents[1] / "email-worker"
 
 
-def send_order_confirmation_email(to_email, order):
-    if not to_email:
-        logging.warning("Order email skipped: no recipient")
-        return
+def _catalog_url():
+    origin = os.getenv("FRONTEND_URL", "http://localhost:5173").rstrip("/")
+    return f"{origin}/productos"
 
+
+def _order_email_payload(to_email, order):
     items = []
     for item in order.items or []:
         product = item.product
@@ -26,7 +28,7 @@ def send_order_confirmation_email(to_email, order):
             }
         )
 
-    payload = {
+    return {
         "to": to_email,
         "fullName": order.full_name or "cliente",
         "username": getattr(getattr(order, "user", None), "username", None),
@@ -36,10 +38,12 @@ def send_order_confirmation_email(to_email, order):
         "payment": "Sinpe",
         "orderNumber": order.order_number,
         "total": int(order.total or 0),
-        "catalogUrl": "http://localhost:5173/products",
+        "catalogUrl": _catalog_url(),
         "items": items,
     }
 
+
+def _run_email_worker(payload):
     try:
         result = subprocess.run(
             ["node", "--import", "tsx", "send.jsx"],
@@ -59,3 +63,18 @@ def send_order_confirmation_email(to_email, order):
         return
 
     logging.info((result.stdout or b"").decode("utf-8", errors="replace").strip())
+
+
+def send_order_confirmation_email(to_email, order):
+    if not to_email:
+        logging.warning("Order email skipped: no recipient")
+        return
+
+    payload = _order_email_payload(to_email, order)
+    thread = threading.Thread(
+        target=_run_email_worker,
+        args=(payload,),
+        daemon=True,
+        name="order-email",
+    )
+    thread.start()
