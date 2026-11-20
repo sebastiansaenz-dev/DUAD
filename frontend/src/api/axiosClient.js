@@ -1,5 +1,5 @@
 import axios from "axios";
-import { getAuthUser, runLogout } from "../context/AuthContext";
+import { getAuthUser, runLogout, setAuthUser } from "../context/AuthContext";
 
 const BASE_URL = import.meta.env.VITE_API_URL;
 
@@ -70,7 +70,7 @@ apiAuth.interceptors.response.use(
           ...user,
           access_token: response.data.access_token,
         };
-        localStorage.setItem("user", JSON.stringify(updatedUser));
+        setAuthUser(updatedUser);
 
         originalRequest.headers = originalRequest.headers || {};
         originalRequest.headers.Authorization = `Bearer ${updatedUser.access_token}`;

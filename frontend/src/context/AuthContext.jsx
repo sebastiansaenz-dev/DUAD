@@ -3,35 +3,50 @@ import { createContext, useContext, useState } from "react";
 const AuthContext = createContext(null);
 
 let currentUser = null;
-let logoutHandler = () => {};
+let setUserHandler = () => {};
+
+const readStoredUser = () => {
+  try {
+    return JSON.parse(localStorage.getItem("user"));
+  } catch {
+    return null;
+  }
+};
 
 export const getAuthUser = () => currentUser;
 
+export const setAuthUser = (userData) => {
+  currentUser = userData;
+
+  if (userData) {
+    localStorage.setItem("user", JSON.stringify(userData));
+  } else {
+    localStorage.removeItem("user");
+  }
+
+  setUserHandler(userData);
+};
+
 export const runLogout = () => {
-  logoutHandler();
+  setAuthUser(null);
 };
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(() => {
-    try {
-      return JSON.parse(localStorage.getItem("user"));
-    } catch {
-      return null;
-    }
+    const storedUser = readStoredUser();
+    currentUser = storedUser;
+    return storedUser;
   });
 
+  setUserHandler = setUser;
+
   const login = (userData) => {
-    localStorage.setItem("user", JSON.stringify(userData));
-    setUser(userData);
+    setAuthUser(userData);
   };
 
   const logout = () => {
-    localStorage.removeItem("user");
-    setUser(null);
+    setAuthUser(null);
   };
-
-  currentUser = user;
-  logoutHandler = logout;
 
   const value = { user, login, logout };
 
