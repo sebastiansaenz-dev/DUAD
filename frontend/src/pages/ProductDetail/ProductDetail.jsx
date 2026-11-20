@@ -4,6 +4,7 @@ import styles from "./ProductDetail.module.css";
 import { formatPrice } from "../../utils/utils";
 import { getProductById } from "../../api/productsApi";
 import Loader from "../../components/loading-ui/Loader";
+import EmptyState from "../../components/EmptyState/EmptyState";
 import { useCart } from "../../context/CartContext";
 
 const ProductDetail = () => {
@@ -21,7 +22,7 @@ const ProductDetail = () => {
 
     getProductById(id)
       .then((res) => setProduct(res.data))
-      .catch((err) => setError(err.message))
+      .catch(() => setError("Producto no encontrado."))
       .finally(() => setLoading(false));
   }, [id]);
 
@@ -77,7 +78,16 @@ const ProductDetail = () => {
   }
 
   if (error || !product) {
-    return <div className={styles["error-section"]}>Product not found</div>;
+    return (
+      <main className={styles["empty-page"]}>
+        <EmptyState
+          title="Producto no encontrado"
+          message="El producto que buscas no existe o ya no está disponible."
+          actionTo="/productos"
+          actionLabel="Volver al catálogo"
+        />
+      </main>
+    );
   }
 
   return (
