@@ -94,8 +94,21 @@ export const CartProvider = ({ children }) => {
     persistCart([], setCart);
   };
 
+  const itemCount = cart.reduce(
+    (sum, item) => sum + (Number(item.quantity) || 1),
+    0,
+  );
+
+  const total = cart.reduce(
+    (sum, item) =>
+      sum + Number(item.price ?? 0) * Number(item.quantity ?? 1),
+    0,
+  );
+
   const value = {
     cart,
+    itemCount,
+    total,
     addToCart,
     removeFromCart,
     updateQuantity,

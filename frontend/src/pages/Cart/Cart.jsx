@@ -4,30 +4,25 @@ import { formatPrice } from "../../utils/utils";
 import { useNavigate } from "react-router-dom";
 
 const Cart = () => {
-  const { cart, removeFromCart, updateQuantity } = useCart();
+  const { cart, total, itemCount, removeFromCart, updateQuantity } = useCart();
   const navigate = useNavigate();
   const items = cart ?? [];
-  const total = items.reduce(
-    (sum, item) => sum + Number(item.price ?? 0) * Number(item.quantity ?? 1),
-    0
-  );
 
   return (
     <main className={styles["cart-container"]}>
       <header className={styles["cart-header"]}>
         <h1>Tu carrito</h1>
         <p>
-          {items.length === 0
+          {itemCount === 0
             ? "Aún no has agregado productos"
-            : `${items.length} producto${items.length === 1 ? "" : "s"}`}
+            : `${itemCount} producto${itemCount === 1 ? "" : "s"}`}
         </p>
       </header>
 
       <div className={styles["cart-items-list"]}>
         {items.length === 0 && (
           <div className={styles["empty-cart"]}>
-            <p>Tu carrito está vacío</p>
-            <span>Explora el catálogo y agrega algo para tu mascota.</span>
+            <p>Tu carrito está vacío.</p>
           </div>
         )}
 
