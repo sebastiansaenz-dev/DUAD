@@ -28,8 +28,12 @@
 }
 
 .logo {
-  width: 2.5em;
-  height: 2.5em;
+  display: block;
+  width: 2.5rem;
+  height: 2.5rem;
+  min-width: 2.5rem;
+  min-height: 2.5rem;
+  flex-shrink: 0;
   fill: white;
 }
 

@@ -3,11 +3,13 @@ import styles from "./Navbar.module.css";
 import Logo from "../Logo/Logo";
 import CartIcon from "../CartIcon/CartIcon";
 import { useAuth } from "../../context/AuthContext.jsx";
+import { useCart } from "../../context/CartContext.jsx";
 import { logoutRequest } from "../../api/usersApi";
 
 const Navbar = () => {
   const navigate = useNavigate();
   const { user, logout } = useAuth();
+  const { itemCount } = useCart();
   const roles = user?.user?.roles ?? [];
   const isAdmin = roles.some((role) => role.name === "admin");
 
@@ -53,8 +55,19 @@ const Navbar = () => {
       </ul>
       <div className={styles["login-logout-button-container"]}>
         <div className={styles["cart-logo-container"]}>
-          <NavLink to="/carrito" aria-label="Carrito">
-            <CartIcon />
+          <NavLink
+            to="/carrito"
+            className={({ isActive }) =>
+              isActive
+                ? `${styles["cart-link"]} ${styles["cart-link-active"]}`
+                : styles["cart-link"]
+            }
+          >
+            <span className={styles["cart-icon-wrap"]}>
+              <CartIcon />
+              <span className={styles["cart-badge"]}>{itemCount}</span>
+            </span>
+            <span className={styles["cart-label"]}>Carrito</span>
           </NavLink>
         </div>
         {user && (
