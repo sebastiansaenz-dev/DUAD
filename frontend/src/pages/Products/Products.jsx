@@ -1,12 +1,15 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import ProductCard from "../../components/ProductCard/ProductCard";
 import Loader from "../../components/loading-ui/Loader";
 import paginationStyles from "./Pagination.module.css";
 import searchSectionStyles from "./SearchSection.module.css";
 import mainStyles from "./Main.module.css";
 import { getProducts } from "../../api/productsApi";
+import EmptyState from "../../components/EmptyState/EmptyState";
 
-const Products = ({ setCurrentPage, setSelectedProduct }) => {
+const Products = () => {
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
@@ -34,13 +37,12 @@ const Products = ({ setCurrentPage, setSelectedProduct }) => {
 
     getProducts(page, debouncedSearch)
       .then((res) => setData(res.data))
-      .catch((err) => setError(err.message))
+      .catch((err) => setError("No hay productos disponibles por el momento."))
       .finally(() => setLoading(false));
   }, [page, debouncedSearch]);
 
   const handleViewDetail = (product) => {
-    setSelectedProduct(product);
-    setCurrentPage("product-detail");
+    navigate(`/products/${product.id}`);
   };
 
   if (loading) {
@@ -62,7 +64,10 @@ const Products = ({ setCurrentPage, setSelectedProduct }) => {
         <section className={mainStyles["title-section"]}>
           <h1>Catalogo de productos</h1>
         </section>
-        <p className={mainStyles["error-message"]}>{error}</p>
+        <EmptyState
+          title={error}
+          message="Intenta recargar la página en unos minutos."
+        />
       </main>
     );
   }
@@ -86,53 +91,14 @@ const Products = ({ setCurrentPage, setSelectedProduct }) => {
       </div>
 
       {products.length === 0 && (
-        <div className={mainStyles["no-results"]}>
-          <svg
-            className={mainStyles["no-results"]}
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <circle
-              cx="12"
-              cy="12"
-              r="10"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-
-            <path
-              d="M9 9H9.01"
-              stroke="currentColor"
-              strokeWidth="2.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-            <path
-              d="M15 9H15.01"
-              stroke="currentColor"
-              strokeWidth="2.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-
-            <path
-              d="M9 16C9 16 10.5 14.5 12 14.5C13.5 14.5 15 16 15 16"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-          <h2>No se encontraron productos</h2>
-          <p>
-            {debouncedSearch
+        <EmptyState
+          title="No se encontraron productos"
+          message={
+            debouncedSearch
               ? "Intenta cambiar los filtros o la busqueda"
-              : "No hay productos disponibles por el momento."}
-          </p>
-        </div>
+              : "No hay productos disponibles por el momento."
+          }
+        />
       )}
 
       {products.length > 0 && (

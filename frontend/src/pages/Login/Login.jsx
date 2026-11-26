@@ -1,12 +1,14 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import { loginRequest } from "../../api/usersApi";
-import { useAuthStore } from "../../store/useAuthStore";
+import { useAuth } from "../../context/AuthContext";
 import Loader from "../../components/loading-ui/Loader";
 import styles from "./styles/Login.module.css";
 
-const Login = ({ setCurrentPage }) => {
-  const login = useAuthStore((state) => state.login);
+const Login = () => {
+  const navigate = useNavigate();
+  const { login } = useAuth();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const {
@@ -24,7 +26,7 @@ const Login = ({ setCurrentPage }) => {
         login(res.data);
         const roles = res.data.user?.roles ?? [];
         const isAdmin = roles.some((role) => role.name === "admin");
-        setCurrentPage(isAdmin ? "administration" : "home");
+        navigate(isAdmin ? "/admin" : "/");
       })
       .catch((err) => {
         const status = err.response?.status;

@@ -4,6 +4,7 @@ import ProductTableStyles from "./styles/ProductsTable.module.css";
 import AddProductFormStyles from "./styles/AddProductFormSection.module.css";
 import errorStyle from "../../../utils/errorSections.module.css";
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { getProducts } from "../../../api/productsApi.js";
 import {
   createProduct,
@@ -11,7 +12,8 @@ import {
 } from "../../../api/admin/adminProductsApi.js";
 import Loader from "../../../components/loading-ui/Loader.jsx";
 
-const AdminProducts = ({ setCurrentPage, setSelectedProduct }) => {
+const AdminProducts = () => {
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
@@ -73,8 +75,7 @@ const AdminProducts = ({ setCurrentPage, setSelectedProduct }) => {
         <ProductTable
           products={products}
           onEdit={(product) => {
-            setSelectedProduct(product);
-            setCurrentPage("admin-edit");
+            navigate(`/admin/edit/${product.id}`);
           }}
           onDelete={onDelete}
         />

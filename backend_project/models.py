@@ -85,8 +85,8 @@ class Orders(db.Model):
     __tablename__ = 'Orders'
     id = db.Column(db.Integer, primary_key=True)
     order_number = db.Column(db.String(20), unique=True, nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('Users.id'), nullable=False)
-    cart_id = db.Column(db.Integer, db.ForeignKey('Carts.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('Users.id'), nullable=True)
+    cart_id = db.Column(db.Integer, db.ForeignKey('Carts.id'), nullable=True)
     payment_method_id = db.Column(db.Integer, db.ForeignKey('Payment_methods.id'), nullable=False)
     total = db.Column(db.Integer, nullable=False)
     date = db.Column(db.DateTime, server_default=func.now())
